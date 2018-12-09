@@ -7,6 +7,13 @@
 #Descrição: Este script configura o ambiente de desenvolvimento para o LAMW
 #---------------------------------
 #Critical Functions to Translate Calls Bash to  WinCalls 
+if [ -e "/c/tools/msys64/usr/bin" ]; then
+	export PATH="$PATH:/c/tools/msys64/usr/bin" 
+else
+	if [ -e "/c/tools/msys32" ]; then
+		export PATH="$PATH:/c/tools/msys32/usr/bin"
+	fi
+fi 
 
 winCallfromPS(){
 	echo "$*" > /tmp/pscommand.ps1
@@ -44,14 +51,20 @@ export WIN_CURRENT_USER=""
 export WIN_USER_DIRECTORY=""
 export WIN_HOME="" #this path compatible with Windows
 export WIN_MSYS_TEMP_HOME=""
+export WIN_MSYS_HOME=""
+
 export WIN_LETTER_HOME_DRIVER=""
 export WGET_EXE=""
 if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
+	echo "Please wait ..."
 	export WIN_CURRENT_USER=$(getWinEnvPaths 'username' )
 	export WIN_LETTER_HOME_DRIVER=$(getWinEnvPaths "HOMEDRIVE" ) # RETURN LETTER TO DRIVER WIN INSTALL , SAMPLE C:
 	export LETTER_HOME_DRIVER=$(getSystemLetterDrivertoLinux $WIN_LETTER_HOME_DRIVER )
 	export WIN_USER_DIRECTORY=$WIN_LETTER_HOME_DRIVER$(getWinEnvPaths "HOMEPATH" )   #ROOT WINU
 	export USER_DIRECTORY="/$LETTER_HOME_DRIVER/Users/$WIN_CURRENT_USER"
+	if [ ! -e $USER_DIRECTORY/.android ]; then 
+		mkdir $USER_DIRECTORY/.android
+	fi
 	echo ""  > $USER_DIRECTORY/.android/repositories.cfg
 	which wget 
 	if [ $? = 0 ]; then
@@ -67,14 +80,17 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 	export OS_PREBUILD=""
 	case "$ARCH" in
 		"x86_64")
+		export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
 		export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
 		export OS_PREBUILD="windows-x86_64"
 		;;
 		"amd64")
+			#export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
 			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
 			export OS_PREBUILD="windows-x86_64"
 		;;
 		*)
+			#export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys32"
 			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys32/tmp"
 			export OS_PREBUILD="windows"
 			export WGET_EXE="/$LETTER_HOME_DRIVER/ProgramData/chocolatey/bin/wget.exe"
@@ -102,9 +118,9 @@ MINGW_OPT="--reinstall"
 	
 
 
-LAMW_INSTALL_VERSION="0.2.0"
+LAMW_INSTALL_VERSION="0.2.0-Rv08-12-2018"
 LAMW_INSTALL_WELCOME=(
-	"\t\tWelcome LAMW4Windows Installer  version: $LAMW_INSTALL_VERSION\n"
+	"\t\tWelcome LAMW4Linux Installer from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
 	"\t\t<oliveira.daniel109@gmail.com>\n"
 )
@@ -213,26 +229,35 @@ export OLD_ANDROID_SDK=0
 winMKLinkDir(){
 	if [ $# = 2 ]; then
 		#getWinEnvPaths "TEMP"
-		echo "LinkDir:target=$1 link=$2"
-		rm  /tmp/winMKLink.bat
+		#echo "LinkDir:target=$1 link=$2"
+		#rm  /tmp/winMKLink.bat
 		#win_temp_path=$(getWinEnvPaths "HOMEDRIVE")
-		win_temp_path="$WIN_MSYS_TEMP_HOME/winMKLink.bat"
-		echo "mklink /J $2 $1" > /tmp/winMKLink.bat 
-		winCallfromPS $win_temp_path
-		rm  /tmp/winMKLink.bat 
+		if [ ! -e "$2" ]; then
+			win_temp_path="$WIN_MSYS_TEMP_HOME/winMKLink.bat"
+			echo "mklink /D $2 $1" > /tmp/winMKLink.bat 
+			winCallfromPS $win_temp_path
+			if [ -e /tmp/winMKLink.bat  ]; then
+				rm  /tmp/winMKLink.bat 
+			fi
+		fi
 	fi
 }
 winMKLink(){
 	if [ $# = 2 ]; then
-		echo "Link: target=$1 link=$2"
-		
-		win_temp_path="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp/winMKLink.bat"
-		aspas="\""
-		#echo   "s2=$aspas$2$aspas s1=$aspas$1$aspas"
-		echo "mklink  $aspas$2$aspas $aspas$1$aspas" > /tmp/winMKLink.bat 
-		#read
-		winCallfromPS $win_temp_path
-		rm  /tmp/winMKLink.bat
+		#echo "Link: target=$1 link=$2"
+		if [ !-e "$2" ]; then
+				#rm  "$2"
+			#fi
+			win_temp_path="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp/winMKLink.bat"
+			aspas="\""
+			#echo   "s2=$aspas$2$aspas s1=$aspas$1$aspas"
+			echo "mklink  $aspas$2$aspas $aspas$1$aspas" > /tmp/winMKLink.bat 
+			#read
+			winCallfromPS $win_temp_path
+			if [ -e /tmp/winMKLink.bat  ]; then
+				rm  /tmp/winMKLink.bat 
+			fi
+		fi
 	fi
 }
 unzip(){
@@ -240,21 +265,25 @@ unzip(){
 		7z.exe x $*
 }
 InstallWinADB(){
-	changeDirectory /tmp 
-	$WGET_EXE -c $ADB_WIN_DRIVER_LINK
-	if [ $? != 0 ]; then
+	changeDirectory $ANDROID_HOME
+	if [ ! -e adbdriver ]; then 
+		mkdir "adbdriver"
+		changeDirectory "adbdriver" 
 		$WGET_EXE -c $ADB_WIN_DRIVER_LINK
+		if [ $? != 0 ]; then
+			$WGET_EXE -c $ADB_WIN_DRIVER_LINK
+		fi
+			unzip $ADB_WIN_DRIVER_ZIP
+		if [ -e $ADB_WIN_DRIVER_ZIP ]; then
+			rm $ADB_WIN_DRIVER_ZIP
+		fi
 	fi
-		ls -la 
-		unzip $ADB_WIN_DRIVER_ZIP
-		#if [ -e adbdriver ]; then
-			#changeDirectory adbdriver
-			echo "please conect your smartphone to PC and Install the ADBDriver ..."
-			./ADBDriverInstaller.exe
-		#else
-			#echo "falls install ADB Driver ..."
-		#fi
-	#fi
+
+	if  [ -e $ANDROID_HOME/adbdriver ]; then
+		changeDirectory $ANDROID_HOME/adbdriver
+		printf "\n\n%s\n\n" "please conect your smartphone to PC and Install the ADBDriver ..."
+		./ADBDriverInstaller.exe
+	fi
 }
 getAndroidSDKToolsW32(){
 	changeDirectory $USER_DIRECTORY
@@ -370,11 +399,17 @@ winCallfromPS1(){
 	installer_cmd="$ANDROID_SDK/tools/bin/sdk-install.bat"
 	win_installer_cmd="$WIN_ANDROID_SDK\tools\bin\sdk-install.bat"
 	
-	printf " \"%s\" \"%s\""  "${args[0]}"  "${args[1]}" >> $installer_cmd
+	printf " \"%s\" \"%s\""  "${args[0]}"  "${args[1]}" > $installer_cmd
 	
 	winCallfromPS "$win_installer_cmd"
-	rm /tmp/pscommand.ps1
-	rm $installer_cmd
+	if [ -e  /tmp/pscommand.ps1 ]; then 
+		rm /tmp/pscommand.ps1
+	fi
+
+	if [ -e $installer_cmd ];then 
+		chmod 777 $installer_cmd
+		rm  $installer_cmd
+	fi
 
 }
 	
@@ -393,21 +428,7 @@ updateWinPATHS(){
 	new_path=$(bash /tmp/update-win-path.sh)
 	#echo "NEW_PATH=$new_path"
 	#read 
-	export PATH=$PATH:$new_path
-
-	which svn
-
-	if [ $? != 0 ]; then 
-		if [ -e "$WIN_SVN_PATH_WIN64" ]; then 
-			export PATH="$PATH:$WIN_SVN_PATH_WIN64"
-		else
-			if [ -e "$WIN_SVN_PATH_WIN32" ]; then
-				export PATH="$PATH:$WIN_SVN_PATH_WIN32"
-			fi
-		fi
-	fi
-
-	which git 
+	export PATH=$PATH:$new_path 
 }
 
 
@@ -675,21 +696,24 @@ BuildLazarusIDE(){
 		"--build-ide= --add-package \"$WIN_ANDROID_HOME\lazandroidmodulewizard\ide_tools\amw_ide_tools.lpk\""
 	)
 	#make clean all
-	echo "cd \"$WIN_PATH_TO_LAZ4ANDROID\"" > $build_win_cmd
+	
 	#echo "make clean all" >> $build_win_cmd
 		#build ide  with lamw framework 
 	for((i=0;i< ${#WIN_LAZBUILD_PARAMETERS[@]};i++))
 	do
-		#./lazbuild ${LAZBUILD_PARAMETERS[i]}
+		echo "cd \"$WIN_PATH_TO_LAZ4ANDROID\"" > $build_win_cmd
 		echo "lazbuild ${WIN_LAZBUILD_PARAMETERS[i]}" >> $build_win_cmd
-		#echo "lazbuild $WIN_LETTER_HOME_DRIVER${WIN_LAZBUILD_PARAMETERS[i]}" >> $build_win_cmd
-		#if [ $? != 0 ]; then
-		#	./lazbuild ${LAZBUILD_PARAMETERS[i]}
-	#	fi
-	done
-	winCallfromPS "$WIN_LETTER_HOME_DRIVER\generate-lazarus.bat"
+		winCallfromPS "$WIN_LETTER_HOME_DRIVER\generate-lazarus.bat"
+		if [ $? != 0 ]; then 
+			winCallfromPS "$WIN_LETTER_HOME_DRIVER\generate-lazarus.bat"
+		fi
 
-	echo  "lazarus --primary-config-path=$WIN_LETTER_HOME_DRIVER$WIN_PATH_LAZ4ANDROID_CFG" > start_laz4lamw.bat
+	done
+	
+	if [ -e $build_win_cmd ]; then
+		rm $build_win_cmd
+	fi
+	#echo  "lazarus --primary-config-path=$WIN_LETTER_HOME_DRIVER$WIN_PATH_LAZ4ANDROID_CFG" > start_laz4lamw.bat
 }
 #Esta função imprime o valor de uma váriavel de ambiente do MS Windows 
 #this  fuction create a INI file to config  all paths used in lamw framework 
@@ -732,7 +756,7 @@ LAMW4LinuxPostConfig(){
 		"AntBuildMode=debug"
 		"NDK=5"
 	)
-	echo "${LAMW_init_str[*]}"
+	# "${LAMW_init_str[*]}"
 	for ((i=0;i<${#LAMW_init_str[@]};i++))
 	do
 		if [ $i = 0 ]; then 
@@ -779,12 +803,6 @@ CleanOldConfig(){
 			rm $USER_DIRECTORY/mingw-get-setup.exe
 		fi
 	fi
-	if [ -e /usr/bin/arm-linux-androideabi-as.exe ]; then
-		rm /usr/bin/arm-linux-androideabi-as.exe
-	fi
-	if [ -e /usr/bin/arm-linux-ld.exe ] ; then 
-		rm /usr/bin/arm-linux-ld.exe
-	fi
 
 	if [ -e $USER_DIRECTORY/laz4ndroid ]; then
 		rm  -r $USER_DIRECTORY/laz4ndroid
@@ -792,48 +810,48 @@ CleanOldConfig(){
 	if [ -e $USER_DIRECTORY/.laz4android ] ; then
 		rm -r $USER_DIRECTORY/.laz4android
 	fi
-	if [ -e $LAZ4LAMW_HOME ] ; then
-		rm $LAZ4LAMW_HOME -rv
-	fi
-
-	if [ -e $LAZ4_LAMW_PATH_CFG ]; then  rm -r $LAZ4_LAMW_PATH_CFG; fi
 
 	if [ -e $ANDROID_HOME ] ; then
+		chmod 777 -Rv $ANDROID_HOME
 		rm -r $ANDROID_HOME  
 	fi
 
+	if [ -e $USER_DIRECTORY/.android ]; then
+		chmod 777 -R  $USER_DIRECTORY/.android
+		rm -r  $USER_DIRECTORY/.android
+	fi 
 
-	if [ -e $USER_DIRECTORY/.local/share/applications/laz4android.desktop ];then
-		rm $USER_DIRECTORY/.local/share/applications/laz4android.desktop
-	fi
 
-	if [ -e $LAMW_MENU_ITEM_PATH ]; then
-		rm $LAMW_MENU_ITEM_PATH
-	fi
 
 	if [ -e $GRADLE_CFG_HOME ]; then
 		rm -r $GRADLE_CFG_HOME
 	fi
 
-	if [ -e usr/bin/arm-embedded-as ] ; then    
-		rm usr/bin/arm-embedded-as
-	fi
-	if [ -e  /usr/bin/arm-linux-androideabi-ld ]; then
-		 rm /usr/bin/arm-linux-androideabi-ld
-	fi
-	if [ -e /usr/bin/arm-embedded-ld  ]; then
-		/usr/bin/arm-embedded-ld           
-	fi 
-	if [ -e /usr/bin/arm-linux-as ] ; then 
-	 	rm  /usr/bin/arm-linux-as
-	fi
-	if [ -e /usr/lib/fpc/$FPC_VERSION/fpmkinst/arm-android ]; then
-		rm -r /usr/lib/fpc/$FPC_VERSION/fpmkinst/arm-android
-	fi
+	# if [ -e usr/bin/arm-embedded-as ] ; then    
+	# 	rm usr/bin/arm-embedded-as
+	# fi
+	# if [ -e  /usr/bin/arm-linux-androideabi-ld ]; then
+	# 	 rm /usr/bin/arm-linux-androideabi-ld
+	# fi
+	# if [ -e /usr/bin/arm-embedded-ld  ]; then
+	# 	/usr/bin/arm-embedded-ld           
+	# fi 
+	# if [ -e /usr/bin/arm-linux-as ] ; then 
+	#  	rm  /usr/bin/arm-linux-as
+	# fi
+	# if [ -e /usr/lib/fpc/$FPC_VERSION/fpmkinst/arm-android ]; then
+	# 	rm -r /usr/lib/fpc/$FPC_VERSION/fpmkinst/arm-android
+	# fi
 	
 	##if [ -e "$work_home_desktop/Laz4Lamw.desktop" ]; then
 	##	rm "$work_home_desktop/Laz4Lamw.desktop"
 	#fi
+	# if [ -e /usr/bin/arm-linux-androideabi-as.exe ]; then
+	# 	rm /usr/bin/arm-linux-androideabi-as.exe
+	# fi
+	# if [ -e /usr/bin/arm-linux-ld.exe ] ; then 
+	# 	rm /usr/bin/arm-linux-ld.exe
+	# fi
 }
 
 
@@ -896,22 +914,16 @@ fi
 
 #write log lamw install 
 writeLAMWLogInstall(){
-	lamw_log_str=("Generate $LAMW_INSTALL_VERSION" "Info:\nLAMW4Linux:$LAZ4LAMW_HOME\nLAMW workspace:"  "$LAMW_WORKSPACE_HOME\nAndroid SDK:$ANDROID_HOME/sdk\n" "Android NDK:$ANDROID_HOME/ndk\nGradle:$GRADLE_HOME\n")
-	NOTIFY_SEND_EXE=$(which notify-send)
+	lamw_log_str=("Generate LAMW4Linux Intaller Version $LAMW_INSTALL_VERSION" "LAMW workspace : $WIN_LAMW_WORKSPACE_HOME" "Android SDK:$WIN_ANDROID_HOME\sdk" "Android NDK:$WIN_ANDROID_HOME\ndk" "Gradle:$WIN_GRADLE_HOME" "LOG:$WIN_ANDROID_HOME\lamw-install.log")
 	for((i=0; i<${#lamw_log_str[*]};i++)) 
 	do
+		printf "%s\n"  "${lamw_log_str[i]}"
 		if [ $i = 0 ] ; then 
-			printf "${lamw_log_str[i]}" > $ANDROID_HOME/lamw-install.log
+			printf "%s\n" "${lamw_log_str[i]}" > $ANDROID_HOME/lamw-install.log
 		else
-			printf "${lamw_log_str[i]}" >> $ANDROID_HOME/lamw-install.log
+			printf "%s\n" "${lamw_log_str[i]}" >> $ANDROID_HOME/lamw-install.log 
 		fi
-	done
-	if [ "$NOTIFY_SEND_EXE" != "" ]; then
-		$NOTIFY_SEND_EXE  "Info:\nLAMW4Linux:$LAZ4LAMW_HOME\nLAMW workspace : $LAMW_WORKSPACE_HOME\nAndroid SDK:$ANDROID_HOME/sdk\nAndroid NDK:$ANDROID_HOME/ndk\nGradle:$GRADLE_HOME\nLOG:$LAZ4LAMW_HOME/lamw-install.log"
-	else
-		printf "Info:\nLAMW4Linux:$LAZ4LAMW_HOME\nLAMW workspace : $WIN_USER_DIRECTORY/Dev/lamw_workspace\nAndroid SDK:$ANDROID_HOME/sdk\nAndroid NDK:$ANDROID_HOME/ndk\nGradle:$GRADLE_HOME\nLOG:$LAZ4LAMW_HOME/lamw-install.log"
-	fi		
-
+	done		
 }
 
 mainInstall(){
@@ -939,7 +951,7 @@ mainInstall(){
 	LAMW4LinuxPostConfig
 	InstallWinADB
 	writeLAMWLogInstall
-	rm /tmp/*.bat
+	#rm /tmp/*.bat
 }
 
 if  [  "$(whoami)" = "root" ] #impede que o script seja executado pelo root 
@@ -951,21 +963,14 @@ fi
 	echo "----------------------------------------------------------------------"
 	printf "${LAMW_INSTALL_WELCOME[*]}"
 	echo "----------------------------------------------------------------------"
-	echo "LAMW-Install (Linux supported Debian 9, Ubuntu 16.04 LTS, Linux Mint 18)
-	Generate LAMW4Linux to  android-sdk=$SDK_VERSION"
-	if [ $FORCE_LAWM4INSTALL = 1 ]; then
-		echo "Warning: Earlier versions of Lazarus (debian package) will be removed!"
-	else
-		echo "This application not  is compatible with lazarus (debian package)"
-		echo "use --force parameter remove anywhere lazarus (debian package)"
-		#sleep 1
-	fi
+	echo "LAMW-Install (Native Support:Linux supported Debian 9, Ubuntu 16.04 LTS, Linux Mint 18)
+	Windows Compability (from MSYS2): Windows 7 SP1, Windows 8.1, Windows 10"
+
 	#configure parameters sdk before init download and build
 
 	#Checa se necessario habilitar remocao forcada
 	#checkForceLAMW4LinuxInstall $*
-#else
-	echo "LAMW4LinuxInstall  manager recomen"
+
 	if [ $# = 6 ] || [ $# = 7 ]; then
 		if [ "$2" = "--use_proxy" ] ;then 
 			if [ "$3" = "--server" ]; then
@@ -1032,7 +1037,7 @@ case "$1" in
 			"Usage:\n\tbash lamw-install.sh [Options]\n"
 			"\tbash lamw-install.sh clean\n"
 			"\tbash lamw-install.sh install\n"
-			"\tbash lawmw-install.sh install --force"
+			"\tbash lawmw-install.sh install --force\n"
 			"\tbash lamw-install.sh install --use_proxy\n"
 			"\tbash lawmw-install.sh install=sdk24"
 			"----------------------------------------------\n"
@@ -1044,7 +1049,7 @@ case "$1" in
 			"\tbash lamw-install.sh clean-install --use_proxy\n"
 			"\tbash lamw-install.sh update-lamw\n"
 			)
-		printf "${lamw_opts[*]}"
+		printf "%s\U\n" "${lamw_opts[*]}"
 	;;
 	
 esac
