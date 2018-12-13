@@ -118,7 +118,7 @@ MINGW_OPT="--reinstall"
 	
 
 
-LAMW_INSTALL_VERSION="0.2.0-Rv08-12-2018"
+LAMW_INSTALL_VERSION="0.2.0-Rv13-12-2018"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW4Linux Installer from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -285,6 +285,23 @@ InstallWinADB(){
 		./ADBDriverInstaller.exe
 	fi
 }
+getAnt(){
+	changeDirectory $ANDROID_HOME 
+	if [ ! -e $ANT_HOME ]; then
+		$WGET_EXE -c $ANT_ZIP_LINK
+		if [ $? != 0 ] ; then
+			#rm *.zip*
+			$WGET_EXE -c $ANT_ZIP_LINK
+		fi
+		#echo "$PWD"
+		#sleep 3
+		unzip "$ANT_ZIP_FILE"
+	fi
+
+	if [ -e  $ANT_ZIP_FILE ]; then
+		rm $ANT_ZIP_FILE
+	fi
+}
 getAndroidSDKToolsW32(){
 	changeDirectory $USER_DIRECTORY
 	if [ ! -e $ANDROID_HOME ]; then
@@ -307,20 +324,7 @@ getAndroidSDKToolsW32(){
 		rm $GRADLE_ZIP_FILE
 	fi
 	#ANT
-	if [ ! -e $ANT_HOME ]; then
-		$WGET_EXE -c $ANT_ZIP_LINK
-		if [ $? != 0 ] ; then
-			#rm *.zip*
-			$WGET_EXE -c $ANT_ZIP_LINK
-		fi
-		#echo "$PWD"
-		#sleep 3
-		unzip "$ANT_ZIP_FILE"
-	fi
-
-	if [ -e  $ANT_ZIP_FILE ]; then
-		rm $ANT_ZIP_FILE
-	fi
+	
 	#mkdir
 	#changeDirectory $ANDROID_SDK
 	if [ ! -e sdk ] ; then
@@ -345,11 +349,12 @@ getAndroidSDKToolsW32(){
 #Get Gradle and SDK Tools
 getOldAndroidSDKToolsW32(){
 	changeDirectory $USER_DIRECTORY
-	if [ ! -e ANDROID_HOME ]; then
+	if [ ! -e $ANDROID_HOME ]; then
 		mkdir $ANDROID_HOME
 	fi
 	
 	changeDirectory $ANDROID_HOME
+	getAnt
 	if [ ! -e $GRADLE_HOME ]; then
 		$WGET_EXE -c $GRADLE_ZIP_LNK
 		if [ $? != 0 ] ; then
@@ -377,13 +382,14 @@ getOldAndroidSDKToolsW32(){
 		./installer_r24.0.2-windows.exe
 	fi
 
-	if [ ! -e ndk ]; then
+	if [ ! -e $ANDROID_SDK/ndk-bundle ]; then
+		changeDirectory $ANDROID_SDK
 		$WGET_EXE -c $NDK_URL
 		if [ $? != 0 ]; then 
 			$WGET_EXE -c $NDK_URL
 		fi
 		unzip android-ndk-r16b-windows-x86_64.zip
-		mv android-ndk-r16b ndk
+		mv android-ndk-r16b ndk-bundle
 		if [ -e android-ndk-r16b-windows-x86_64.zip ]; then
 			rm android-ndk-r16b-windows-x86_64.zip
 		fi
@@ -624,11 +630,11 @@ getSDKAndroid(){
 getOldAndroidSDK(){
 
 	if [ -e $ANDROID_SDK/tools/android.bat  ]; then 
-		changeDirectory $ANDROID_SDK/tools
+		#changeDirectory $ANDROID_SDK/tools
 		winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk "
 		#./android update sdk
 		echo "--> After update sdk tools to 24.1.1"
-		changeDirectory $ANDROID_SDK/tools
+		#schangeDirectory $ANDROID_SDK/tools
 		#./android update sdk
 		winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk"
 
@@ -766,9 +772,10 @@ LAMW4LinuxPostConfig(){
 		fi
 	done
 	#AddLAMWtoStartMenu
-
-	winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mipsel-linux-android-4.9"
-	winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mips64el-linux-android-4.9"
+	if [ $OLD_ANDROID_SDK = 0 ]; then
+		winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mipsel-linux-android-4.9"
+		winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mips64el-linux-android-4.9"
+	fi
 
 
 }
@@ -803,7 +810,10 @@ CleanOldConfig(){
 			rm $USER_DIRECTORY/mingw-get-setup.exe
 		fi
 	fi
-
+	winCallfromPS "taskkill /im adb.exe /f"
+	if [ $? = 0 ]; then
+		echo "adb process stopped..."
+	fi
 	if [ -e $USER_DIRECTORY/laz4ndroid ]; then
 		rm  -r $USER_DIRECTORY/laz4ndroid
 	fi
