@@ -373,6 +373,7 @@ getOldAndroidSDKToolsW32(){
 	#changeDirectory $ANDROID_SDK
 	if [ ! -e sdk ] ; then
 		mkdir sdk
+	fi
 		changeDirectory sdk
 		export SDK_TOOLS_URL="http://dl.google.com/android/installer_r24.0.2-windows.exe" 
 		$WGET_EXE -c $SDK_TOOLS_URL #getting sdk 
@@ -380,7 +381,7 @@ getOldAndroidSDKToolsW32(){
 			$WGET_EXE -c $SDK_TOOLS_URL
 		fi
 		./installer_r24.0.2-windows.exe
-	fi
+	#fi
 
 	if [ ! -e $ANDROID_SDK/ndk-bundle ]; then
 		changeDirectory $ANDROID_SDK
