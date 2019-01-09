@@ -118,7 +118,7 @@ MINGW_OPT="--reinstall"
 	
 
 
-LAMW_INSTALL_VERSION="0.2.0-Rv13-12-2018"
+LAMW_INSTALL_VERSION="0.2.0-Rv14-12-2018"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW4Linux Installer from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -140,13 +140,13 @@ export FPC_VERSION=""
 export FPC_MKCFG_EXE=""
 export FORCE_LAWM4INSTALL=0
 #work_home_desktop=$(xdg-user-dir DESKTOP)
-ANDROID_HOME="$USER_DIRECTORY/android"
+ANDROID_HOME="$USER_DIRECTORY/LAMW"
 ANDROID_SDK="$ANDROID_HOME/sdk"
 #ANDROID_HOME for $win 
 
 BARRA_INVERTIDA="\""
 #------------ PATHS translated for windows------------------------------
-WIN_ANDROID_HOME="$WIN_USER_DIRECTORY\android"
+WIN_ANDROID_HOME="$WIN_USER_DIRECTORY\LAMW"
 WIN_ANDROID_SDK="$WIN_ANDROID_HOME\sdk"
 WIN_PATH_LAZ4ANDROID_CFG="$WIN_LETTER_HOME_DRIVER\laz4android1.8\config"
 WIN_LAZ4LAMW_HOME="$WIN_USER_DIRECTORY\Laz4Lamw"
@@ -193,7 +193,7 @@ GRADLE_CFG_HOME="$USER_DIRECTORY/.gradle"
 
 GRADLE_ZIP_LNK="http://services.gradle.org/distributions/gradle-4.4.1-bin.zip"
 GRADLE_ZIP_FILE="gradle-4.4.1-bin.zip"
-ANT_ZIP_LINK="http://mirror.nbtelecom.com.br/apache/ant/binaries/apache-ant-1.10.5-bin.zip"
+ANT_ZIP_LINK="http://ftp.unicamp.br/pub/apache/ant/binaries/apache-ant-1.10.5-bin.zip"
 ANT_ZIP_FILE="apache-ant-1.10.5-bin.zip"
 
 ADB_WIN_DRIVER_LINK="http://dl.adbdriver.com/upload/adbdriver.zip"
@@ -291,6 +291,7 @@ getAnt(){
 		$WGET_EXE -c $ANT_ZIP_LINK
 		if [ $? != 0 ] ; then
 			#rm *.zip*
+			ANT_ZIP_LINK="https://www-eu.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.zip"
 			$WGET_EXE -c $ANT_ZIP_LINK
 		fi
 		#echo "$PWD"
@@ -748,10 +749,10 @@ LAMW4LinuxPostConfig(){
 	LAMW_init_str=(
 		"[NewProject]"
 		"PathToWorkspace=$WIN_LAMW_WORKSPACE_HOME"
-		"PathToJavaTemplates=$WIN_USER_DIRECTORY\android\lazandroidmodulewizard\java"
+		"PathToJavaTemplates=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\java"
 		"PathToJavaJDK=$java_path"
-		"PathToAndroidNDK=$WIN_USER_DIRECTORY\android\sdk\ndk-bundle"
-		"PathToAndroidSDK=$WIN_USER_DIRECTORY\android\sdk"
+		"PathToAndroidNDK=$WIN_USER_DIRECTORY\LAMW\sdk\ndk-bundle"
+		"PathToAndroidSDK=$WIN_USER_DIRECTORY\LAMW\sdk"
 		"PathToAntBin=$WIN_ANT_HOME\bin"
 		"PathToGradle=$WIN_GRADLE_HOME"
 		"PrebuildOSYS=$OS_PREBUILD"
@@ -824,7 +825,7 @@ CleanOldConfig(){
 
 	if [ -e $ANDROID_HOME ] ; then
 		chmod 777 -Rv $ANDROID_HOME
-		rm -r $ANDROID_HOME  
+		rm -rf $ANDROID_HOME  
 	fi
 
 	if [ -e $USER_DIRECTORY/.android ]; then
@@ -838,6 +839,12 @@ CleanOldConfig(){
 		rm -r $GRADLE_CFG_HOME
 	fi
 
+	#old
+	if [ $USER_DIRECTORY/android ]; then 
+		echo "please wait to remove $USER_DIRECTORY/android ..."
+		chmod 777 -R $USER_DIRECTORY/android
+		rm -r $USER_DIRECTORY/android 
+	fi
 	# if [ -e usr/bin/arm-embedded-as ] ; then    
 	# 	rm usr/bin/arm-embedded-as
 	# fi
