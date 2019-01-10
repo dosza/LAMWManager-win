@@ -82,11 +82,15 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 		"x86_64")
 		export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
 		export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
+		export NDK_URL="http://dl.google.com/android/repository/android-ndk-r16b-windows-x86_64.zip"
+		export NDK_ZIP_FILE="android-ndk-r16b-windows-x86_64.zip"
 		export OS_PREBUILD="windows-x86_64"
 		;;
 		"amd64")
-			#export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
+			export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
 			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
+			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r16b-windows-x86_64.zip"
+			export NDK_ZIP_FILE="android-ndk-r16b-windows-x86_64.zip"
 			export OS_PREBUILD="windows-x86_64"
 		;;
 		*)
@@ -94,6 +98,8 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys32/tmp"
 			export OS_PREBUILD="windows"
 			export WGET_EXE="/$LETTER_HOME_DRIVER/ProgramData/chocolatey/bin/wget.exe"
+			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r16b-windows-x86.zip"
+			export NDK_ZIP_FILE="android-ndk-r16b-windows-x86.zip"
 		;;
 	esac
 	 #MSYS_TEMP != %temp%
@@ -173,7 +179,8 @@ PROXY_URL="http://$PROXY_SERVER:$PORT_SERVER"
 export USE_PROXY=0
 export JAVA_PATH=""
 export SDK_TOOLS_URL="http://dl.google.com/android/repository/sdk-tools-windows-3859397.zip" 
-export NDK_URL="http://dl.google.com/android/repository/android-ndk-r16b-windows-x86_64.zip"
+export NDK_URL=""
+export NDK_ZIP_FILE=""
 SDK_VERSION="28"
 SDK_MANAGER_CMD_PARAMETERS=()
 SDK_MANAGER_CMD_PARAMETERS2=()
@@ -390,10 +397,10 @@ getOldAndroidSDKToolsW32(){
 		if [ $? != 0 ]; then 
 			$WGET_EXE -c $NDK_URL
 		fi
-		unzip android-ndk-r16b-windows-x86_64.zip
-		mv android-ndk-r16b ndk-bundle
-		if [ -e android-ndk-r16b-windows-x86_64.zip ]; then
-			rm android-ndk-r16b-windows-x86_64.zip
+		unzip $NDK_ZIP_FILE
+		mv $NDK_ZIP_FILE ndk-bundle
+		if [ -e $NDK_ZIP_FILE ]; then
+			rm $NDK_ZIP_FILE
 		fi
 	fi
 
