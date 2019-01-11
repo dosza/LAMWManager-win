@@ -124,7 +124,7 @@ MINGW_OPT="--reinstall"
 	
 
 
-LAMW_INSTALL_VERSION="0.2.0-Rv14-12-2018"
+LAMW_INSTALL_VERSION="0.2.0-Rv11-01-2019"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW4Linux Installer from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -267,10 +267,20 @@ winMKLink(){
 		fi
 	fi
 }
-unzip(){
-		#/$LETTER_HOME_DRIVER/Program\ Files/7-zip/7z.exe x $*
-		7z.exe x $*
+#this function delete a windows directory 
+winRMDir(){
+	win_temp_executable="$WIN_MSYS_TEMP_HOME/winrmdir.bat"
+	echo "rmdir /Q /S  $*" > /tmp/winrmdir.bat
+	winCallfromPS $win_temp_executable
+	if [ -e /tmp/winrmdir.bat ]; then 
+		rm /tmp/winrmdir.bat
+	fi
 }
+
+#unzip(){
+		#/$LETTER_HOME_DRIVER/Program\ Files/7-zip/7z.exe x $*
+	#	7z.exe x $*
+#}
 InstallWinADB(){
 	changeDirectory $ANDROID_HOME
 	if [ ! -e adbdriver ]; then 
@@ -640,6 +650,7 @@ getOldAndroidSDK(){
 
 	if [ -e $ANDROID_SDK/tools/android.bat  ]; then 
 		#changeDirectory $ANDROID_SDK/tools
+		echo  "Before install sdk 24.0"
 		winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk "
 		#./android update sdk
 		echo "--> After update sdk tools to 24.1.1"
@@ -682,13 +693,6 @@ BuildCrossArm(){
 		case $1 in 
 			0 )
 				make clean
-			#	str="$WIN_LAZ4LAMW_HOME\fpcsrc"
-			#	bar='\'
-			#	str="$str$bar$FPC_RELEASE"
-			#	echo "str=$str"
-				#read
-			#	makeFromPS "$str" ${FPC_CROSS_ARM_MODE_FPCDELUXE[*]}
-				# 777  -Rv $LAZ4LAMW_HOME/fpcsrc$bar$FPC_RELEASE
 				make crossall crossinstall  CPU_TARGET=arm OPT="-dFPC_ARMEL" OS_TARGET=android CROSSOPT="-CpARMV7A -CfVFPV3" INSTALL_PREFIX=/$LETTER_HOME_DRIVER/tools/freepascal
 				#echo "press enter to exit BuildCrossArm" ; read
 			;;
@@ -824,20 +828,25 @@ CleanOldConfig(){
 		echo "adb process stopped..."
 	fi
 	if [ -e $USER_DIRECTORY/laz4ndroid ]; then
-		rm  -r $USER_DIRECTORY/laz4ndroid
+		#rm  -r $USER_DIRECTORY/laz4ndroid
+		winRMDir "$WIN_USER_DIRECTORY\laz4ndroid"
 	fi
 	if [ -e $USER_DIRECTORY/.laz4android ] ; then
 		rm -r $USER_DIRECTORY/.laz4android
+		#winRMDir "$WIN_USER_DIRECTORY\.laz4android"
 	fi
 
 	if [ -e $ANDROID_HOME ] ; then
-		chmod 777 -Rv $ANDROID_HOME
-		rm -rf $ANDROID_HOME  
+		#chmod 777 -Rv $ANDROID_HOME
+		#rm -rf $ANDROID_HOME
+		echo "WIN_ANDROID_HOME=$WIN_ANDROID_HOME"
+		winRMDir "$WIN_ANDROID_HOME"
 	fi
 
 	if [ -e $USER_DIRECTORY/.android ]; then
 		chmod 777 -R  $USER_DIRECTORY/.android
 		rm -r  $USER_DIRECTORY/.android
+		#winRMDir "$WIN_USER_DIRECTORY\.android"
 	fi 
 
 
@@ -846,37 +855,13 @@ CleanOldConfig(){
 		rm -r $GRADLE_CFG_HOME
 	fi
 
-	#old
-	if [ $USER_DIRECTORY/android ]; then 
-		echo "please wait to remove $USER_DIRECTORY/android ..."
-		chmod 777 -R $USER_DIRECTORY/android
-		rm -r $USER_DIRECTORY/android 
-	fi
-	# if [ -e usr/bin/arm-embedded-as ] ; then    
-	# 	rm usr/bin/arm-embedded-as
-	# fi
-	# if [ -e  /usr/bin/arm-linux-androideabi-ld ]; then
-	# 	 rm /usr/bin/arm-linux-androideabi-ld
-	# fi
-	# if [ -e /usr/bin/arm-embedded-ld  ]; then
-	# 	/usr/bin/arm-embedded-ld           
-	# fi 
-	# if [ -e /usr/bin/arm-linux-as ] ; then 
-	#  	rm  /usr/bin/arm-linux-as
-	# fi
-	# if [ -e /usr/lib/fpc/$FPC_VERSION/fpmkinst/arm-android ]; then
-	# 	rm -r /usr/lib/fpc/$FPC_VERSION/fpmkinst/arm-android
-	# fi
-	
-	##if [ -e "$work_home_desktop/Laz4Lamw.desktop" ]; then
-	##	rm "$work_home_desktop/Laz4Lamw.desktop"
-	#fi
-	# if [ -e /usr/bin/arm-linux-androideabi-as.exe ]; then
-	# 	rm /usr/bin/arm-linux-androideabi-as.exe
-	# fi
-	# if [ -e /usr/bin/arm-linux-ld.exe ] ; then 
-	# 	rm /usr/bin/arm-linux-ld.exe
-	# fi
+	#if [ -e $USER_DIRECTORY/android ]; then 
+	#	#echo "please wait to remove $USER_DIRECTORY/android ..."
+	#chmod 777 -R $USER_DIRECTORY/android
+	#	#rm -r $USER_DIRECTORY/android 
+	#	winRMDir "$WIN_USER_DIRECTORY\android"
+	#
+
 }
 
 
