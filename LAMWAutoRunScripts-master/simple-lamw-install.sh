@@ -418,7 +418,7 @@ getOldAndroidSDKToolsW32(){
 			$WGET_EXE -c $NDK_URL
 		fi
 		unzip $NDK_ZIP_FILE
-		mv $NDK_ZIP_FILE ndk-bundle
+		mv "android-ndk-r16b" ndk-bundle
 		if [ -e $NDK_ZIP_FILE ]; then
 			rm $NDK_ZIP_FILE
 		fi
