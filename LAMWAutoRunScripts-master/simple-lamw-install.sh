@@ -826,9 +826,16 @@ changeDirectory(){
 CleanOldConfig(){
 
 	if [ $WINDOWS_CMD_WRAPPERS = 1 ]; then
-		if [ -e $ANDROID_HOME/sdk/unistall.exe ]; then
-			$ANDROID_HOME/sdk/unistall.exe
+		if [ -e $ANDROID_HOME/sdk/uninstall.exe ]; then
+			echo "running unistaller sdktools 24..."
+			echo "$WIN_ANDROID_HOME\sdk\uninstall" > /tmp/run.bat
+			winCallfromPS "$WIN_MSYS_TEMP_HOME\run.bat"
+			if [ -e /tmp/run.bat ]; then 
+				rm /tmp/run.bat
+			fi
+
 		fi
+		#echo "try read file ...";read
 		if [ -e $USER_DIRECTORY/mingw-get-setup.exe ]; then
 			rm $USER_DIRECTORY/mingw-get-setup.exe
 		fi
