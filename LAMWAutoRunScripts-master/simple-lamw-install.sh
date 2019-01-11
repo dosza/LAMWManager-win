@@ -52,9 +52,10 @@ export WIN_USER_DIRECTORY=""
 export WIN_HOME="" #this path compatible with Windows
 export WIN_MSYS_TEMP_HOME=""
 export WIN_MSYS_HOME=""
-
 export WIN_LETTER_HOME_DRIVER=""
 export WGET_EXE=""
+export NDK_URL=""
+export NDK_ZIP_FILE=""
 if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 	echo "Please wait ..."
 	export WIN_CURRENT_USER=$(getWinEnvPaths 'username' )
@@ -179,8 +180,7 @@ PROXY_URL="http://$PROXY_SERVER:$PORT_SERVER"
 export USE_PROXY=0
 export JAVA_PATH=""
 export SDK_TOOLS_URL="http://dl.google.com/android/repository/sdk-tools-windows-3859397.zip" 
-export NDK_URL=""
-export NDK_ZIP_FILE=""
+
 SDK_VERSION="28"
 SDK_MANAGER_CMD_PARAMETERS=()
 SDK_MANAGER_CMD_PARAMETERS2=()
@@ -267,10 +267,20 @@ winMKLink(){
 		fi
 	fi
 }
-#this function delete a windows directory 
+#this function delete a windows 
 winRMDir(){
 	win_temp_executable="$WIN_MSYS_TEMP_HOME/winrmdir.bat"
+	#echo "rmdir /Q  $*" > /tmp/winrmdir.bat
+	echo "rmdir $*" > /tmp/winrmdir.bat
+	winCallfromPS $win_temp_executable
+	if [ -e /tmp/winrmdir.bat ]; then 
+		rm /tmp/winrmdir.bat
+	fi
+}
+winRMDirf(){
+	win_temp_executable="$WIN_MSYS_TEMP_HOME/winrmdir.bat"
 	echo "rmdir /Q /S  $*" > /tmp/winrmdir.bat
+	echo "rmdir $*" >> /tmp/winrmdir.bat
 	winCallfromPS $win_temp_executable
 	if [ -e /tmp/winrmdir.bat ]; then 
 		rm /tmp/winrmdir.bat
@@ -823,30 +833,36 @@ CleanOldConfig(){
 			rm $USER_DIRECTORY/mingw-get-setup.exe
 		fi
 	fi
-	winCallfromPS "taskkill /im adb.exe /f"
+	winCallfromPS "taskkill /im adb.exe /f" > /dev/null
 	if [ $? = 0 ]; then
 		echo "adb process stopped..."
 	fi
 	if [ -e $USER_DIRECTORY/laz4ndroid ]; then
 		#rm  -r $USER_DIRECTORY/laz4ndroid
-		winRMDir "$WIN_USER_DIRECTORY\laz4ndroid"
+		winRMDirf "$WIN_USER_DIRECTORY\laz4ndroid"
 	fi
 	if [ -e $USER_DIRECTORY/.laz4android ] ; then
 		rm -r $USER_DIRECTORY/.laz4android
-		#winRMDir "$WIN_USER_DIRECTORY\.laz4android"
+		#winRMDirf "$WIN_USER_DIRECTORY\.laz4android"
 	fi
 
 	if [ -e $ANDROID_HOME ] ; then
 		#chmod 777 -Rv $ANDROID_HOME
 		#rm -rf $ANDROID_HOME
-		echo "WIN_ANDROID_HOME=$WIN_ANDROID_HOME"
-		winRMDir "$WIN_ANDROID_HOME"
+	#	echo "WIN_ANDROID_HOME=$WIN_ANDROID_HOME"
+		winRMDirf "$WIN_ANDROID_HOME"
+		if [ $? != 0 ]; then
+			winRMDirf "$WIN_ANDROID_HOME"
+			if [ $? != 0 ]; then 
+				rm -rf $ANDROID_HOME
+			fi
+		fi
 	fi
 
 	if [ -e $USER_DIRECTORY/.android ]; then
 		chmod 777 -R  $USER_DIRECTORY/.android
 		rm -r  $USER_DIRECTORY/.android
-		#winRMDir "$WIN_USER_DIRECTORY\.android"
+		#winRMDirf "$WIN_USER_DIRECTORY\.android"
 	fi 
 
 
@@ -859,7 +875,7 @@ CleanOldConfig(){
 	#	#echo "please wait to remove $USER_DIRECTORY/android ..."
 	#chmod 777 -R $USER_DIRECTORY/android
 	#	#rm -r $USER_DIRECTORY/android 
-	#	winRMDir "$WIN_USER_DIRECTORY\android"
+	#	winRMDirf "$WIN_USER_DIRECTORY\android"
 	#
 
 }
