@@ -83,15 +83,15 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 		"x86_64")
 		export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
 		export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
-		export NDK_URL="http://dl.google.com/android/repository/android-ndk-r16b-windows-x86_64.zip"
-		export NDK_ZIP_FILE="android-ndk-r16b-windows-x86_64.zip"
+		export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
+		export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
 		export OS_PREBUILD="windows-x86_64"
 		;;
 		"amd64")
 			export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
 			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
-			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r16b-windows-x86_64.zip"
-			export NDK_ZIP_FILE="android-ndk-r16b-windows-x86_64.zip"
+			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
+			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
 			export OS_PREBUILD="windows-x86_64"
 		;;
 		*)
@@ -99,8 +99,8 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys32/tmp"
 			export OS_PREBUILD="windows"
 			export WGET_EXE="/$LETTER_HOME_DRIVER/ProgramData/chocolatey/bin/wget.exe"
-			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r16b-windows-x86.zip"
-			export NDK_ZIP_FILE="android-ndk-r16b-windows-x86.zip"
+			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86.zip"
+			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86.zip"
 		;;
 	esac
 	 #MSYS_TEMP != %temp%
@@ -179,7 +179,8 @@ export PORT_SERVER=3128
 PROXY_URL="http://$PROXY_SERVER:$PORT_SERVER"
 export USE_PROXY=0
 export JAVA_PATH=""
-export SDK_TOOLS_URL="http://dl.google.com/android/repository/sdk-tools-windows-3859397.zip" 
+export SDK_TOOLS_URL="https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip
+" 
 
 SDK_VERSION="28"
 SDK_MANAGER_CMD_PARAMETERS=()
@@ -364,13 +365,13 @@ getAndroidSDKToolsW32(){
 			if [ $? != 0 ]; then 
 				$WGET_EXE -c $SDK_TOOLS_URL
 			fi
-			unzip "sdk-tools-windows-3859397.zip"
+			unzip "sdk-tools-windows-4333796.zip"
 		fi
 		
 		#mv "sdk-tools-windows-3859397" "tools"
 
-		if [ -e  "sdk-tools-windows-3859397.zip" ]; then
-			rm  "sdk-tools-windows-3859397.zip"
+		if [ -e "sdk-tools-windows-4333796.zip" ]; then
+			rm  "sdk-tools-windows-4333796.zip"
 		fi
 	#fi
 }
@@ -401,15 +402,18 @@ getOldAndroidSDKToolsW32(){
 	#changeDirectory $ANDROID_SDK
 	if [ ! -e sdk ] ; then
 		mkdir sdk
-	fi
+	
 		changeDirectory sdk
-		export SDK_TOOLS_URL="http://dl.google.com/android/installer_r24.0.2-windows.exe" 
+		export SDK_TOOLS_URL="https://dl.google.com/android/repository/tools_r25.2.5-windows.zip" 
 		$WGET_EXE -c $SDK_TOOLS_URL #getting sdk 
 		if [ $? != 0 ]; then 
 			$WGET_EXE -c $SDK_TOOLS_URL
 		fi
-		./installer_r24.0.2-windows.exe
-	#fi
+		#./installer_r24.0.2-windows.exe
+		unzip tools_r25.2.5-windows.zip
+		rm tools_r25.2.5-windows.zip
+
+	fi
 
 	if [ ! -e $ANDROID_SDK/ndk-bundle ]; then
 		changeDirectory $ANDROID_SDK
@@ -418,7 +422,7 @@ getOldAndroidSDKToolsW32(){
 			$WGET_EXE -c $NDK_URL
 		fi
 		unzip $NDK_ZIP_FILE
-		mv "android-ndk-r16b" ndk-bundle
+		mv "android-ndk-r18b" ndk-bundle
 		if [ -e $NDK_ZIP_FILE ]; then
 			rm $NDK_ZIP_FILE
 		fi
@@ -539,7 +543,8 @@ initParameters(){
 
 	if [ $USE_PROXY = 1 ]; then
 		SDK_MANAGER_CMD_PARAMETERS=(
-			"platforms;android-26" 
+			"platforms;android-26"
+			"platform-tools"
 			"build-tools;26.0.2" 
 			#"tools" 
 			"ndk-bundle" 
@@ -556,7 +561,8 @@ initParameters(){
 #	ActiveProxy 1
 	else
 		SDK_MANAGER_CMD_PARAMETERS=(
-		"platforms;android-26" 
+		"platforms;android-26"
+		"platform-tools" 
 		"build-tools;26.0.2" 
 		#"tools"
 		"ndk-bundle" 
@@ -660,10 +666,10 @@ getOldAndroidSDK(){
 
 	if [ -e $ANDROID_SDK/tools/android.bat  ]; then 
 		#changeDirectory $ANDROID_SDK/tools
-		echo  "Before install sdk 24.0"
-		winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk "
+		#echo  "Before install sdk 24.0"
+		#winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk "
 		#./android update sdk
-		echo "--> After update sdk tools to 24.1.1"
+		echo "--> Running Android SDK Tools manager"
 		#schangeDirectory $ANDROID_SDK/tools
 		#./android update sdk
 		winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk"
@@ -779,7 +785,7 @@ LAMW4LinuxPostConfig(){
 		"PrebuildOSYS=$OS_PREBUILD"
 		"MainActivity=App"
 		"FullProjectName="
-		"InstructionSet=0"''
+		"InstructionSet=1"
 		"AntPackageName=org.lamw"
 		"AndroidPlatform=0"
 		"AntBuildMode=debug"
@@ -795,10 +801,10 @@ LAMW4LinuxPostConfig(){
 		fi
 	done
 	#AddLAMWtoStartMenu
-	if [ $OLD_ANDROID_SDK = 0 ]; then
-		winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mipsel-linux-android-4.9"
-		winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mips64el-linux-android-4.9"
-	fi
+	#if [ $OLD_ANDROID_SDK = 0 ]; then
+	winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mipsel-linux-android-4.9"
+	winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mips64el-linux-android-4.9"
+	#fi
 
 
 }
@@ -1023,7 +1029,7 @@ case "$1" in
 	"version")
 	echo "LAMW4Linux  version $LAMW_INSTALL_VERSION"
 	;;
-	"clean")
+	"uninstall")
 		CleanOldConfig
 	;;
 	"install")
@@ -1031,16 +1037,21 @@ case "$1" in
 		mainInstall
 	;;
 
-	"install=sdk24")
+	"install-oldsdk")
 		printf "Mode SDKTOOLS=24 with ant support "
 		export OLD_ANDROID_SDK=1
-
 		mainInstall
 	;;
 
-	"clean-install")
+	"reinstall")
 		#initParameters $2
 		CleanOldConfig
+		mainInstall
+	;;
+	"reinstall-oldsdk")
+		CleanOldConfig
+		printf "Mode SDKTOOLS=24 with ant support "
+		export OLD_ANDROID_SDK=1
 		mainInstall
 	;;
 
@@ -1068,18 +1079,19 @@ case "$1" in
 	*)
 		lamw_opts=(
 			"Usage:\n\tbash lamw-install.sh [Options]\n"
-			"\tbash lamw-install.sh clean\n"
+			"\tbash lamw-install.sh uninstall\n"
 			"\tbash lamw-install.sh install\n"
 			"\tbash lawmw-install.sh install --force\n"
 			"\tbash lamw-install.sh install --use_proxy\n"
-			"\tbash lawmw-install.sh install=sdk24"
+			"\tbash lawmw-install.sh install-old-sdk"
 			"----------------------------------------------\n"
 			"\tbash lamw-install.sh install --use_proxy --server [HOST] --port [NUMBER] \n"
 			"sample:\n\tbash lamw-install.sh install --use_proxy --server 10.0.16.1 --port 3128\n"
 			"-----------------------------------------------\n"
-			"\tbash lamw-install.sh clean-install\n"
-			"\tbash lamw-install.sh clean-install --force\n"
-			"\tbash lamw-install.sh clean-install --use_proxy\n"
+			"\tbash lamw-install.sh reinstall\n"
+			"\tbash lamw-install.sh reinstall-oldsdk\n"
+			"\tbash lamw-install.sh reinstall --force\n"
+			"\tbash lamw-install.sh reinstall --use_proxy\n"
 			"\tbash lamw-install.sh update-lamw\n"
 			)
 		printf "%s\U\n" "${lamw_opts[*]}"
