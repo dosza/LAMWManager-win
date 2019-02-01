@@ -3,9 +3,20 @@
 #Universidade federal de Mato Grosso
 #Curso ciencia da computação
 #AUTOR: Daniel Oliveira Souza <oliveira.daniel@gmail.com>
-#Versao LAMW-INSTALL: 0.2.0
+#Versao LAMW-INSTALL: 0.3.0
 #Descrição: Este script configura o ambiente de desenvolvimento para o LAMW
 #---------------------------------
+#----ColorTerm
+export VERDE=$'\e[1;32m'
+export AMARELO=$'\e[01;33m'
+export SUBLINHADO='4'
+export NEGRITO=$'\e[1m'
+export VERMELHO=$'\e[1;31m'
+export VERMELHO_SUBLINHADO=$'\e[1;4;31m'
+export AZUL=$'\e[1;34m'
+export NORMAL=$'\e[0m'
+
+
 #Critical Functions to Translate Calls Bash to  WinCalls 
 if [ -e "/c/tools/msys64/usr/bin" ]; then
 	export PATH="$PATH:/c/tools/msys64/usr/bin" 
@@ -125,9 +136,9 @@ MINGW_OPT="--reinstall"
 	
 
 
-LAMW_INSTALL_VERSION="0.2.0-Rv11-01-2019"
+LAMW_INSTALL_VERSION="0.3.0"
 LAMW_INSTALL_WELCOME=(
-	"\t\tWelcome LAMW4Linux Installer from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
+	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
 	"\t\t<oliveira.daniel109@gmail.com>\n"
 )
@@ -185,6 +196,7 @@ export SDK_TOOLS_URL="https://dl.google.com/android/repository/sdk-tools-windows
 SDK_VERSION="28"
 SDK_MANAGER_CMD_PARAMETERS=()
 SDK_MANAGER_CMD_PARAMETERS2=()
+SDK_MANAGER_CMD_PARAMETERS2_PROXY=()
 SDK_LICENSES_PARAMETERS=()
 LAZARUS_STABLE_SRC_LNK="http://svn.freepascal.org/svn/lazarus/tags/lazarus_1_8_4"
 LAMW_SRC_LNK="http://github.com/jmpessoa/lazandroidmodulewizard"
@@ -231,6 +243,7 @@ packs=()
 #echo "WIN_GRADLE_HOME=$WIN_GRADLE_HOME"
 #sleep 3
 export OLD_ANDROID_SDK=0
+export NO_GUI_OLD_SDK=0
 
 #--------------Win32 functions-------------------------
 
@@ -554,7 +567,22 @@ initParameters(){
 			--proxy_host=$PROXY_SERVER 
 			--proxy_port=$PORT_SERVER 
 		)
-		SDK_MANAGER_CMD_PARAMETERS2=("ndk-bundle" "extras;android;m2repository" --no_https --proxy=http --proxy_host=$PROXY_SERVER --proxy_port=$PORT_SERVER )
+		SDK_MANAGER_CMD_PARAMETERS2=(
+			 "android-26"
+			"platform-tools"
+			"build-tools-26.0.2" 
+			"extra-google-google_play_services"
+			"extra-android-m2repository"
+			"extra-google-m2repository"
+			"extra-google-market_licensing"
+			"extra-google-market_apk_expansion"
+		)
+		SDK_MANAGER_CMD_PARAMETERS2_PROXY=(
+			--no_https 
+			#--proxy=http 
+			--proxy-host=$PROXY_SERVER 
+			--proxy-port=$PORT_SERVER 
+		)
 		SDK_LICENSES_PARAMETERS=( --licenses --no_https --proxy=http --proxy_host=$PROXY_SERVER --proxy_port=$PORT_SERVER )
 		export http_proxy=$PROXY_URL
 		export https_proxy=$PROXY_URL
@@ -568,7 +596,16 @@ initParameters(){
 		"ndk-bundle" 
 		"extras;android;m2repository"
 		)			#ActiveProxy 0
-		SDK_MANAGER_CMD_PARAMETERS2=("ndk-bundle" "extras;android;m2repository")
+		SDK_MANAGER_CMD_PARAMETERS2=(
+			"android-26"
+			"platform-tools"
+			"build-tools-26.0.2" 
+			"extra-google-google_play_services"
+			"extra-android-m2repository"
+			"extra-google-m2repository"
+			"extra-google-market_licensing"
+			"extra-google-market_apk_expansion"
+		)
 		SDK_LICENSES_PARAMETERS=(--licenses )
 	fi
 }
@@ -669,10 +706,22 @@ getOldAndroidSDK(){
 		#echo  "Before install sdk 24.0"
 		#winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk "
 		#./android update sdk
-		echo "--> Running Android SDK Tools manager"
+		if [ $NO_GUI_OLD_SDK = 0 ]; then
+			echo "--> Running Android SDK Tools manager"
 		#schangeDirectory $ANDROID_SDK/tools
 		#./android update sdk
-		winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk"
+			winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk"
+		else
+			for((i=0;i<${#SDK_MANAGER_CMD_PARAMETERS2[*]};i++))
+			do
+				echo "${SDK_MANAGER_CMD_PARAMETERS2[i]}"
+				#read;
+				echo "y" |   winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk" "--all" "--no-ui" "--filter" "${SDK_MANAGER_CMD_PARAMETERS2[i]}" "${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}"
+				if [ $? != 0 ]; then
+					echo "y" |    winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk" "--all" "--no-ui" "--filter" "${SDK_MANAGER_CMD_PARAMETERS2[i]}" "${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}"
+				fi	
+			done 
+		fi
 
 		#echo "please wait ..."
 		#read 
@@ -776,7 +825,7 @@ LAMW4LinuxPostConfig(){
 	LAMW_init_str=(
 		"[NewProject]"
 		"PathToWorkspace=$WIN_LAMW_WORKSPACE_HOME"
-		"PathToJavaTemplates=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\java"
+		"PathToJavaTemplates=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\android_wizard\smartdesigner\java"
 		"PathToJavaJDK=$java_path"
 		"PathToAndroidNDK=$WIN_USER_DIRECTORY\LAMW\sdk\ndk-bundle"
 		"PathToAndroidSDK=$WIN_USER_DIRECTORY\LAMW\sdk"
@@ -790,14 +839,15 @@ LAMW4LinuxPostConfig(){
 		"AndroidPlatform=0"
 		"AntBuildMode=debug"
 		"NDK=5"
+		"PathToSmartDesigner=$WIN_USER_DIRECTORY\lazandroidmodulewizard\android_wizard\smartdesigner"
 	)
 	# "${LAMW_init_str[*]}"
 	for ((i=0;i<${#LAMW_init_str[@]};i++))
 	do
 		if [ $i = 0 ]; then 
-			echo "${LAMW_init_str[i]}" > "$LAZ4_LAMW_PATH_CFG/JNIAndroidProject.ini" 
+			echo "${LAMW_init_str[i]}" > "$LAZ4_LAMW_PATH_CFG/LAMW.ini" 
 		else
-			echo "${LAMW_init_str[i]}" >> "$LAZ4_LAMW_PATH_CFG/JNIAndroidProject.ini"
+			echo "${LAMW_init_str[i]}" >> "$LAZ4_LAMW_PATH_CFG/LAMW.ini"
 		fi
 	done
 	#AddLAMWtoStartMenu
@@ -1038,8 +1088,14 @@ case "$1" in
 	;;
 
 	"install-oldsdk")
-		printf "Mode SDKTOOLS=24 with ant support "
+		printf "Mode SDKTOOLS=24 with ant support\n"
 		export OLD_ANDROID_SDK=1
+		mainInstall
+	;;
+	"install_old_sdk")
+		printf "Mode SDKTOOLS=24(AutoInstall) with ant support\n"
+		export OLD_ANDROID_SDK=1
+		export NO_GUI_OLD_SDK=1
 		mainInstall
 	;;
 
@@ -1081,9 +1137,10 @@ case "$1" in
 			"Usage:\n\tbash lamw-install.sh [Options]\n"
 			"\tbash lamw-install.sh uninstall\n"
 			"\tbash lamw-install.sh install\n"
-			"\tbash lawmw-install.sh install --force\n"
+			"\tbash lamw-install.sh install --force\n"
 			"\tbash lamw-install.sh install --use_proxy\n"
-			"\tbash lawmw-install.sh install-old-sdk"
+			"\tbash lamw-install.sh install-old-sdk\n"
+			"${VERDE}New:\tbash lamw-install.sh install_old_sdk${NORMAL}\n"
 			"----------------------------------------------\n"
 			"\tbash lamw-install.sh install --use_proxy --server [HOST] --port [NUMBER] \n"
 			"sample:\n\tbash lamw-install.sh install --use_proxy --server 10.0.16.1 --port 3128\n"
@@ -1094,7 +1151,7 @@ case "$1" in
 			"\tbash lamw-install.sh reinstall --use_proxy\n"
 			"\tbash lamw-install.sh update-lamw\n"
 			)
-		printf "%s\U\n" "${lamw_opts[*]}"
+		printf "%b" "${lamw_opts[*]}"
 	;;
 	
 esac
