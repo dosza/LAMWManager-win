@@ -9,7 +9,7 @@ fi
 		"preinstall-win32.bat"
 		"preinstall-win64.bat"
 		"simple-lamw-install.sh"
-		"install.bat"	
+		"lamw_manager.bat"	
 	)
 	qt=${#files[*]}
 	for((i=0;i<qt;i++))
