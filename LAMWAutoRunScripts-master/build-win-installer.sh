@@ -8,7 +8,8 @@ fi
 		"preinstall.bat"
 		"preinstall-win32.bat"
 		"preinstall-win64.bat"
-		"simple-lamw-install.sh"	
+		"simple-lamw-install.sh"
+		"install.bat"	
 	)
 	qt=${#files[*]}
 	for((i=0;i<qt;i++))
