@@ -57,16 +57,29 @@ to distro linux like *GNU/debian* or *Windows 7 SP1/8.1/10*
 	<ul>
 		<li>preinstall-win32.bat</li>
 		<li>preinstall-win64.bat</li>
+		<li>lamw_manager.bat</li>
 		<li>bash simple-lamw-install.sh**</li>
 	</ul>
 </p>
 *Note: you need run this tool without root privileges!*
 
 
+<p>
+	<strong>Simple Example of Standard Installation (with Android SDK Tools r25.2.5)</strong>
+	<ol>
+	<li>Get and Run setup.exe <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/setup.exe">Click here to Download of LAMW Manager Win Installer</a></li>
+	<li>Open  with explorer.exe c:\lamw_manager </li>
+	<li>right-click on lamw_manager.bat</li>
+	<li>Then click Run as administrator</li>
+	</ol>
+	<strong>Note:</strong>To update LAMW simply redo the steps: 2,3 and 4!
+	<br><strong>Note:</strong>Read the requesitos section!</br>
+	<br><strong>Warning:</strong>Windows 7 has specific requirements, read the requirements section of windows 7</br>
+</p>
 
-<strong>Example of installation:</strong>
+<strong>Example Advanced of installation:</strong>
 <pre>
-	Run setup.exe avaliable in yourpath\LazLazlAMW-Win-Installer\LAMWAutoRunScripts
+	Run setup.exe avaliable in yourpath\LazLazlAMW-Win-Installer\LAMWAutoRunScripts or in <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/setup.exe">Setup</a>
 To install LAMW completely the <strong>first time</strong> with <strong><em>default option</em></strong>:
 	<strong>bash simple-lamw-install.sh</strong>
 			or:
@@ -80,10 +93,6 @@ To install LAMW completely the <strong>first time</strong> with <strong><em>defa
 	<strong>bash simple-lamw-install.sh</strong>        <em>update_lamw</em>
 
 </pre>
-</p>
-
-
-<p>
 <pre>					<Strong>Syntax:</Strong>
 bash simple-lamw-install.sh¹
 bash simple-lamw-install.sh² 	<strong>[actions]</strong>    [options]
