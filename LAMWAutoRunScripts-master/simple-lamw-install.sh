@@ -244,7 +244,52 @@ packs=()
 #sleep 3
 export OLD_ANDROID_SDK=0
 export NO_GUI_OLD_SDK=0
+export LAMW_INSTALL_STATUS=0
+export LAMW_IMPLICIT_ACTION_MODE=0
+#help of lamw
+lamw_opts=(
+	"Usage:\n\tbash simple-lamw-install.sh [Options]\n"
+	"\tbash simple-lamw-install.sh uninstall\n"
+	"\tbash simple-lamw-install.sh install\n"
+	"\t${VERDE}bash simple-lamw-install.sh install_default${NORMAL}\n"
+	"\tbash simple-lamw-install.sh install --force\n"
+	"\tbash simple-lamw-install.sh install --use_proxy\n"
+	"\tbash simple-lamw-install.sh install-old-sdk\n"
+	"\tbash simple-lamw-install.sh install_old_sdk\n"
+	"----------------------------------------------\n"
+	"\tbash simple-lamw-install.sh install --use_proxy --server [HOST] --port [NUMBER] \n"
+	"sample:\n\tbash simple-lamw-install.sh install --use_proxy --server 10.0.16.1 --port 3128\n"
+	"-----------------------------------------------\n"
+	"\tbash simple-lamw-install.sh reinstall\n"
+	"\tbash simple-lamw-install.sh reinstall-oldsdk\n"
+	"\tbash simple-lamw-install.sh reinstall --force\n"
+	"\tbash simple-lamw-install.sh reinstall --use_proxy\n"
+	"\tbash simple-lamw-install.sh update-lamw\n"
+)
 
+getImplicitInstall(){
+	if [  -e  $ANDROID_HOME/lamw-install.log ]; then
+		printf "Checking the Android SDK version installed :"
+		cat $ANDROID_HOME/lamw-install.log |  grep "OLD_ANDROID_SDK=0"
+		if [ $? = 0 ]; then
+			export OLD_ANDROID_SDK=0
+		else 
+			export OLD_ANDROID_SDK=1
+		fi
+		printf "Checking the LAMW Manager version :"
+		cat $ANDROID_HOME/lamw-install.log |  grep "Generate LAMW_INSTALL_VERSION=$LAMW_INSTALL_VERSION"
+		if [ $? = 0 ]; then  
+			echo "Only Update LAMW"
+			export LAMW_IMPLICIT_ACTION_MODE=1 #apenas atualiza o lamw 
+		else
+			echo "You need upgrade your LAMW4Linux!"
+			export LAMW_IMPLICIT_ACTION_MODE=0
+		fi
+	else
+		export OLD_ANDROID_SDK=1 #obetem por padrão o old sdk 
+		export NO_GUI_OLD_SDK=1
+	fi
+}
 #--------------Win32 functions-------------------------
 
 winMKLinkDir(){
@@ -294,7 +339,7 @@ winRMDir(){
 winRMDirf(){
 	win_temp_executable="$WIN_MSYS_TEMP_HOME/winrmdir.bat"
 	echo "rmdir /Q /S  $*" > /tmp/winrmdir.bat
-	echo "rmdir $*" >> /tmp/winrmdir.bat
+	echo "rmdir /Q /S  $*" >> /tmp/winrmdir.bat
 	winCallfromPS $win_temp_executable
 	if [ -e /tmp/winrmdir.bat ]; then 
 		rm /tmp/winrmdir.bat
@@ -1003,7 +1048,16 @@ fi
 
 #write log lamw install 
 writeLAMWLogInstall(){
-	lamw_log_str=("Generate LAMW4Linux Intaller Version $LAMW_INSTALL_VERSION" "LAMW workspace : $WIN_LAMW_WORKSPACE_HOME" "Android SDK:$WIN_ANDROID_HOME\sdk" "Android NDK:$WIN_ANDROID_HOME\ndk" "Gradle:$WIN_GRADLE_HOME" "LOG:$WIN_ANDROID_HOME\lamw-install.log")
+	lamw_log_str=(
+		"Generate LAMW_INSTALL_VERSION=$LAMW_INSTALL_VERSION" 
+		"LAMW workspace : $WIN_LAMW_WORKSPACE_HOME" 
+		"Android SDK:$WIN_ANDROID_HOME\sdk" 
+		"Android NDK:$WIN_ANDROID_HOME\ndk" 
+		"Gradle:$WIN_GRADLE_HOME" 
+		"OLD_ANDROID_SDK=$OLD_ANDROID_SDK\n"
+		"SDK_TOOLS_VERSION=$SDK_TOOLS_VERSION\n"
+		"Install-date:$(date)"
+	)
 	for((i=0; i<${#lamw_log_str[*]};i++)) 
 	do
 		printf "%s\n"  "${lamw_log_str[i]}"
@@ -1052,7 +1106,7 @@ fi
 	echo "----------------------------------------------------------------------"
 	printf "${LAMW_INSTALL_WELCOME[*]}"
 	echo "----------------------------------------------------------------------"
-	echo "LAMW-Install (Native Support:Linux supported Debian 9, Ubuntu 16.04 LTS, Linux Mint 18)
+	echo "LAMW Manager (Native Support:Linux supported Debian 9, Ubuntu 16.04 LTS, Linux Mint 18)
 	Windows Compability (from MSYS2): Windows 7 SP1, Windows 8.1, Windows 10"
 
 	#configure parameters sdk before init download and build
@@ -1082,11 +1136,30 @@ case "$1" in
 	"uninstall")
 		CleanOldConfig
 	;;
-	"install")
-		
+	"install")	
 		mainInstall
 	;;
+	"install_default")
+		getImplicitInstall
+		if [ $LAMW_IMPLICIT_ACTION_MODE = 0 ]; then
+			echo "Please wait..."
+			printf "${NEGRITO}Implicit installation of LAMW starting in 10 seconds  ... ${NORMAL}\n"
+			printf "Press control+c to exit ...\n"
+			sleep 10
 
+			mainInstall
+		else
+			echo "Please wait ..."
+			printf "${NEGRITO}Implicit LAMW Framework update starting in 10 seconds ... ${NORMAL}...\n"
+			printf "Press control+c to exit ...\n"
+			sleep 10 
+			checkProxyStatus;
+			echo "Updating LAMW";
+			getLAMWFramework;
+		#	sleep 1;
+			BuildLazarusIDE "1";
+		fi
+	;;
 	"install-oldsdk")
 		printf "Mode SDKTOOLS=24 with ant support\n"
 		export OLD_ANDROID_SDK=1
@@ -1132,25 +1205,28 @@ case "$1" in
 	"update-links")
 		#CreateSDKSimbolicLinks
 	;;
+	"")
+		getImplicitInstall
+		if [ $LAMW_IMPLICIT_ACTION_MODE = 0 ]; then
+			echo "Please wait..."
+			printf "${NEGRITO}Implicit installation of LAMW starting in 10 seconds  ... ${NORMAL}\n"
+			printf "Press control+c to exit ...\n"
+			sleep 10
+
+			mainInstall
+		else
+			echo "Please wait ..."
+			printf "${NEGRITO}Implicit LAMW Framework update starting in 10 seconds ... ${NORMAL}...\n"
+			printf "Press control+c to exit ...\n"
+			sleep 10 
+			#checkProxyStatus;
+			echo "Updating LAMW";
+			getLAMWFramework;
+		#	sleep 1;
+			BuildLazarusIDE "1";
+		fi					
+	;;
 	*)
-		lamw_opts=(
-			"Usage:\n\tbash lamw-install.sh [Options]\n"
-			"\tbash lamw-install.sh uninstall\n"
-			"\tbash lamw-install.sh install\n"
-			"\tbash lamw-install.sh install --force\n"
-			"\tbash lamw-install.sh install --use_proxy\n"
-			"\tbash lamw-install.sh install-old-sdk\n"
-			"${VERDE}New:\tbash lamw-install.sh install_old_sdk${NORMAL}\n"
-			"----------------------------------------------\n"
-			"\tbash lamw-install.sh install --use_proxy --server [HOST] --port [NUMBER] \n"
-			"sample:\n\tbash lamw-install.sh install --use_proxy --server 10.0.16.1 --port 3128\n"
-			"-----------------------------------------------\n"
-			"\tbash lamw-install.sh reinstall\n"
-			"\tbash lamw-install.sh reinstall-oldsdk\n"
-			"\tbash lamw-install.sh reinstall --force\n"
-			"\tbash lamw-install.sh reinstall --use_proxy\n"
-			"\tbash lamw-install.sh update-lamw\n"
-			)
 		printf "%b" "${lamw_opts[*]}"
 	;;
 	
