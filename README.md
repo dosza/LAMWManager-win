@@ -55,5 +55,5 @@ to distro linux like *GNU/debian* or *Windows 7 SP1/8.1/10*
 </p>
 
 <p>
-	for details read  <a hef="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/LAMWAutoRunScripts-master/docs/man.md"> the advanced manual</a>
+	for details read in <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/LAMWAutoRunScripts-master/docs/man.md">The advanced manual</a>
 </p>
