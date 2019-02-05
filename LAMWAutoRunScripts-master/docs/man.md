@@ -3,7 +3,21 @@ bash simple-lamw-install.sh¹
 bash simple-lamw-install.sh² 	<strong>[actions]</strong>    [options]
 </pre>
 </p>
+**Usage:**
 
+<p>
+bash simple-lamw-install.sh                                         
+	<pre>
+	<strong>[action]</strong>                            <em>Description</em>
+	<strong>uninstall</strong>                           Uninstall LAMW completely and erase all settings.
+	<strong>--sdkmanager</strong>                        Run Android SDK Manager 
+	<strong>--update-lamw</strong>                       Update LAMW sources and rebuild Lazarus IDE
+	</pre>
+	<strong>Note:</strong>The <em>default option</em> is <strong><em>Android SDK Tools r25.2.5</em></strong>
+</p>
+
+
+<pre> <strong>sample:</strong>	lamw_manager install	<strong>--use-proxy	--server</strong> <em>10.0.16.1</em>	<strong>--port</strong>	<em>3128</em> </pre>
 **commands:**
 <p>
 	<ul>
@@ -14,38 +28,49 @@ bash simple-lamw-install.sh² 	<strong>[actions]</strong>    [options]
 	</ul>
 </p>
 
+<strong>Example Advanced of installation:</strong>
+<pre>
+Get and Run setup.exe  in <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/setup.exe">Clich Here to get Setup</a>
+Open  a powershell as administrator.
+<br>Open directory with command "cd c:\lamw_manager"</br>
+To install LAMW completely the <strong>first time</strong> with <strong><em>default option</em></strong>:
+	<strong>bash simple-lamw-install.sh</strong>
+<br>To fully update LAMW <strong>after</strong> the <em>first installation</em>:</br>
+	<strong>bash simple-lamw-install.sh</strong>
+<br>To just upgrade <strong>LAMW framework</strong> <em>(with the latest version available in git)</em></br>
+	<strong>bash simple-lamw-install.sh</strong>        <em>update_lamw</em>
+
+</pre>
 **Usage:**
+<pre>					<Strong>Syntax:</Strong>
+bash simple-lamw-install.sh¹
+bash simple-lamw-install.shr² 	<strong>[actions]</strong>         <strong>[options]</strong>  
+</pre>
 
 <p>
-bash simple-lamw-install.sh
+bash simple-lamw-install.sh                                     
 	<pre>
 	<strong>[action]</strong>                            <em>Description</em>
-	<strong>install</strong>                             Install lamw with <em>Android SDK Tools r26.1.1</em>
-	<strong>install_default</strong>                     The first time, install LAMW with <strong>default option</strong>, in other cases only install updates.                                                   
 	<strong>uninstall</strong>                           Uninstall LAMW completely and erase all settings.
-	<strong>reinstall</strong>                           Clean and reinstall <em>LAMW IDE with Android SDK Tools r26.1.1</em>
-	<strong>install-oldsdk</strong>                      Install lamw with <em>Android SDK Tools r25.2.5³ GUI</em>
-	<strong>install_old_sdk</strong>                     Auto Install lamw with <strong><em>Android SDK Tools r25.2.5 CLI</em></strong>
-	<strong>reinstall-oldsdk</strong>                    Clean and reinstall lamw with <em>Android SDK Tools r25.2.5</em>
-	<strong>update-lamw</strong>                         Update LAMW sources and rebuild Lazarus IDE
+	<strong>--sdkmanager</strong>                        Run Android SDK Manager 
+	<strong>--update-lamw</strong>                       Update LAMW sources and rebuild Lazarus IDE
 	</pre>
-	<strong>Note:</strong>The <em>default option</em> is <strong><em>Android SDK Tools r25.2.5</em></strong>
 </p>
 
 **proxy options:**
 <p>
 	<pre>
 	<em>actions</em>    <strong>--use-proxy</strong> 		<em>[proxy options]</em>
-	<em>install</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
+	<strong>sample:</strong>bash simple-lamw-install.sh    <em>--sdkmanager</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
 </pre>
 </p>
 
-<pre> <strong>sample:</strong>	simple-lamw-install.sh install	<strong>--use-proxy	--server</strong> <em>10.0.16.1</em>	<strong>--port</strong>	<em>3128</em> </pre>
+<pre> <strong>sample:</strong>	simple-lamw-install.sh <strong>--use-proxy	--server</strong> <em>10.0.16.1</em>	<strong>--port</strong>	<em>3128</em> </pre>
 
 
 ¹<strong>New!
 Implied action</strong>:
-<em>When using the <strong>bash simple-lamw-install.sh</strong> command <strong>without parameters the first time</strong>, LAMW Manager installs the default LAMW environment (Android SDK Tools r25.2.5), in other cases LAMW Manager <strong>only</strong> installs updates.</em>
+<em>When using the <strong>bash simple-lamw-install.sh</strong> command <strong>without parameters </strong>, LAMW Manager installs the default LAMW environment in other cases LAMW Manager <strong>only</strong> installs updates.</em>
 
 
 <p>

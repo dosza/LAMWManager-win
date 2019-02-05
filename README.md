@@ -39,10 +39,8 @@ to distro linux like *GNU/debian* or *Windows 7 SP1/8.1/10*
 
 **Windows 7 Requeriments**
 <p>
+	Read more in <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/LAMWAutoRunScripts-master/docs/win7.md"> Windows 7 Requeriments </a>
 </p>
-
-
-
 
 <p>
 	<strong>Simple Example of Standard Installation (with Android SDK Tools r25.2.5)</strong>
@@ -54,22 +52,8 @@ to distro linux like *GNU/debian* or *Windows 7 SP1/8.1/10*
 	</ol>
 	<strong>Note:</strong>To update LAMW simply redo the steps: 2,3 and 4!
 	<br><strong>Note:</strong>Read the requesitos section!</br>
-	<br><strong>Warning:</strong>Windows 7 has specific requirements, read the requirements section of windows 7</br>
 </p>
 
-<strong>Example Advanced of installation:</strong>
-<pre>
-	Run setup.exe avaliable in yourpath\LazLazlAMW-Win-Installer\LAMWAutoRunScripts or in <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/setup.exe">Setup</a>
-To install LAMW completely the <strong>first time</strong> with <strong><em>default option</em></strong>:
-	<strong>bash simple-lamw-install.sh</strong>
-			or:
-	<strong>bash simple-lamw-install.sh</strong>        <em>install_default</em>
-
-<br>To install LAMW completely the <strong>first time</strong> with <strong><em>Android SDK Tools r26.1.1:</em></strong></br>
-	<strong>bash simple-lamw-install.sh</strong>       <em>install</em>
-<br>To fully update LAMW <strong>after</strong> the <em>first installation</em>:</br>
-	<strong>bash simple-lamw-install.sh</strong>
-<br>To just upgrade <strong>LAMW framework</strong> <em>(with the latest version available in git)</em></br>
-	<strong>bash simple-lamw-install.sh</strong>        <em>update_lamw</em>
-
-</pre>
+<p>
+	for details read  <a hef="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/LAMWAutoRunScripts-master/docs/man.md"> the advanced manual</a>
+</p>
