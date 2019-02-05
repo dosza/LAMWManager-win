@@ -270,6 +270,9 @@ lamw_opts=(
 
 getTerminalDeps(){
 	pacman -Syy  unzip --noconfirm
+	if [ $? != 0 ]; then 
+		pacman -Syy  unzip --noconfirm
+	fi
 }
 getImplicitInstall(){
 	if [  -e  $ANDROID_HOME/lamw-install.log ]; then
