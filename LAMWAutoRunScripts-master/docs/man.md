@@ -1,27 +1,7 @@
 
 **Advanced LAMW Manage v0.3.0 Manual**
 
-<pre>					<Strong>Syntax:</Strong>
-bash simple-lamw-install.sh¹
-bash simple-lamw-install.sh² 	<strong>[actions]</strong>    [options]
-</pre>
-</p>
 
-**Usage:**
-
-<p>
-bash simple-lamw-install.sh                                         
-	<pre>
-	<strong>[action]</strong>                            <em>Description</em>
-	<strong>uninstall</strong>                           Uninstall LAMW completely and erase all settings.
-	<strong>--sdkmanager</strong>                        Run Android SDK Manager 
-	<strong>--update-lamw</strong>                       Update LAMW sources and rebuild Lazarus IDE
-	</pre>
-	<strong>Note:</strong>The <em>default option</em> is <strong><em>Android SDK Tools r25.2.5</em></strong>
-</p>
-
-
-<pre> <strong>sample:</strong>	lamw_manager install	<strong>--use-proxy	--server</strong> <em>10.0.16.1</em>	<strong>--port</strong>	<em>3128</em> </pre>
 **commands:**
 <p>
 	<ul>
@@ -48,12 +28,12 @@ To install LAMW completely the <strong>first time</strong> with <strong><em>defa
 **Usage:**
 <pre>					<Strong>Syntax:</Strong>
 bash simple-lamw-install.sh¹
-bash simple-lamw-install.shr² 	<strong>[actions]</strong>         <strong>[options]</strong>  
+bash simple-lamw-install.sh² 	<strong>[actions]</strong>         <strong>[options]</strong>  
 </pre>
 
 <p>
-bash simple-lamw-install.sh                                     
-	<pre>
+<pre>
+bash simple-lamw-install.sh 
 	<strong>[action]</strong>                            <em>Description</em>
 	<strong>uninstall</strong>                           Uninstall LAMW completely and erase all settings.
 	<strong>--sdkmanager</strong>                        Run Android SDK Manager 
@@ -63,13 +43,13 @@ bash simple-lamw-install.sh
 
 **proxy options:**
 <p>
-	<pre>
-	<em>actions</em>    <strong>--use-proxy</strong> 		<em>[proxy options]</em>
-	<strong>sample:</strong>bash simple-lamw-install.sh    <em>--sdkmanager</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
+<pre>
+bash simple-lamw-install.sh	<em>[actions]</em>    <strong>--use-proxy</strong> 		<em>[proxy options]</em>
+<strong>sample:</strong>bash simple-lamw-install.sh    <strong>--use-proxy	--server</strong> <em>10.0.16.1</em>	<strong>--port</strong>	<em>3128</em>
+<strong>sample:</strong>bash simple-lamw-install.sh    <em>--sdkmanager</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
 </pre>
 </p>
 
-<pre> <strong>sample:</strong>	simple-lamw-install.sh <strong>--use-proxy	--server</strong> <em>10.0.16.1</em>	<strong>--port</strong>	<em>3128</em> </pre>
 
 
 ¹<strong>New!
