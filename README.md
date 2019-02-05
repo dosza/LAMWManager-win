@@ -4,22 +4,20 @@ LAMW Manager is  **"APT"** to LAMW framework
 LAMW Manager is powerfull   command line tool like *APT* to install, configure and Update LAMW Framework IDE
 to distro linux like *GNU/debian* or *Windows 7 SP1/8.1/10*
 
+<p>
+	For details read in <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/LAMWAutoRunScripts-master/docs/man.md"><strong>Advanced LAMW Manage v0.3.0 Manual</strong></a>
+</p>
 
 **This tool make:**
 <ul>
 	<li>Get Apache Ant</li>
 	<li>Get Gradle</li>
-	<li>Get Freepascal Compiler</li>
-	<li>Get Lazarus IDE Sources</li>
 	<li>Get Android NDK</li>
 	<li>Get Android SDK</li>
-	<li>Get OpenJDK</li>
+	<li>Get Oracle JDK</li>
 	<li>Get LAMW framework</li>
-	<li>Build Freepascal Cross-compile to <strong>arm-android</strong></li>
 	<li>Build Lazarus IDE</li>
 	<li>Install LAMW framework</li>
-	<li>Create launcher to menu</li>
-	<li>Register <strong>MIME</strong> </li>
 </ul>
 
 
@@ -54,6 +52,3 @@ to distro linux like *GNU/debian* or *Windows 7 SP1/8.1/10*
 	<br><strong>Note:</strong>Read the requesitos section!</br>
 </p>
 
-<p>
-	for details read in <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/LAMWAutoRunScripts-master/docs/man.md">The advanced manual</a>
-</p>
