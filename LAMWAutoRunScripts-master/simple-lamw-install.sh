@@ -32,6 +32,7 @@ winCallfromPS(){
 	powershell.exe  /tmp/pscommand.ps1
 }
 
+
 getWinEnvPaths(){
 	command='$env:'
 	command="$command$1"
@@ -267,6 +268,9 @@ lamw_opts=(
 	"\tbash simple-lamw-install.sh update-lamw\n"
 )
 
+getTerminalDeps(){
+	pacman -Syy  unzip --noconfirm
+}
 getImplicitInstall(){
 	if [  -e  $ANDROID_HOME/lamw-install.log ]; then
 		printf "Checking the Android SDK version installed :"
@@ -346,11 +350,6 @@ winRMDirf(){
 		rm /tmp/winrmdir.bat
 	fi
 }
-
-#unzip(){
-		#/$LETTER_HOME_DRIVER/Program\ Files/7-zip/7z.exe x $*
-	#	7z.exe x $*
-#}
 InstallWinADB(){
 	changeDirectory $ANDROID_HOME
 	if [ ! -e adbdriver ]; then 
@@ -1087,6 +1086,7 @@ getStatusInstalation(){
 mainInstall(){
 
 	#installDependences
+	getTerminalDeps
 	#checkProxyStatus
 	#configureFPC
 	WrappergetAndroidSDKTools

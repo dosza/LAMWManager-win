@@ -14,7 +14,7 @@
 
 <strong>Example Advanced of installation:</strong>
 <pre>
-Get and Run setup.exe  in <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/setup.exe">Clich Here to get Setup</a>
+Run setup.exe <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/setup.exe">Clich Here to get Setup</a>
 Open  a powershell as administrator.
 <br>Open directory with command "cd c:\lamw_manager"</br>
 To install LAMW completely the <strong>first time</strong> with <strong><em>default option</em></strong>:
@@ -43,10 +43,11 @@ bash simple-lamw-install.sh
 
 **proxy options:**
 <p>
-<pre>
-bash simple-lamw-install.sh	<em>[actions]</em>    <strong>--use-proxy</strong> 		<em>[proxy options]</em>
-<strong>sample:</strong>bash simple-lamw-install.sh    <strong>--use-proxy	--server</strong> <em>10.0.16.1</em>	<strong>--port</strong>	<em>3128</em>
-<strong>sample:</strong>bash simple-lamw-install.sh    <em>--sdkmanager</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
+<pre>					<Strong>Syntax:</Strong>
+bash simple-lamw-install.sh	<em>     [actions]</em>    <strong>--use-proxy</strong> 		<em>[proxy options]</em>
+<br><strong>sample:    </strong>bash simple-lamw-install.sh    <strong>--use-proxy	--server</strong> <em>10.0.16.1</em></br><strong>--port</strong>	<em>3128</em>
+<strong>sample:    </strong>bash simple-lamw-install.sh    <em>--sdkmanager</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
+<strong>sample:    </strong>bash simple-lamw-install.sh    <em>--update-lamw</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
 </pre>
 </p>
 
