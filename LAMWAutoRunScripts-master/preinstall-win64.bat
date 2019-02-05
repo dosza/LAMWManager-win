@@ -26,12 +26,10 @@ IF   %ERRORLEVEL% NEQ 0 choco install git.install -y --force
 choco install jdk8  -y  
 IF   %ERRORLEVEL% NEQ 0 choco install jdk8  -y --force  
 choco install 7zip.install -y  
-IF   %ERRORLEVEL% NEQ 0 choco install 7zip.install -y --force  
+IF   %ERRORLEVEL% NEQ 0 choco install unzip -y --force  
 choco install wget -y 
 IF   %ERRORLEVEL% NEQ 0 choco install wget -y --force
 
-REM SET exec_path="%HOMEDRIVE%""%HOMEPATH%\Downloads\LAMWAutoRunScripts-master"
-REM cd %exec_path%
 if not exist "%HOMEDRIVE%\laz4lamwpaths.txt"  SETX /M PATH "C:\laz4android1.8\fpc\3.0.4\bin\i386-win32;C:\tools\msys64\usr\bin;C:\Program Files\Git\bin;%PATH%"
 if %errorlevel% EQU 0 echo "%PATH%" > "%HOMEDRIVE%\laz4lamwpaths.txt"
 SET PATH=%MSYS_EXEC%;%PATH%

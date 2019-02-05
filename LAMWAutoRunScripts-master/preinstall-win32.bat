@@ -24,7 +24,7 @@ IF   %ERRORLEVEL% NEQ 0 choco install git.install -y --force
 choco install jdk8  -y  
 IF   %ERRORLEVEL% NEQ 0 choco install jdk8  -y --force  
 choco install 7zip.install -y  
-IF   %ERRORLEVEL% NEQ 0 choco install 7zip.install -y --force 
+IF   %ERRORLEVEL% NEQ 0 choco install unzip -y --force 
 choco install wget -y 
 IF   %ERRORLEVEL% NEQ 0 choco install wget -y --force
 if not exist "%HOMEDRIVE%\laz4lamwpaths.txt"  SETX /M PATH "C:\laz4android1.8\fpc\3.0.4\bin\i386-win32;C:\tools\msys32\usr\bin;C:\Program Files\Git\bin;%PATH%"

@@ -190,8 +190,8 @@ export PORT_SERVER=3128
 PROXY_URL="http://$PROXY_SERVER:$PORT_SERVER"
 export USE_PROXY=0
 export JAVA_PATH=""
-export SDK_TOOLS_URL="https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip
-" 
+export SDK_TOOLS_URL="https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip"
+export SDK_TOOLS_VERSION="r26.1.1" 
 
 SDK_VERSION="28"
 SDK_MANAGER_CMD_PARAMETERS=()
@@ -242,7 +242,7 @@ packs=()
 #[[]
 #echo "WIN_GRADLE_HOME=$WIN_GRADLE_HOME"
 #sleep 3
-export OLD_ANDROID_SDK=0
+export OLD_ANDROID_SDK=1
 export NO_GUI_OLD_SDK=0
 export LAMW_INSTALL_STATUS=0
 export LAMW_IMPLICIT_ACTION_MODE=0
@@ -275,6 +275,7 @@ getImplicitInstall(){
 			export OLD_ANDROID_SDK=0
 		else 
 			export OLD_ANDROID_SDK=1
+			export NO_GUI_OLD_SDK=1
 		fi
 		printf "Checking the LAMW Manager version :"
 		cat $ANDROID_HOME/lamw-install.log |  grep "Generate LAMW_INSTALL_VERSION=$LAMW_INSTALL_VERSION"
@@ -462,6 +463,7 @@ getOldAndroidSDKToolsW32(){
 		mkdir sdk
 	
 		changeDirectory sdk
+		export SDK_TOOLS_VERSION="r25.2.5"
 		export SDK_TOOLS_URL="https://dl.google.com/android/repository/tools_r25.2.5-windows.zip" 
 		$WGET_EXE -c $SDK_TOOLS_URL #getting sdk 
 		if [ $? != 0 ]; then 
@@ -650,6 +652,7 @@ initParameters(){
 			"extra-google-m2repository"
 			"extra-google-market_licensing"
 			"extra-google-market_apk_expansion"
+			"extra-google-usb_driver"
 		)
 		SDK_LICENSES_PARAMETERS=(--licenses )
 	fi
@@ -1054,8 +1057,8 @@ writeLAMWLogInstall(){
 		"Android SDK:$WIN_ANDROID_HOME\sdk" 
 		"Android NDK:$WIN_ANDROID_HOME\ndk" 
 		"Gradle:$WIN_GRADLE_HOME" 
-		"OLD_ANDROID_SDK=$OLD_ANDROID_SDK\n"
-		"SDK_TOOLS_VERSION=$SDK_TOOLS_VERSION\n"
+		"OLD_ANDROID_SDK=$OLD_ANDROID_SDK"
+		"SDK_TOOLS_VERSION=$SDK_TOOLS_VERSION"
 		"Install-date:$(date)"
 	)
 	for((i=0; i<${#lamw_log_str[*]};i++)) 
@@ -1068,7 +1071,19 @@ writeLAMWLogInstall(){
 		fi
 	done		
 }
+getStatusInstalation(){
+	if [  -e $ANDROID_HOME/lamw-install.log ]; then
+		#cat $LAMW4LINUX_HOME/lamw-install.log
+		export LAMW_INSTALL_STATUS=1
+		return 1
 
+	else 
+		#echo "not installed" >&2
+		export OLD_ANDROID_SDK=1
+		export NO_GUI_OLD_SDK=1
+		return 0;
+	fi
+}
 mainInstall(){
 
 	#installDependences
@@ -1135,75 +1150,94 @@ case "$1" in
 	;;
 	"uninstall")
 		CleanOldConfig
-	;;
-	"install")	
-		mainInstall
-	;;
-	"install_default")
-		getImplicitInstall
-		if [ $LAMW_IMPLICIT_ACTION_MODE = 0 ]; then
-			echo "Please wait..."
-			printf "${NEGRITO}Implicit installation of LAMW starting in 10 seconds  ... ${NORMAL}\n"
-			printf "Press control+c to exit ...\n"
-			sleep 10
+	 ;;
+	# "install")	
+	# 	mainInstall
+	# ;;
+	# "install_default")
+	# 	getImplicitInstall
+	# 	if [ $LAMW_IMPLICIT_ACTION_MODE = 0 ]; then
+	# 		echo "Please wait..."
+	# 		printf "${NEGRITO}Implicit installation of LAMW starting in 10 seconds  ... ${NORMAL}\n"
+	# 		printf "Press control+c to exit ...\n"
+	# 		sleep 10
 
-			mainInstall
+	# 		mainInstall
+	# 	else
+	# 		echo "Please wait ..."
+	# 		printf "${NEGRITO}Implicit LAMW Framework update starting in 10 seconds ... ${NORMAL}...\n"
+	# 		printf "Press control+c to exit ...\n"
+	# 		sleep 10 
+	# 		checkProxyStatus;
+	# 		echo "Updating LAMW";
+	# 		getLAMWFramework;
+	# 	#	sleep 1;
+	# 		BuildLazarusIDE "1";
+	# 	fi
+	# ;;
+	# "install-oldsdk")
+	# 	printf "Mode SDKTOOLS=24 with ant support\n"
+	# 	export OLD_ANDROID_SDK=1
+	# 	mainInstall
+	# ;;
+	# "install_old_sdk")
+	# 	printf "Mode SDKTOOLS=24(AutoInstall) with ant support\n"
+	# 	export OLD_ANDROID_SDK=1
+	# 	export NO_GUI_OLD_SDK=1
+	# 	mainInstall
+	# ;;
+
+	# "reinstall")
+	# 	#initParameters $2
+	# 	CleanOldConfig
+	# 	mainInstall
+	# ;;
+	# "reinstall-oldsdk")
+	# 	CleanOldConfig
+	# 	printf "Mode SDKTOOLS=24 with ant support "
+	# 	export OLD_ANDROID_SDK=1
+	# 	mainInstall
+	# ;;
+
+	
+
+	# "mkcrossarm")
+	# 	configureFPC 
+	# 	changeDirectory $FPC_RELEASE
+	# 	BuildCrossArm $FPC_ID_DEFAULT
+	# ;;
+	# "delete_paths")
+	# 	cleanPATHS
+	# ;;
+	# "update-config")
+	# 	LAMW4LinuxPostConfig
+	# ;;
+	# "update-links")
+	# 	#CreateSDKSimbolicLinks
+	# ;;
+	"--sdkmanager")
+		getStatusInstalation;
+		if [ $LAMW_INSTALL_STATUS = 1 ];then
+			echo "Starting Android SDK Manager...."
+			winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk"
+			#changeOwnerAllLAMW 
+
 		else
-			echo "Please wait ..."
-			printf "${NEGRITO}Implicit LAMW Framework update starting in 10 seconds ... ${NORMAL}...\n"
-			printf "Press control+c to exit ...\n"
-			sleep 10 
-			checkProxyStatus;
+			mainInstall
+			$ANDROID_SDK/tools/android update sdk
+			#changeOwnerAllLAMW
+		fi 	
+;;
+	"--update-lamw")
+		getStatusInstalation
+		if [ $LAMW_INSTALL_STATUS = 1 ]; then
 			echo "Updating LAMW";
-			getLAMWFramework;
-		#	sleep 1;
-			BuildLazarusIDE "1";
+			getLAMWFramework "pull";
+			#sleep 1;
+			BuildLazarusIDE;
+		else
+			mainInstall
 		fi
-	;;
-	"install-oldsdk")
-		printf "Mode SDKTOOLS=24 with ant support\n"
-		export OLD_ANDROID_SDK=1
-		mainInstall
-	;;
-	"install_old_sdk")
-		printf "Mode SDKTOOLS=24(AutoInstall) with ant support\n"
-		export OLD_ANDROID_SDK=1
-		export NO_GUI_OLD_SDK=1
-		mainInstall
-	;;
-
-	"reinstall")
-		#initParameters $2
-		CleanOldConfig
-		mainInstall
-	;;
-	"reinstall-oldsdk")
-		CleanOldConfig
-		printf "Mode SDKTOOLS=24 with ant support "
-		export OLD_ANDROID_SDK=1
-		mainInstall
-	;;
-
-	"update-lamw")
-		echo "Updating LAMW";
-		getLAMWFramework "pull";
-		#sleep 1;
-		BuildLazarusIDE;
-	;;
-
-	"mkcrossarm")
-		configureFPC 
-		changeDirectory $FPC_RELEASE
-		BuildCrossArm $FPC_ID_DEFAULT
-	;;
-	"delete_paths")
-		cleanPATHS
-	;;
-	"update-config")
-		LAMW4LinuxPostConfig
-	;;
-	"update-links")
-		#CreateSDKSimbolicLinks
 	;;
 	"")
 		getImplicitInstall
