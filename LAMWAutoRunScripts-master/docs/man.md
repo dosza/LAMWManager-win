@@ -1,8 +1,12 @@
+
+**Advanced LAMW Manage v0.3.0 Manual**
+
 <pre>					<Strong>Syntax:</Strong>
 bash simple-lamw-install.sh¹
 bash simple-lamw-install.sh² 	<strong>[actions]</strong>    [options]
 </pre>
 </p>
+
 **Usage:**
 
 <p>
