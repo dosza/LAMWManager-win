@@ -14,7 +14,7 @@
 
 <strong>Example Advanced of installation:</strong>
 <pre>
-Run setup.exe <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/setup.exe">Clich Here to get Setup</a>
+Run lamw_manager_setup.exe <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/lamw_manager_setup.exe">Clich Here to get Setup</a>
 Open  a powershell as administrator.
 <br>Open directory with command "cd c:\lamw_manager"</br>
 To install LAMW completely the <strong>first time</strong> with <strong><em>default option</em></strong>:
@@ -28,16 +28,15 @@ To install LAMW completely the <strong>first time</strong> with <strong><em>defa
 **Usage:**
 <pre>					<Strong>Syntax:</Strong>
 bash simple-lamw-install.sh¹
-bash simple-lamw-install.sh² 	<strong>[actions]</strong>         <strong>[options]</strong>  
+bash simple-lamw-install.sh² 	<strong>[actions]</strong> <strong>[options]</strong>  
 </pre>
 
 <p>
 <pre>
-bash simple-lamw-install.sh 
-	<strong>[action]</strong>                            <em>Description</em>
-	<strong>uninstall</strong>                           Uninstall LAMW completely and erase all settings.
-	<strong>--sdkmanager</strong>                        Run Android SDK Manager 
-	<strong>--update-lamw</strong>                       Update LAMW sources and rebuild Lazarus IDE
+bash simple-lamw-install.sh    <strong>[action]</strong>                            <em>Description</em>
+				<strong>uninstall</strong>                           Uninstall LAMW completely and erase all settings.
+				<strong>--sdkmanager</strong>                        Run Android SDK Manager 
+				<strong>--update-lamw</strong>                       Update LAMW sources and rebuild Lazarus IDE
 	</pre>
 </p>
 
@@ -45,9 +44,12 @@ bash simple-lamw-install.sh
 <p>
 <pre>					<Strong>Syntax:</Strong>
 bash simple-lamw-install.sh	<em>     [actions]</em>    <strong>--use-proxy</strong> 		<em>[proxy options]</em>
+<br>To install with proxy</br>
 <br><strong>sample:    </strong>bash simple-lamw-install.sh    <strong>--use-proxy	--server</strong> <em>10.0.16.1</em></br><strong>--port</strong>	<em>3128</em>
-<strong>sample:    </strong>bash simple-lamw-install.sh    <em>--sdkmanager</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
-<strong>sample:    </strong>bash simple-lamw-install.sh    <em>--update-lamw</em>    <strong>--use-proxy --server</strong>	<em>[HOST]</em> <strong>--port</strong> 	<em>[NUMBER]</em>
+<br>To install and Run Android SDK Manager with Proxy</br>
+<strong>sample:    </strong>bash simple-lamw-install.sh    <em>--sdkmanager</em>    <strong>--use-proxy --server</strong>	<em>10.0.16.1</em> <strong>--port</strong> 	<em>3128</em>
+<br>To just upgrade LAMW framework (with the latest version available in git) with proxy</br>
+<strong>sample:    </strong>bash simple-lamw-install.sh    <em>--update-lamw</em>    <strong>--use-proxy --server</strong>	<em>10.0.16.1</em> <strong>--port</strong> 	<em>3128</em>
 </pre>
 </p>
 
