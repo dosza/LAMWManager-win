@@ -1,11 +1,11 @@
 # **LAMW Manager v0.3.0**
 
-LAMW Manager is a command line tool to automate the <strong>installation</strong>, <strong>configuration</strong> and <strong>upgrade</strong>  the framework <a href="https://github.com/jmpessoa/lazandroidmodulewizard">LAMW - Lazarus Android Module Wizard</a>
+LAMW Manager is a command line tool to automate the <strong>installation</strong>, <strong>configuration</strong> and <strong>upgrade</strong>  the framework <a href="https://github.com/jmpessoa/lazandroidmodulewizard"><br>LAMW - Lazarus Android Module Wizard</a></br>
 
 **What do you get?** 
 
 <p>
-	A <strong><a href="http://www.lazarus-ide.org/">Lazarus  IDE </a></strong>ready to develop applications for Android !!
+	A <a href="http://www.lazarus-ide.org/">Lazarus  IDE </a> ready to develop applications for Android !!
 </p>
 
 <p> 
@@ -45,7 +45,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 <p>
 	<strong>How to use LAMW Manager:</strong>
 	<ol>
-	<li><a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/lamw_manager/lamw_manager_setup.exe">Click here to download <strong> LAMW Manager Setup</strong></a></li> 
+	<li><a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/lamw_manager/lamw_manager_setup.exe">Click here to download <em> LAMW Manager Setup</em></a></li> 
 	<li>Double-click to run <strong>lamw_manager_setup.exe</strong></li>
 	<li>Go to folder <strong>C:\lamw_manager</strong></li>
 	<li>Right-click <strong>lamw_manager.bat</strong> and  select <strong>Run as administrator</strong></li>
