@@ -26,7 +26,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 **Windows Supported (32 e 64 bit):**
 
 <ul>
-	<li>Windows 7 - <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/LAMWAutoRunScripts-master/docs/win7.md">  <strong>Important Requeriments</strong></a></li>
+	<li>Windows 7 - <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/lamw_manager/docs/win7.md">  <strong>Important Requeriments</strong></a></li>
 	<li>Windows 8.1</li> 
 	<li>Windows 10</li>
 </ul>		
@@ -36,7 +36,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 <p>
 	<strong>How to use LAMW Manager:</strong>
 	<ol>
-	<li> <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/lamw_manager_setup.exe">Click here to download <strong> LAMW Manager Setup</a></li> 
+	<li> <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/lamw_manager/lamw_manager_setup.exe">Click here to download <strong> LAMW Manager Setup</a></li> 
 	<li>Double-click to run <strong>lamw_manager_setup.exe</strong></li>
 	<li>Go to folder <strong>C:\lamw_manager</strong></li>
 	<li>Right-click <strong>lamw_manager.bat</strong> and  select <strong>Run as administrator</strong></li>
@@ -54,5 +54,5 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 </p>
 
 <p>
-	For more info read <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/LAMWAutoRunScripts-master/docs/man.md"><strong>LAMW Manager v0.3.0  Manual</strong></a>
+	For more info read <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.0  Manual</strong></a>
 </p>

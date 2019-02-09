@@ -14,7 +14,7 @@
 
 <strong>Example Advanced of installation:</strong>
 <pre>
-Run lamw_manager_setup.exe <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/LAMWAutoRunScripts-master/lamw_manager_setup.exe">Clich Here to get Setup</a>
+Run lamw_manager_setup.exe <a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/lamw_manager/lamw_manager_setup.exe">Clich Here to get Setup</a>
 Open  a powershell as administrator.
 <br>Open directory with command "cd c:\lamw_manager"</br>
 To install LAMW completely the <strong>first time</strong> with <strong><em>default option</em></strong>:
