@@ -163,7 +163,7 @@ ANDROID_HOME="$USER_DIRECTORY/LAMW"
 ANDROID_SDK="$ANDROID_HOME/sdk"
 #ANDROID_HOME for $win 
 
-BARRA_INVERTIDA="\""
+BARRA_INVERTIDA='\'
 #------------ PATHS translated for windows------------------------------
 WIN_ANDROID_HOME="$WIN_USER_DIRECTORY\LAMW"
 WIN_ANDROID_SDK="$WIN_ANDROID_HOME\sdk"
@@ -200,6 +200,10 @@ SDK_MANAGER_CMD_PARAMETERS2=()
 SDK_MANAGER_CMD_PARAMETERS2_PROXY=()
 SDK_LICENSES_PARAMETERS=()
 LAZARUS_STABLE_SRC_LNK="http://svn.freepascal.org/svn/lazarus/tags/lazarus_1_8_4"
+
+LAZARUS4ANDROID_LNK="https://ufpr.dl.sourceforge.net/project/laz4android/laz4android1.8.0-FPC3.0.4.7z"
+LAZARUS4ANDROID_ZIP="laz4android1.8.0-FPC3.0.4.7z"
+#LAZARUS4ANDROID_HOME="$LETTER_HOME_DRIVER/laz4android1.8"
 LAMW_SRC_LNK="http://github.com/jmpessoa/lazandroidmodulewizard"
 LAZ4_LAMW_PATH_CFG="/$LETTER_HOME_DRIVER/laz4android1.8/config"
 LAZ4LAMW_HOME="$USER_DIRECTORY/Laz4Lamw"
@@ -243,29 +247,31 @@ packs=()
 #[[]
 #echo "WIN_GRADLE_HOME=$WIN_GRADLE_HOME"
 #sleep 3
+
 export OLD_ANDROID_SDK=1
 export NO_GUI_OLD_SDK=0
 export LAMW_INSTALL_STATUS=0
 export LAMW_IMPLICIT_ACTION_MODE=0
 #help of lamw
 lamw_opts=(
-	"Usage:\n\tbash simple-lamw-install.sh [Options]\n"
-	"\tbash simple-lamw-install.sh uninstall\n"
-	"\tbash simple-lamw-install.sh install\n"
-	"\t${VERDE}bash simple-lamw-install.sh install_default${NORMAL}\n"
-	"\tbash simple-lamw-install.sh install --force\n"
-	"\tbash simple-lamw-install.sh install --use_proxy\n"
-	"\tbash simple-lamw-install.sh install-old-sdk\n"
-	"\tbash simple-lamw-install.sh install_old_sdk\n"
-	"----------------------------------------------\n"
-	"\tbash simple-lamw-install.sh install --use_proxy --server [HOST] --port [NUMBER] \n"
-	"sample:\n\tbash simple-lamw-install.sh install --use_proxy --server 10.0.16.1 --port 3128\n"
-	"-----------------------------------------------\n"
-	"\tbash simple-lamw-install.sh reinstall\n"
-	"\tbash simple-lamw-install.sh reinstall-oldsdk\n"
-	"\tbash simple-lamw-install.sh reinstall --force\n"
-	"\tbash simple-lamw-install.sh reinstall --use_proxy\n"
-	"\tbash simple-lamw-install.sh update-lamw\n"
+	"syntax:\n"
+	"bash simple-lamw-install.sh\tor\t./lamw_manger\t${NEGRITO}[actions]${NORMAL} ${VERDE}[options]${NORMAL}\n"
+	"${NEGRITO}Usage${NORMAL}:\n"
+	"\t${NEGRITO}bash simple-lamw-install.sh${NORMAL}                              Install LAMW and dependecies¹\n"
+	"\tbash simple-lamw-install.sh\t${VERDE}--sdkmanager${NORMAL}                Install LAMW and Run Android SDK Manager²\n"
+	"\tbash simple-lamw-install.sh\t${VERDE}--update-lamw${NORMAL}               To just upgrade LAMW framework (with the latest version available in git)\n"
+	"\tbash simple-lamw-install.sh\t${VERDE}--reset${NORMAL}                     To clean and reinstall\n"
+	"\tbash simple-lamw-install.sh\t${NEGRITO}uninstall${NORMAL}                   To uninstall LAMW :(\n"
+	"\tbash simple-lamw-install.sh\t${VERDE}--help${NORMAL}                      Show help\n"                 
+	"\n"
+	"${NEGRITO}Proxy Options:${NORMAL}\n"
+	"\tbash simple-lamw-install.sh ${NEGRITO}[action]${NORMAL}  --use_proxy --server ${VERDE}[HOST]${NORMAL} --port ${VERDE}[NUMBER]${NORMAL}\n"
+	"sample:\n\tbash simple-lamw-install.sh --update-lamw --use_proxy --server 10.0.16.1 --port 3128\n"
+	"\n\n${NEGRITO}Note:\n${NORMAL}"
+	"\t¹ By default the installation waives the use of parameters, if LAMW is installed, it will only be updated!\n"
+	"\t² If it is already installed, just run the Android SDK Tools\n"
+	"\n"
+	
 )
 
 getTerminalDeps(){
@@ -438,6 +444,8 @@ getAndroidSDKToolsW32(){
 }
 #Get Gradle and SDK Tools
 getOldAndroidSDKToolsW32(){
+	export SDK_TOOLS_VERSION="r25.2.5"
+	export SDK_TOOLS_URL="https://dl.google.com/android/repository/tools_r25.2.5-windows.zip" 
 	changeDirectory $USER_DIRECTORY
 	if [ ! -e $ANDROID_HOME ]; then
 		mkdir $ANDROID_HOME
@@ -465,8 +473,6 @@ getOldAndroidSDKToolsW32(){
 		mkdir sdk
 	
 		changeDirectory sdk
-		export SDK_TOOLS_VERSION="r25.2.5"
-		export SDK_TOOLS_URL="https://dl.google.com/android/repository/tools_r25.2.5-windows.zip" 
 		$WGET_EXE -c $SDK_TOOLS_URL #getting sdk 
 		if [ $? != 0 ]; then 
 			$WGET_EXE -c $SDK_TOOLS_URL
@@ -817,11 +823,25 @@ BuildCrossArm(){
 }
 
 #Build lazarus ide
-
+getLazarus4Android(){
+	changeDirectory "/$LETTER_HOME_DRIVER"
+	if [ ! -e $PATH_TO_LAZ4ANDROID ]; then
+		wget -c $LAZARUS4ANDROID_LNK
+		if [ $? != 0 ]; then
+			wget -c $LAZARUS4ANDROID_LNK
+		fi
+		7z x $LAZARUS4ANDROID_ZIP
+	fi
+}
 BuildLazarusIDE(){
 
 	#changeDirectory $LAMW_IDE_HOME
 	changeDirectory "$PATH_TO_LAZ4ANDROID"
+	aux="$WIN_PATH_TO_LAZ4ANDROID"$BARRA_INVERTIDA
+	#echo "aux=$aux";read
+	aux=$aux"build.bat"
+	winCallfromPS "$aux"
+	changeDirectory $LETTER_HOME_DRIVER
 	build_win_cmd="/$LETTER_HOME_DRIVER/generate-lazarus.bat"
 	bar='\'
 	WIN_LAZBUILD_PARAMETERS=(
@@ -1099,6 +1119,7 @@ mainInstall(){
 	#getSDKAndroid
 	WrappergetAndroidSDK
 	#getFPCSources
+	getLazarus4Android
 	getLAMWFramework
 	#getLazarusSources
 
