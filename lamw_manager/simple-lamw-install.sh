@@ -855,7 +855,8 @@ BuildLazarusIDE(){
 		#build ide  with lamw framework 
 	for((i=0;i< ${#WIN_LAZBUILD_PARAMETERS[@]};i++))
 	do
-		echo "cd \"$WIN_PATH_TO_LAZ4ANDROID\"" > $build_win_cmd
+		echo "PATH=$WIN_PATH_TO_FPC;%PATH%"> $build_win_cmd
+		echo "cd \"$WIN_PATH_TO_LAZ4ANDROID\"" >> $build_win_cmd
 		echo "lazbuild ${WIN_LAZBUILD_PARAMETERS[i]}" >> $build_win_cmd
 		winCallfromPS "$WIN_LETTER_HOME_DRIVER\generate-lazarus.bat"
 		if [ $? != 0 ]; then 
