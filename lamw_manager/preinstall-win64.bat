@@ -23,8 +23,8 @@ choco install msys2  -y
 IF   %ERRORLEVEL% NEQ 0  choco install msys2  -y --force 
 choco install git.install -y 
 IF   %ERRORLEVEL% NEQ 0 choco install git.install -y --force 
-choco install jdk8  -y  
-IF   %ERRORLEVEL% NEQ 0 choco install jdk8  -y --force  
+choco install zulu8  -y  
+IF   %ERRORLEVEL% NEQ 0 choco install zulu8  -y --force  
 choco install 7zip.install -y  
 IF   %ERRORLEVEL% NEQ 0 choco install 7zip.install -y --force  
 choco install wget -y 
