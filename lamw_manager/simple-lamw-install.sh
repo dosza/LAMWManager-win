@@ -274,6 +274,33 @@ lamw_opts=(
 	
 )
 
+#Flag tratador de sinal 
+magicTrapIndex=-1 
+
+#Rotina que trata control+c
+TrapControlC(){
+	sdk_tools_zip=$ANDROID_SDK
+	#echo "magicTrapIndex=$magicTrapIndex";read
+	magic_trap=(
+		"$ANT_TAR_FILE" #0 
+		"$ANT_HOME"		#1
+		"$GRADLE_ZIP_FILE" #2
+		"$GRADLE_HOME"   #3
+		"$sdk_tools_zip" #4
+		"$ANDROID_SDK/tools" #5
+		"android-ndk-r18b-linux-x86_64.zip" #6
+		"android-ndk-r18b" #7
+	)
+	
+	if [ "$magicTrapIndex" != "-1" ]; then
+		file_deleted="${magic_trap[magicTrapIndex]}"
+		if [ -e "$file_deleted" ]; then
+			echo "deleting... $file_deleted"
+			rm  -rv $file_deleted
+		fi
+	fi
+	exit 2
+}
 getTerminalDeps(){
 	pacman -Syy  unzip --noconfirm
 	if [ $? != 0 ]; then 
@@ -383,14 +410,22 @@ InstallWinADB(){
 getAnt(){
 	changeDirectory $ANDROID_HOME 
 	if [ ! -e $ANT_HOME ]; then
+		magicTrapIndex=-1
+		trap TrapControlC 2
 		$WGET_EXE -c $ANT_ZIP_LINK
 		if [ $? != 0 ] ; then
 			#rm *.zip*
 			ANT_ZIP_LINK="https://www-eu.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.zip"
 			$WGET_EXE -c $ANT_ZIP_LINK
+			if [ $? != 0 ]; then 
+				echo "possible network instability! Try later!"
+				exit 1
+			fi
 		fi
 		#echo "$PWD"
 		#sleep 3
+		magicTrapIndex=1
+		trap TrapControlC 2
 		unzip "$ANT_ZIP_FILE"
 	fi
 
@@ -406,6 +441,8 @@ getAndroidSDKToolsW32(){
 	
 	changeDirectory $ANDROID_HOME
 	if [ ! -e $GRADLE_HOME ]; then
+		magicTrapIndex=-1
+		trap TrapControlC 2
 		$WGET_EXE -c $GRADLE_ZIP_LNK
 		if [ $? != 0 ] ; then
 			#rm *.zip*
@@ -413,6 +450,8 @@ getAndroidSDKToolsW32(){
 		fi
 		#echo "$PWD"
 		#sleep 3
+		magicTrapIndex=3
+		trap TrapControlC 2
 		unzip "$GRADLE_ZIP_FILE"
 	fi
 
@@ -454,13 +493,21 @@ getOldAndroidSDKToolsW32(){
 	changeDirectory $ANDROID_HOME
 	getAnt
 	if [ ! -e $GRADLE_HOME ]; then
+		magicTrapIndex=-1
+		trap TrapControlC 2
 		$WGET_EXE -c $GRADLE_ZIP_LNK
 		if [ $? != 0 ] ; then
 			#rm *.zip*
 			$WGET_EXE -c $GRADLE_ZIP_LNK
+			if [ $? != 0 ]; then
+				echo "possible network instability! Try later!"
+				exit 1
+			fi 
 		fi
 		#echo "$PWD"
 		#sleep 3
+		magicTrapIndex=3
+		trap TrapControlC 2
 		unzip "$GRADLE_ZIP_FILE"
 	fi
 	
@@ -469,32 +516,53 @@ getOldAndroidSDKToolsW32(){
 	fi
 	#mkdir
 	#changeDirectory $ANDROID_SDK
-	if [ ! -e sdk ] ; then
-		mkdir sdk
-	
-		changeDirectory sdk
-		$WGET_EXE -c $SDK_TOOLS_URL #getting sdk 
-		if [ $? != 0 ]; then 
-			$WGET_EXE -c $SDK_TOOLS_URL
-		fi
-		#./installer_r24.0.2-windows.exe
-		unzip tools_r25.2.5-windows.zip
-		rm tools_r25.2.5-windows.zip
-
+	if [ ! -e $ANDROID_SDK ] ; then
+		mkdir $ANDROID_SDK
 	fi
+		changeDirectory $ANDROID_SDK
+		if [ ! -e "$ANDROID_SDK/tools" ]; then
+			magicTrapIndex=-1
+			trap TrapControlC 2  
+			$WGET_EXE -c $SDK_TOOLS_URL #getting sdk 
+			if [ $? != 0 ]; then 
+				$WGET_EXE -c $SDK_TOOLS_URL
+				if [ $? != 0 ]; then
+					echo "possible network instability! Try later!"
+					exit 1
+				fi
+			fi
+			#./installer_r24.0.2-windows.exe
+			magicTrapIndex=5
+			trap TrapControlC 2 
+			unzip tools_r25.2.5-windows.zip
+			rm tools_r25.2.5-windows.zip
+		fi
+
+	#fi
 
 	if [ ! -e $ANDROID_SDK/ndk-bundle ]; then
+		magicTrapIndex=-1
 		changeDirectory $ANDROID_SDK
+		trap TrapControlC 2 
 		$WGET_EXE -c $NDK_URL
 		if [ $? != 0 ]; then 
 			$WGET_EXE -c $NDK_URL
+			if [ $? != 0 ]; then
+				echo "possible network instability! Try later!"
+				exit 1
+			fi
 		fi
+		magicTrapIndex=7
+		trap TrapControlC 2 
 		unzip $NDK_ZIP_FILE
 		mv "android-ndk-r18b" ndk-bundle
+		
 		if [ -e $NDK_ZIP_FILE ]; then
 			rm $NDK_ZIP_FILE
 		fi
 	fi
+	trap - SIGINT  #removendo a traps
+	magicTrapIndex=-1
 
 
 }
@@ -687,12 +755,12 @@ getLazarusSources(){
 	changeDirectory $LAZ4LAMW_HOME
 	svn co $LAZARUS_STABLE_SRC_LNK
 	if [ $? != 0 ]; then  #case fails last command , try svn chekout 
-		rm -r $LAZARUS_STABLE
+		rm -rf $LAZARUS_STABLE
 		#svn cleanup
 		#changeDirectory $LAZ4LAMW_HOME
 		svn co $LAZARUS_STABLE_SRC_LNK
 		if [ $? != 0 ]; then 
-			rm -r $LAZARUS_STABLE
+			rm -rf $LAZARUS_STABLE
 			echo "possible network instability! Try later!"
 			exit 1
 		fi
@@ -715,11 +783,10 @@ getLAMWFramework(){
 		
 		export git_param=("clone" "$LAMW_SRC_LNK")
 		cd $ANDROID_HOME
-		chmod 777 -Rv lazandroidmodulewizard
-		rm -r lazandroidmodulewizard
+		rm -rf  "$ANDROID_HOME/lazandroidmodulewizard"
 		git ${git_param[*]}
 		if [ $? != 0 ]; then 
-			rm -r lazandroidmodulewizard
+			rm -rf  "$ANDROID_HOME/lazandroidmodulewizard"
 			echo "possible network instability! Try later!"
 			exit 1
 		fi
@@ -735,6 +802,10 @@ getSDKAndroid(){
 	yes |  winCallfromPS1 "$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_LICENSES_PARAMETERS[*]}
 	if [ $? != 0 ]; then 
 			yes | winCallfromPS1 "$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_LICENSES_PARAMETERS[*]}
+			if [ $? != 0 ]; then 
+				echo "possible network instability! Try later!"
+				exit 1
+			fi
 	fi
 
 	for((i=0;i<${#SDK_MANAGER_CMD_PARAMETERS[*]};i++))
@@ -744,6 +815,10 @@ getSDKAndroid(){
 
 		if [ $? != 0 ]; then 
 			winCallfromPS1 "$$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_MANAGER_CMD_PARAMETERS[i]}
+			if [ $? != 0 ]; then
+				echo "possible network instability! Try later!"
+				exit 1;
+			fi
 		fi
 		#winCallfromPS1 "$WIN_LETTER_HOME_DRIVER$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" "ndk-bundle"
 
@@ -775,6 +850,10 @@ getOldAndroidSDK(){
 				echo "y" |   winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk" "--all" "--no-ui" "--filter" "${SDK_MANAGER_CMD_PARAMETERS2[i]}" "${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}"
 				if [ $? != 0 ]; then
 					echo "y" |    winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk" "--all" "--no-ui" "--filter" "${SDK_MANAGER_CMD_PARAMETERS2[i]}" "${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}"
+					if [ $? != 0 ]; then
+						echo "possible network instability! Try later!"
+						exit 1
+					fi
 				fi	
 			done 
 		fi
@@ -855,7 +934,7 @@ BuildLazarusIDE(){
 		#build ide  with lamw framework 
 	for((i=0;i< ${#WIN_LAZBUILD_PARAMETERS[@]};i++))
 	do
-		echo "PATH=$WIN_PATH_TO_FPC;%PATH%"> $build_win_cmd
+		echo "PATH=$WIN_PATH;%PATH%"> $build_win_cmd
 		echo "cd \"$WIN_PATH_TO_LAZ4ANDROID\"" >> $build_win_cmd
 		echo "lazbuild ${WIN_LAZBUILD_PARAMETERS[i]}" >> $build_win_cmd
 		winCallfromPS "$WIN_LETTER_HOME_DRIVER\generate-lazarus.bat"
@@ -886,7 +965,14 @@ LAMW4LinuxPostConfig(){
 	fi
 
 	#java_versions=("/usr/lib/jvm/java-8-openjdk-amd64"  "/usr/lib/jvm/java-8-oracle"  "/usr/lib/jvm/java-8-openjdk-i386")
-	java_path=$(getWinEnvPaths "JAVA_HOME" )
+	java_path=""
+	if [ -e "/c/Program Files/Zulu/zulu-8/bin/javac" ]; then
+		java_path="C:\Program Files\Zulu\zulu-8\bin"
+	else
+		if [ -e "/c/Program Files (x86)/Zulu/zulu-8/bin/javac" ]; then
+			java_path="C:\Program Files (x86)\Zulu\zulu-8\bin"
+		fi
+	fi
 	tam=${#java_versions[@]} #tam recebe o tamanho do vetor 
 	#ant_path=$(getWinEnvPaths "ANT_HOME" )
 	
@@ -910,7 +996,7 @@ LAMW4LinuxPostConfig(){
 		"AndroidPlatform=0"
 		"AntBuildMode=debug"
 		"NDK=5"
-		"PathToSmartDesigner=$WIN_USER_DIRECTORY\lazandroidmodulewizard\android_wizard\smartdesigner"
+		"PathToSmartDesigner=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\android_wizard\smartdesigner"
 	)
 	# "${LAMW_init_str[*]}"
 	for ((i=0;i<${#LAMW_init_str[@]};i++))
@@ -1176,6 +1262,17 @@ case "$1" in
 	"uninstall")
 		CleanOldConfig
 	 ;;
+	 "--reset")
+		CleanOldConfig
+		export OLD_ANDROID_SDK=1
+		export NO_GUI_OLD_SDK=1
+		mainInstall
+	;;
+	"install")
+			export OLD_ANDROID_SDK=1
+			export NO_GUI_OLD_SDK=1
+			mainInstall
+	;;
 	# "install")	
 	# 	mainInstall
 	# ;;
