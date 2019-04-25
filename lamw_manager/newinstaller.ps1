@@ -30,6 +30,8 @@ $NATIVE_WINDOWS_SUPPPORT=0
 #ARG0 eh a url
 #ARG1 eh o caminho do diretorio  com o nome do arquivo exemplo C:\Users\Daniel\apache-ant.zip
 function getFile(){
+
+    #add support wget -OutFile
     $URL=$ARGS[0];
     $client = New-Object System.Net.WebClient;
     $path=$ARGS[1];
@@ -54,7 +56,7 @@ function enableChocolateyPackageManager(){
 }
 #[bool]
 function installDependencies(){
-    $packages = @("mingw","msys2", "git.install", "zulu8","7zip.install", "wget" )
+    $packages = @("mingw","msys2", "git.install","7zip.install", "wget" )
     for($i=0;$i -lt $packages.Count;$i++){
         choco install  $packages[$i] -y 
         if ( $? -eq $false ){
@@ -64,9 +66,7 @@ function installDependencies(){
                 exit 1
             }
         }
-
     }
-    
 }
 function detectArch(){
    [bool] $flag_arch=systeminfo | Select-String -pattern 'x64-based'
@@ -76,6 +76,17 @@ function detectArch(){
         return "x86"
     }
 
+}
+function installAndroidAPIs(){
+    $env:PATH='C:\Program Files\Zulu\zulu-8\bin;' + $env:PATH
+
+    $SDK_MANAGER_CMD_PARAMETERS2=@( "android-26" ,"platform-tools" ,"build-tools-26.0.2"  ,"extra-google-google_play_services" ,"extra-android-m2repository" ,"extra-google-m2repository" ,"extra-google-market_licensing", "extra-google-market_apk_expansion")
+    $SDK_MANAGER_FAILS=@("platform","platform-tools", "build-tools", "extras/google/google-google_play_services", "extras/android/m2repository", "extras/google/market_licensing" , "extras/google/market_apk_expansion")   
+    $env:PATH="C:\Users\Daniel\LAMW\sdk\tools;" + $env:path
+    echo $env:path
+    for($i=0; $i -lt $SDK_MANAGER_CMD_PARAMETERS2.Count; $i++){
+        echo y | android.bat "update" "sdk" "--all" "--no-ui" "--filter" $SDK_MANAGER_CMD_PARAMETERS2[$i]  --force
+    }
 }
 
 enableChocolateyPackageManager

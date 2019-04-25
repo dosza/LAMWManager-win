@@ -15,7 +15,8 @@ export VERMELHO=$'\e[1;31m'
 export VERMELHO_SUBLINHADO=$'\e[1;4;31m'
 export AZUL=$'\e[1;34m'
 export NORMAL=$'\e[0m'
-
+export USE_LOCAL_ENV=0
+export GDB_INDEX=0
 
 #Critical Functions to Translate Calls Bash to  WinCalls 
 if [ -e "/c/tools/msys64/usr/bin" ]; then
@@ -27,9 +28,33 @@ else
 fi 
 
 winCallfromPS(){
-	echo "$*" > /tmp/pscommand.ps1
-	powershell.exe Set-ExecutionPolicy Bypass
-	powershell.exe  /tmp/pscommand.ps1
+	if [ $USE_LOCAL_ENV = 0 ];  then
+		echo "$*" > /tmp/pscommand.ps1
+		powershell.exe Set-ExecutionPolicy Bypass
+		powershell.exe  /tmp/pscommand.ps1
+	 else
+		#this array of script powershellF
+		pscommand_str=(
+		"\$JAVA_HOME=\"$win_java_path\""
+		#"echo \$env:path"
+		"\$env:PATH=\"$WIN_JAVA_PATH;\" + \$env:path"
+		"$*"
+		)
+		for((i=0;i<${#pscommand_str[*]};i++))
+		do
+			if [ $i = 0 ]; then 
+				echo "${pscommand_str[i]}" > /tmp/pscommand.ps1
+			else
+				echo "${pscommand_str[i]}" >> /tmp/pscommand.ps1
+			fi
+		done
+		
+		cat /tmp/pscommand.ps1
+		#read
+		#echo "$WIN_JAVA_PATH";read
+		powershell.exe Set-ExecutionPolicy Bypass
+		powershell.exe  /tmp/pscommand.ps1
+	fi
 }
 
 
@@ -68,6 +93,13 @@ export WIN_LETTER_HOME_DRIVER=""
 export WGET_EXE=""
 export NDK_URL=""
 export NDK_ZIP_FILE=""
+export  ZULU_JDK_URL=""
+export ZULU_JDK_ZIP=""
+export ZULU_TMP_PATH=""
+export USE_LOCAL_ENV=0
+export LOCAL_ENV=""
+export WIN_LOCAL_ENV=""
+export JAVA_PATH=""
 if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 	echo "Please wait ..."
 	export WIN_CURRENT_USER=$(getWinEnvPaths 'username' )
@@ -93,18 +125,30 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 	export OS_PREBUILD=""
 	case "$ARCH" in
 		"x86_64")
-		export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
-		export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
-		export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
-		export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
-		export OS_PREBUILD="windows-x86_64"
-		;;
-		"amd64")
 			export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
 			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
 			export OS_PREBUILD="windows-x86_64"
+			export ZULU_JDK_URL="https://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
+			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
+			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_x64"
+			export JAVA_PATH="/$LETTER_HOME_DRIVER/Program Files/Zulu/zulu-8/bin"
+			export WIN_JAVA_PATH="$WIN_LETTER_HOME_DRIVER\Program Files\Zulu\zulu-8\bin"
+			#export USE_LOCAL_ENV=1
+		;;
+		"amd64")
+			export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"S
+			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
+			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
+			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
+			export OS_PREBUILD="windows-x86_64"
+			export ZULU_JDK_URL="https://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
+			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
+			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_x64"
+			export JAVA_PATH="/$LETTER_HOME_DRIVER/Program Files/Zulu/zulu-8/bin"
+			export WIN_JAVA_PATH="$WIN_LETTER_HOME_DRIVER\Program Files\Zulu\zulu-8\bin"
+			#export USE_LOCAL_ENV=1
 		;;
 		*)
 			#export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys32"
@@ -113,6 +157,12 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 			export WGET_EXE="/$LETTER_HOME_DRIVER/ProgramData/chocolatey/bin/wget.exe"
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86.zip"
+			export ZULU_JDK_URL="https://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_i686.zip"
+			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_i686.zip"
+			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_i686"
+			export JAVA_PATH="/$LETTER_HOME_DRIVER/Program Files/Zulu/zulu-8/bin"
+			export WIN_JAVA_PATH="$WIN_LETTER_HOME_DRIVER\Program Files\Zulu\zulu-8\bin"
+			#export USE_LOCAL_ENV=1
 		;;
 	esac
 	 #MSYS_TEMP != %temp%
@@ -190,7 +240,6 @@ export PROXY_SERVER="internet.cua.ufmt.br"
 export PORT_SERVER=3128
 PROXY_URL="http://$PROXY_SERVER:$PORT_SERVER"
 export USE_PROXY=0
-export JAVA_PATH=""
 export SDK_TOOLS_URL="https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip"
 export SDK_TOOLS_VERSION="r26.1.1" 
 
@@ -276,6 +325,10 @@ lamw_opts=(
 
 #Flag tratador de sinal 
 magicTrapIndex=-1 
+#remove /bin of java_path
+java_path=$JAVA_PATH
+java_path=${java_path%/bin*}
+win_java_path=${WIN_JAVA_PATH%'\bin'}
 
 #Rotina que trata control+c
 TrapControlC(){
@@ -300,6 +353,46 @@ TrapControlC(){
 		fi
 	fi
 	exit 2
+}
+installJava(){
+	#if [ "$ARCH" != "x86_64" ]; then
+		#pwd;read;
+		changeDirectory "/$LETTER_HOME_DRIVER/Program Files"
+		if [ ! -e "/$LETTER_HOME_DRIVER/Program Files/Zulu" ]; then
+			mkdir -p "/$LETTER_HOME_DRIVER/Program Files/Zulu"
+		fi
+		#echo "JAVA_PATH="\$JAVA_PATH\" >> debug-lamw.sh
+		#echo "ls \$JAVA_PATH" >> debug-lamw.sh
+		changeDirectory "/$LETTER_HOME_DRIVER/Program Files/Zulu"
+		#echo "PWD=$PWD";read
+		#ls $JAVA_PATH
+		#ls ${JAVA_PATH}/java*;read
+		if [ ! -e "zulu-8" ]; then
+		#	pwd;read
+		#	echo "$JAVA_PATH";read
+		#	ls $JAVA_PATH
+		#	$JAVA_PATH/javac.exe -version
+			$WGET_EXE -c $ZULU_JDK_URL
+			if [ $? != 0 ]; then
+				$WGET_EXE -c $ZULU_JDK_URL
+				if [ $? != 0 ]; then
+					echo "possible network instability! Try later!"
+					exit 1
+				fi
+			fi
+			unzip $ZULU_JDK_ZIP
+			mv "$ZULU_TMP_PATH" "zulu-8"
+			#echo $PWD | grep ${JAVA_PATH};read
+			rm $ZULU_JDK_ZIP
+			export PATH=$PATH:$JAVA_PATH
+			#export JAVA_HOME=$JAVA_PATH
+			java -version
+		else
+			export PATH=$PATH:$JAVA_PATH
+		#	export JAVA_HOME=$JAVA_PATH
+			java -version
+		fi
+	#fi
 }
 getTerminalDeps(){
 	pacman -Syy  unzip --noconfirm
@@ -371,7 +464,7 @@ winMKLink(){
 winRMDir(){
 	win_temp_executable="$WIN_MSYS_TEMP_HOME/winrmdir.bat"
 	#echo "rmdir /Q  $*" > /tmp/winrmdir.bat
-	echo "rmdir $*" > /tmp/winrmdir.bat
+	echo "rmdir \"$*\"" > /tmp/winrmdir.bat
 	winCallfromPS $win_temp_executable
 	if [ -e /tmp/winrmdir.bat ]; then 
 		rm /tmp/winrmdir.bat
@@ -379,8 +472,8 @@ winRMDir(){
 }
 winRMDirf(){
 	win_temp_executable="$WIN_MSYS_TEMP_HOME/winrmdir.bat"
-	echo "rmdir /Q /S  $*" > /tmp/winrmdir.bat
-	echo "rmdir /Q /S  $*" >> /tmp/winrmdir.bat
+	echo "rmdir /Q /S  \"$*\"" > /tmp/winrmdir.bat
+	echo "rmdir /Q /S  \"$*\"" >> /tmp/winrmdir.bat
 	winCallfromPS $win_temp_executable
 	if [ -e /tmp/winrmdir.bat ]; then 
 		rm /tmp/winrmdir.bat
@@ -571,20 +664,49 @@ getOldAndroidSDKToolsW32(){
 
 winCallfromPS1(){
 	args=($*)
-	installer_cmd="$ANDROID_SDK/tools/bin/sdk-install.bat"
-	win_installer_cmd="$WIN_ANDROID_SDK\tools\bin\sdk-install.bat"
-	
-	printf " \"%s\" \"%s\""  "${args[0]}"  "${args[1]}" > $installer_cmd
-	
-	winCallfromPS "$win_installer_cmd"
-	if [ -e  /tmp/pscommand.ps1 ]; then 
-		rm /tmp/pscommand.ps1
-	fi
-
-	if [ -e $installer_cmd ];then 
-		chmod 777 $installer_cmd
-		rm  $installer_cmd
-	fi
+	changeDirectory /tmp
+	#echo "WIN_JAVA_PATH=$WIN_JAVA_PATH";read;
+	pscommand_str=(
+		"\$JAVA_HOME=\"$win_java_path\""
+		#"echo \$env:path"
+		"\$env:PATH=\"$WIN_JAVA_PATH;\" + \$env:path"
+		"\$SDK_MANAGER_FAILS=@(\"platform\",\"platform-tools\", \"build-tools\", \"extras\google\google-google_play_services\", \"extras\android\m2repository\", \"extras\google\market_licensing\" , \"extras\google\market_apk_expansion\")"   
+    	"\$SDK_MANAGER_CMD_PARAMETERS2=@( \"android-26\" ,\"platform-tools\" ,\"build-tools-26.0.2\"  ,\"extra-google-google_play_services\" ,\"extra-android-m2repository\" ,\"extra-google-m2repository\" ,\"extra-google-market_licensing\", \"extra-google-market_apk_expansion\")"
+    	"\$env:PATH=\"$WIN_ANDROID_SDK\tools;\" + \$env:path"
+    	#"echo \$env:path"
+		"for(\$i=0; \$i -lt \$SDK_MANAGER_CMD_PARAMETERS2.Count; \$i++){"
+		"	\$aux=\"${WIN_ANDROID_SDK}\tools\" + '\' + \$SDK_MANAGER_FAILS[\$i]"
+    	"	echo y | android.bat \"update\" \"sdk\" \"--all\" \"--no-ui\" \"--filter\" \$SDK_MANAGER_CMD_PARAMETERS2[\$i] "
+   		"	if ( \$? -eq \$false ){"
+   		"		if ( Test-Path \$aux){"
+       	"			rmdir -Recurse -Force \$aux"
+       	"		}"
+       	"		echo y | android.bat \"update\" \"sdk\" \"--all\" \"--no-ui\" \"--filter\" \$SDK_MANAGER_CMD_PARAMETERS2[\$i]  --force"
+       	"		if ( \$? -eq \$false ){"
+   		"			if ( Test-Path \$aux){"
+       	"				rmdir -Recurse -Force \$aux"
+       	"			}"
+       	"			exit 1"
+       	"		}"
+       	"	}"
+   		"}"
+	)
+		for((i=0;i<${#pscommand_str[*]};i++))
+		do
+			if [ $i = 0 ]; then 
+				echo "${pscommand_str[i]}" > /tmp/pscommand.ps1
+			else
+				echo "${pscommand_str[i]}" >> /tmp/pscommand.ps1
+			fi
+		done
+	cat /tmp/pscommand.ps1
+	#read
+	powershell Set-ExecutionPolicy Bypass
+	powershell /tmp/pscommand.ps1
+	#if [ -e  /tmp/pscommand.ps1 ]; then 
+	#	rm /tmp/pscommand.ps1
+	#fi
+	#cat $installer_cmd
 
 }
 	
@@ -783,10 +905,10 @@ getLAMWFramework(){
 		
 		export git_param=("clone" "$LAMW_SRC_LNK")
 		cd $ANDROID_HOME
-		rm -rf  "$ANDROID_HOME/lazandroidmodulewizard"
+		winRMDirf "$WIN_ANDROID_HOME\lazandroidmodulewizard"
 		git ${git_param[*]}
 		if [ $? != 0 ]; then 
-			rm -rf  "$ANDROID_HOME/lazandroidmodulewizard"
+			winRMDirf "$WIN_ANDROID_HOME\lazandroidmodulewizard"
 			echo "possible network instability! Try later!"
 			exit 1
 		fi
@@ -797,24 +919,26 @@ getLAMWFramework(){
 
 
 getSDKAndroid(){
-	changeDirectory $ANDROID_SDK/tools/bin #change directory
+	export USE_LOCAL_ENV=1
+	#changeDirectory $ANDROID_SDK/tools/bin #change directory
 	
-	yes |  winCallfromPS1 "$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_LICENSES_PARAMETERS[*]}
-	if [ $? != 0 ]; then 
-			yes | winCallfromPS1 "$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_LICENSES_PARAMETERS[*]}
-			if [ $? != 0 ]; then 
-				echo "possible network instability! Try later!"
-				exit 1
-			fi
-	fi
+	#   winCallfromPS1 "yes" "|" "$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_LICENSES_PARAMETERS[*]}
+	# if [ $? != 0 ]; then 
+	# 		winCallfromPS1 "yes" "|" "$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_LICENSES_PARAMETERS[*]}
+	# 		if [ $? != 0 ]; then 
+	# 			echo "possible network instability! Try later!"
+	# 			exit 1
+	# 		fi
+	# fi
 
+	#echo "len(SDK_MANAGER_CMD_PARAMETERS)=${#SDK_MANAGER_CMD_PARAMETERS[*]}";read;
 	for((i=0;i<${#SDK_MANAGER_CMD_PARAMETERS[*]};i++))
 	do
 		echo "please wait... "
-		winCallfromPS1 "$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_MANAGER_CMD_PARAMETERS[i]}  # instala sdk sem intervenção humana  
+		 winCallfromPS1 "echo"  "y" "|" "$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" "\"${SDK_MANAGER_CMD_PARAMETERS[i]}\""  # instala sdk sem intervenção humana  
 
 		if [ $? != 0 ]; then 
-			winCallfromPS1 "$$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" ${SDK_MANAGER_CMD_PARAMETERS[i]}
+			winCallfromPS1 "echo" "y" "|" "$$WIN_ANDROID_SDK\tools\bin\sdkmanager.bat" "\"${SDK_MANAGER_CMD_PARAMETERS[i]}\""
 			if [ $? != 0 ]; then
 				echo "possible network instability! Try later!"
 				exit 1;
@@ -827,12 +951,15 @@ getSDKAndroid(){
 		#fi
 
 	done
+	export USE_LOCAL_ENV=0
 
 }
 
 getOldAndroidSDK(){
 
 	if [ -e $ANDROID_SDK/tools/android.bat  ]; then 
+		#echo "PWD=$PWD";read;
+		export USE_LOCAL_ENV=1
 		#changeDirectory $ANDROID_SDK/tools
 		#echo  "Before install sdk 24.0"
 		#winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk "
@@ -843,23 +970,12 @@ getOldAndroidSDK(){
 		#./android update sdk
 			winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk"
 		else
-			for((i=0;i<${#SDK_MANAGER_CMD_PARAMETERS2[*]};i++))
-			do
-				echo "${SDK_MANAGER_CMD_PARAMETERS2[i]}"
-				#read;
-				echo "y" |   winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk" "--all" "--no-ui" "--filter" "${SDK_MANAGER_CMD_PARAMETERS2[i]}" "${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}"
-				if [ $? != 0 ]; then
-					echo "y" |    winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk" "--all" "--no-ui" "--filter" "${SDK_MANAGER_CMD_PARAMETERS2[i]}" "${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}"
-					if [ $? != 0 ]; then
-						echo "possible network instability! Try later!"
-						exit 1
-					fi
-				fi	
-			done 
+			winCallfromPS1 
 		fi
 
 		#echo "please wait ..."
 		#read 
+		export USE_LOCAL_ENV=0
 	fi
 
 }
@@ -965,17 +1081,10 @@ LAMW4LinuxPostConfig(){
 	fi
 
 	#java_versions=("/usr/lib/jvm/java-8-openjdk-amd64"  "/usr/lib/jvm/java-8-oracle"  "/usr/lib/jvm/java-8-openjdk-i386")
-	java_path=""
-	if [ -e "/c/Program Files/Zulu/zulu-8/bin/javac" ]; then
-		java_path="C:\Program Files\Zulu\zulu-8\bin"
-	else
-		if [ -e "/c/Program Files (x86)/Zulu/zulu-8/bin/javac" ]; then
-			java_path="C:\Program Files (x86)\Zulu\zulu-8\bin"
-		fi
-	fi
-	tam=${#java_versions[@]} #tam recebe o tamanho do vetor 
 	#ant_path=$(getWinEnvPaths "ANT_HOME" )
+	#java_path=$JAVA_PATH
 	
+	#echo $java_path
 
 
 # contem o arquivo de configuração do lamw
@@ -983,7 +1092,7 @@ LAMW4LinuxPostConfig(){
 		"[NewProject]"
 		"PathToWorkspace=$WIN_LAMW_WORKSPACE_HOME"
 		"PathToJavaTemplates=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\android_wizard\smartdesigner\java"
-		"PathToJavaJDK=$java_path"
+		"PathToJavaJDK=$win_java_path"
 		"PathToAndroidNDK=$WIN_USER_DIRECTORY\LAMW\sdk\ndk-bundle"
 		"PathToAndroidSDK=$WIN_USER_DIRECTORY\LAMW\sdk"
 		"PathToAntBin=$WIN_ANT_HOME\bin"
@@ -998,7 +1107,17 @@ LAMW4LinuxPostConfig(){
 		"NDK=5"
 		"PathToSmartDesigner=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\android_wizard\smartdesigner"
 	)
+
+	lamw_loader_bat_str=(
+		"@echo off"
+		"SET PATH=$WIN_JAVA_PATH;%PATH%"
+		"cd \"$WIN_PATH_TO_LAZ4ANDROID\""
+		"SET JAVA_HOME=\"$win_java_path\""
+		"lazarus"
+	)
+	lamw_loader_vbs_str="CreateObject(\"Wscript.Shell\").Run  \"$WIN_PATH_TO_LAZ4ANDROID\lamw-ide.bat\",0,True"
 	# "${LAMW_init_str[*]}"
+	#escreve o arquivo LAMW.ini
 	for ((i=0;i<${#LAMW_init_str[@]};i++))
 	do
 		if [ $i = 0 ]; then 
@@ -1007,6 +1126,18 @@ LAMW4LinuxPostConfig(){
 			echo "${LAMW_init_str[i]}" >> "$LAZ4_LAMW_PATH_CFG/LAMW.ini"
 		fi
 	done
+
+	#escreve o arquivo lamw.bat que contém as variáveis de ambiente do lamw
+	for ((i=0;i<${#LAMW_init_str[@]};i++))
+	do
+		if [ $i = 0 ]; then 
+			echo "${lamw_loader_bat_str[i]}" > "$PATH_TO_LAZ4ANDROID\lamw-ide.bat"
+		else
+			echo "${lamw_loader_bat_str[i]}" >>  "$PATH_TO_LAZ4ANDROID\lamw-ide.bat"
+		fi
+	done
+
+	echo "$lamw_loader_vbs_str" >  "$PATH_TO_LAZ4ANDROID\start-lamw.vbs"
 	#AddLAMWtoStartMenu
 	#if [ $OLD_ANDROID_SDK = 0 ]; then
 	winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mipsel-linux-android-4.9"
@@ -1022,8 +1153,8 @@ changeDirectory(){
 	#echo "args=$# args=$*";read
 	if [ $# = 1 ]; then 
 		if [ "$1" != "" ] ; then
-			if [ -e $1  ]; then
-				cd $1
+			if [ -e "$1"  ]; then
+				cd "$1"
 			fi
 		fi
 	else 
@@ -1079,6 +1210,11 @@ CleanOldConfig(){
 		fi
 	fi
 
+	#echo "$java_path";read
+	if [  -e "$java_path" ]; then
+		winRMDirf "$win_java_path"
+	fi
+
 	if [ -e $USER_DIRECTORY/.android ]; then
 		chmod 777 -R  $USER_DIRECTORY/.android
 		rm -r  $USER_DIRECTORY/.android
@@ -1090,7 +1226,9 @@ CleanOldConfig(){
 	if [ -e $GRADLE_CFG_HOME ]; then
 		rm -r $GRADLE_CFG_HOME
 	fi
-
+	if [ -e $PATH_TO_LAZ4ANDROID ]; then
+		winRMDirf $WIN_PATH_TO_LAZ4ANDROID
+	fi
 	#if [ -e $USER_DIRECTORY/android ]; then 
 	#	#echo "please wait to remove $USER_DIRECTORY/android ..."
 	#chmod 777 -R $USER_DIRECTORY/android
@@ -1200,7 +1338,7 @@ mainInstall(){
 	#checkProxyStatus
 	#configureFPC
 	WrappergetAndroidSDKTools
-	changeDirectory $ANDROID_SDK/tools/bin #change directory
+	installJava
 	#unistallJavaUnsupported
 	#setJava8asDefault
 	#getSDKAndroid
@@ -1260,6 +1398,7 @@ case "$1" in
 	echo "LAMW4Linux  version $LAMW_INSTALL_VERSION"
 	;;
 	"uninstall")
+		export USE_LOCAL_ENV=0	
 		CleanOldConfig
 	 ;;
 	 "--reset")
@@ -1272,6 +1411,12 @@ case "$1" in
 			export OLD_ANDROID_SDK=1
 			export NO_GUI_OLD_SDK=1
 			mainInstall
+	;;
+	"update-lamw.ini")
+		#echo ${win_java_path};read;
+		export OLD_ANDROID_SDK=1
+		export NO_GUI_OLD_SDK=1
+		LAMW4LinuxPostConfig
 	;;
 	# "install")	
 	# 	mainInstall
@@ -1341,12 +1486,14 @@ case "$1" in
 		getStatusInstalation;
 		if [ $LAMW_INSTALL_STATUS = 1 ];then
 			echo "Starting Android SDK Manager...."
+			export USE_LOCAL_ENV=1
 			winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk"
 			#changeOwnerAllLAMW 
 
 		else
 			mainInstall
-			$ANDROID_SDK/tools/android update sdk
+			export USE_LOCAL_ENV=1
+			winCallfromPS "$WIN_ANDROID_SDK\tools\android.bat" "update" "sdk"
 			#changeOwnerAllLAMW
 		fi 	
 ;;
