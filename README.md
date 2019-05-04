@@ -30,7 +30,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 **Windows Supported (32 e 64 bit):**
 
 <ul>
-	<li>Windows 7 - <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/lamw_manager/docs/win7.md">  <strong>Important Requeriments</strong></a></li>
+	<!-- <li>Windows 7 - <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/lamw_manager/docs/win7.md">  <strong>Important Requeriments</strong></a></li> -->
 	<li>Windows 8.1</li> 
 	<li>Windows 10</li>
 </ul>		

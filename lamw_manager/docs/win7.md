@@ -1,4 +1,4 @@
-**Windows 7 Requeriments**
+**Windows 7 Requeriments (Deprecated)**
 <p>
 	<strong>Note:</strong> Extended windows 7 support will end on January 14, 2020
 	<ol>
