@@ -100,6 +100,7 @@ export USE_LOCAL_ENV=0
 export LOCAL_ENV=""
 export WIN_LOCAL_ENV=""
 export JAVA_PATH=""
+export LAZ4ANDROID_STABLE_VERSION="2.0.0"
 if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 	echo "Please wait ..."
 	export WIN_CURRENT_USER=$(getWinEnvPaths 'username' )
@@ -130,7 +131,7 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
 			export OS_PREBUILD="windows-x86_64"
-			export ZULU_JDK_URL="https://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
+			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
 			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
 			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_x64"
 			export JAVA_PATH="/$LETTER_HOME_DRIVER/Program Files/Zulu/zulu-8/bin"
@@ -138,12 +139,12 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 			#export USE_LOCAL_ENV=1
 		;;
 		"amd64")
-			export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"S
+			export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys64"
 			export WIN_MSYS_TEMP_HOME="$WIN_LETTER_HOME_DRIVER/tools/msys64/tmp"
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
 			export OS_PREBUILD="windows-x86_64"
-			export ZULU_JDK_URL="https://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
+			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
 			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
 			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_x64"
 			export JAVA_PATH="/$LETTER_HOME_DRIVER/Program Files/Zulu/zulu-8/bin"
@@ -157,7 +158,7 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 			export WGET_EXE="/$LETTER_HOME_DRIVER/ProgramData/chocolatey/bin/wget.exe"
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86.zip"
-			export ZULU_JDK_URL="https://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_i686.zip"
+			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_i686.zip"
 			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_i686.zip"
 			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_i686"
 			export JAVA_PATH="/$LETTER_HOME_DRIVER/Program Files/Zulu/zulu-8/bin"
@@ -171,10 +172,12 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 		export PATH="$PATH:/$LETTER_HOME_DRIVER/Program Files/Git/bin"
 	fi
 fi
-export PATH_TO_FPC="/$LETTER_HOME_DRIVER/laz4android1.8/fpc/3.0.4/bin/i386-win32"
-export PATH_TO_LAZ4ANDROID="/$LETTER_HOME_DRIVER/laz4android1.8/"
-export WIN_PATH_TO_LAZ4ANDROID="$WIN_LETTER_HOME_DRIVER\laz4android1.8"
-export WIN_PATH_TO_FPC="$WIN_LETTER_HOME_DRIVER\laz4android1.8\fpc\3.0.4\bin\i386-win32"
+
+export PATH_TO_FPC="/$LETTER_HOME_DRIVER/laz4android${LAZ4ANDROID_STABLE_VERSION}/fpc/3.0.4/bin/i386-win32"
+export PATH_TO_LAZ4ANDROID="/$LETTER_HOME_DRIVER/LAMW4Windows/laz4android${LAZ4ANDROID_STABLE_VERSION}"
+export LAZ4_LAMW_PATH_CFG="${PATH_TO_LAZ4ANDROID}/config"
+export WIN_PATH_TO_LAZ4ANDROID="$WIN_LETTER_HOME_DRIVER\LAMW4Windows\laz4android${LAZ4ANDROID_STABLE_VERSION}"
+export WIN_PATH_TO_FPC="$WIN_LETTER_HOME_DRIVER\laz4android${LAZ4ANDROID_STABLE_VERSION}\fpc\3.0.4\bin\i386-win32"
 export PATH="$PATH:$PATH_TO_FPC"
 
 MINGW_URL="http://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe"
@@ -240,7 +243,7 @@ export PROXY_SERVER="internet.cua.ufmt.br"
 export PORT_SERVER=3128
 PROXY_URL="http://$PROXY_SERVER:$PORT_SERVER"
 export USE_PROXY=0
-export SDK_TOOLS_URL="https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip"
+export SDK_TOOLS_URL="http://dl.google.com/android/repository/sdk-tools-windows-4333796.zip"
 export SDK_TOOLS_VERSION="r26.1.1" 
 
 SDK_VERSION="28"
@@ -250,11 +253,11 @@ SDK_MANAGER_CMD_PARAMETERS2_PROXY=()
 SDK_LICENSES_PARAMETERS=()
 LAZARUS_STABLE_SRC_LNK="http://svn.freepascal.org/svn/lazarus/tags/lazarus_1_8_4"
 
-LAZARUS4ANDROID_LNK="https://ufpr.dl.sourceforge.net/project/laz4android/laz4android1.8.0-FPC3.0.4.7z"
-LAZARUS4ANDROID_ZIP="laz4android1.8.0-FPC3.0.4.7z"
+LAZARUS4ANDROID_LNK="http://sourceforge.net/projects/laz4android/files/laz4android${LAZ4ANDROID_STABLE_VERSION}-FPC3.0.4.7z"
+LAZARUS4ANDROID_ZIP="laz4android${LAZ4ANDROID_STABLE_VERSION}-FPC3.0.4.7z"
 #LAZARUS4ANDROID_HOME="$LETTER_HOME_DRIVER/laz4android1.8"
 LAMW_SRC_LNK="http://github.com/jmpessoa/lazandroidmodulewizard"
-LAZ4_LAMW_PATH_CFG="/$LETTER_HOME_DRIVER/laz4android1.8/config"
+
 LAZ4LAMW_HOME="$USER_DIRECTORY/Laz4Lamw"
 LAMW_IDE_HOME="$LAZ4LAMW_HOME/lazarus_stable" # path to link-simbolic to ide 
 LAMW_WORKSPACE_HOME="$USER_DIRECTORY/Dev/LAMWProjects"  #piath to lamw_workspace
@@ -329,6 +332,10 @@ magicTrapIndex=-1
 java_path=$JAVA_PATH
 java_path=${java_path%/bin*}
 win_java_path=${WIN_JAVA_PATH%'\bin'}
+#atalhos pro menu iniciar
+WIN_LAMW_MENU_PATH="${WIN_LETTER_HOME_DRIVER}\ProgramData\Microsoft\Windows\Start Menu\Programs\LAMW4Windows"
+LAMW_MENU_PATH="/$LETTER_HOME_DRIVER/ProgramData/Microsoft/Windows/Start Menu/Programs/LAMW4Windows"
+
 
 #Rotina que trata control+c
 TrapControlC(){
@@ -474,7 +481,7 @@ winRMDirf(){
 	win_temp_executable="$WIN_MSYS_TEMP_HOME/winrmdir.bat"
 	echo "rmdir /Q /S  \"$*\"" > /tmp/winrmdir.bat
 	echo "rmdir /Q /S  \"$*\"" >> /tmp/winrmdir.bat
-	winCallfromPS $win_temp_executable
+	winCallfromPS "$win_temp_executable"
 	if [ -e /tmp/winrmdir.bat ]; then 
 		rm /tmp/winrmdir.bat
 	fi
@@ -508,7 +515,7 @@ getAnt(){
 		$WGET_EXE -c $ANT_ZIP_LINK
 		if [ $? != 0 ] ; then
 			#rm *.zip*
-			ANT_ZIP_LINK="https://www-eu.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.zip"
+			ANT_ZIP_LINK="http://www-eu.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.zip"
 			$WGET_EXE -c $ANT_ZIP_LINK
 			if [ $? != 0 ]; then 
 				echo "possible network instability! Try later!"
@@ -577,7 +584,7 @@ getAndroidSDKToolsW32(){
 #Get Gradle and SDK Tools
 getOldAndroidSDKToolsW32(){
 	export SDK_TOOLS_VERSION="r25.2.5"
-	export SDK_TOOLS_URL="https://dl.google.com/android/repository/tools_r25.2.5-windows.zip" 
+	export SDK_TOOLS_URL="http://dl.google.com/android/repository/tools_r25.2.5-windows.zip" 
 	changeDirectory $USER_DIRECTORY
 	if [ ! -e $ANDROID_HOME ]; then
 		mkdir $ANDROID_HOME
@@ -1019,7 +1026,10 @@ BuildCrossArm(){
 
 #Build lazarus ide
 getLazarus4Android(){
-	changeDirectory "/$LETTER_HOME_DRIVER"
+	if [ ! -e "/$LETTER_HOME_DRIVER/LAMW4Windows" ]; then
+		mkdir "/$LETTER_HOME_DRIVER/LAMW4Windows"
+	fi
+	changeDirectory "/$LETTER_HOME_DRIVER/LAMW4Windows"
 	if [ ! -e $PATH_TO_LAZ4ANDROID ]; then
 		wget -c $LAZARUS4ANDROID_LNK
 		if [ $? != 0 ]; then
@@ -1067,6 +1077,45 @@ BuildLazarusIDE(){
 }
 #Esta função imprime o valor de uma váriavel de ambiente do MS Windows 
 #this  fuction create a INI file to config  all paths used in lamw framework 
+
+CreateLauncherLAMW(){
+	
+	if [ ! -e "$LAMW_MENU_PATH" ]; then
+		mkdir "$LAMW_MENU_PATH"
+	fi
+	powershell_create_launcher=(
+		"function CreateLauncher(){"
+	    "	echo \$ARGS[0]"
+	    "	echo \$ARGS[1]"
+	    '	$wscript= New-Object -comObject WScript.Shell'
+	    '	$atalho= $wscript.CreateShortcut($ARGS[1])'
+	    '	$atalho.TargetPath = $ARGS[0]'
+	    '	$atalho.iconLocation=$ARGS[2]'
+	    '	$atalho.Save()'
+	    '}'
+	    ''
+	    "\$lamw_path_target=\"$WIN_PATH_TO_LAZ4ANDROID\start-lamw.vbs\""
+		"\$lamw_path_destination=\"$WIN_LAMW_MENU_PATH\LAMW4Windows.lnk\""
+		"\$lamw_icon_path=\"$WIN_PATH_TO_LAZ4ANDROID\images\icons\lazarus_orange.ico\""
+		"CreateLauncher \$lamw_path_target \$lamw_path_destination \$lamw_icon_path"
+	)
+
+	for ((i=0; i < ${#powershell_create_launcher[*]};i++))
+	do
+		if [ $i = 0 ]; then
+			echo "${powershell_create_launcher[i]}" > /tmp/createlauncher.ps1
+		else
+			echo "${powershell_create_launcher[i]}" >> /tmp/createlauncher.ps1
+		fi
+	done
+
+	cat /tmp/createlauncher.ps1
+	sleep 5
+	powershell.exe Set-ExecutionPolicy Bypass
+	powershell.exe  /tmp/createlauncher.ps1
+	
+}
+
 LAMW4LinuxPostConfig(){
 	old_lamw_workspace="$USER_DIRECTORY/Dev/lamw_workspace"
 	if [ ! -e "$LAZ4_LAMW_PATH_CFG" ] ; then
@@ -1143,7 +1192,7 @@ LAMW4LinuxPostConfig(){
 	winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mipsel-linux-android-4.9"
 	winMKLinkDir "$WIN_ANDROID_SDK\ndk-bundle\toolchains\arm-linux-androideabi-4.9" "$WIN_ANDROID_SDK\ndk-bundle\toolchains\mips64el-linux-android-4.9"
 	#fi
-
+	CreateLauncherLAMW
 
 }
 #Add LAMW4Linux to menu 
@@ -1228,6 +1277,11 @@ CleanOldConfig(){
 	fi
 	if [ -e $PATH_TO_LAZ4ANDROID ]; then
 		winRMDirf $WIN_PATH_TO_LAZ4ANDROID
+	fi
+
+
+	if [ -e "$LAMW_MENU_PATH" ]; then
+		winRMDirf "$WIN_LAMW_MENU_PATH"
 	fi
 	#if [ -e $USER_DIRECTORY/android ]; then 
 	#	#echo "please wait to remove $USER_DIRECTORY/android ..."
@@ -1528,6 +1582,9 @@ case "$1" in
 		#	sleep 1;
 			BuildLazarusIDE "1";
 		fi					
+	;;
+	"getLazarus4Android")
+		getLazarus4Android
 	;;
 	*)
 		printf "%b" "${lamw_opts[*]}"
