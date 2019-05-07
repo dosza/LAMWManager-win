@@ -87,6 +87,7 @@ function prepareEnv(){
     }else{
         $MSYS_EXEC="C:\tools\msys32\usr\bin"
     }
+    return $MSYS_EXEC
 }
 
 #funcao para obter o ultimo caractere 
@@ -165,6 +166,7 @@ function installAndroidAPIs(){
 }
 
 $ARCH=detectArch
+$MSYS_EXEC=prepareEnv
 RepairPath
 enableChocolateyPackageManager
 installDependencies
