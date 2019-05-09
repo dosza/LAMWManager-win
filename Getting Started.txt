@@ -1,0 +1,12 @@
+ How to use LAMW Manager:
+ 
+    Double-click to run lamw_manager_setup.exe
+    
+    [Optional]
+    Go to folder C:\lamw_manager
+    Right-click lamw_manager.bat and select Run as administrator
+
+How to update LAMW framework
+
+    Go to folder C:\lamw_manager
+    Right-click lamw_manager.bat and select Run as administrator
