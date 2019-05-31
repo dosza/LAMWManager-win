@@ -1530,9 +1530,9 @@ case "$1" in
 	# "delete_paths")
 	# 	cleanPATHS
 	# ;;
-	# "update-config")
-	# 	LAMW4LinuxPostConfig
-	# ;;
+	"update-config")
+		LAMW4LinuxPostConfig
+	;;
 	# "update-links")
 	# 	#CreateSDKSimbolicLinks
 	# ;;

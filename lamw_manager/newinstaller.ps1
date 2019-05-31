@@ -49,6 +49,43 @@ function getFile(){
         }
     }
 }
+function writeLAMWManagerbat(){
+    $MSYS_EXEC=prepareEnv
+    $BASH_PATH=$MSYS_EXEC + '\' + 'bash.exe'
+    $buffer_lamw=@(
+    '@echo off',
+    "SET BASH_PATH=$BASH_PATH",
+    "cd C:\lamw_manager",
+    "",
+    "if exist %BASH_PATH% (goto :RunLAMWMgr ) else (goto :RestoreMsys)",
+    "",
+    "",
+    ":RestoreMsys",
+    "C:\lamw_manager\repair-msys.bat",
+    "C:\lamw_manager\preinstall.bat",
+    "goto :End",
+    "",
+    "",
+    ":RunLAMWMgr",
+    "echo %BASH_PATH%",
+    "%BASH_PATH% simple-lamw-install.sh %*",
+    "goto :End",
+    "",
+    "",
+    ":End",
+    "pause"
+    )
+    $lamw_manager_bat_path='C:\lamw_manager\lamw_manager.bat'
+    if ( ! (Test-Path $lamw_manager_bat_path)) {
+        $fp=[System.IO.StreamWriter] $lamw_manager_bat_path
+        for($i=0;$i -lt $buffer_lamw.Count;$i++){
+            $str=$buffer_lamw[$i]
+            $fp.WriteLine($str)
+        }
+        $fp.close()
+    }
+}
+
 
 #this function enable package manager 
 function enableChocolateyPackageManager(){
@@ -138,8 +175,12 @@ function RepairPath(){
                 $new_path=$new_path + $FPC_PATH + ';'
             }
             $new_path= $old_env_path + $new_path
-            echo "new_path=$new_path"
-            SETX /M PATH "$new_path"
+            if ( $new_path.Length -ge 1024 ){
+                echo "Warm: Your new variable% PATH% variable has more than 1024 characters and therefore will not be installed! You should remove unneeded paths"
+            }else{
+                echo "new_path=$new_path"
+                SETX /M PATH "$new_path"
+            }
             $env:path = $env:path + $new_path
         }else{
             echo "always path updated..."
@@ -167,9 +208,26 @@ function installAndroidAPIs(){
 
 $ARCH=detectArch
 $MSYS_EXEC=prepareEnv
+writeLAMWManagerbat
 RepairPath
 enableChocolateyPackageManager
 installDependencies
-.\lamw_manager.bat
+$bash_path=$MSYS_EXEC + '\' + 'bash.exe' 
+if ( Test-Path $bash_path ){
+  & $bash_path simple-lamw-install.sh  
+}else{
+    echo "Bash install falls, trying repair ..."
+    choco uninstall mingw -y 
+    choco uninstall msys2 -y
+   $msys_falls_path=$env:homedrive + '\' +'tools'
+    if ( Test-Path $msys_falls_path ){
+        Remove-Item $msys_falls_path -Force -Recurse 
+        if ( $? -eq $false ){
+          Remove-Item $msys_falls_path -Force -Recurse   
+        }
+    }
+    installDependencies
+    & $bash_path simple-lamw-install.sh
+}
 
 #getFile $ANT_URL C:\Users\Daniel
