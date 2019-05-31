@@ -8,6 +8,16 @@ function detectArch(){
     }
 }
 
+function prepareEnv(){
+    $ARCH=detectArch
+    if ( $ARCH = "amd64" ){
+        $MSYS_EXEC="C:\tools\msys64\usr\bin"
+    }else{
+        $MSYS_EXEC="C:\tools\msys32\usr\bin"
+    }
+    return $MSYS_EXEC
+
+}
 function getLastChar(){
     $test_str=$ARGS[0]
     $lengh_str=$test_str.Length - 1
@@ -15,11 +25,54 @@ function getLastChar(){
     echo $ret
     return $ret
 }
+function writeLAMWManagerbat(){
+    $MSYS_EXEC=prepareEnv
+    $BASH_PATH=$MSYS_EXEC + '\' + 'bash.exe'
+    $buffer_lamw=@(
+    '@echo off',
+    "SET BASH_PATH=$BASH_PATH",
+    "cd C:\lamw_manager",
+    "",
+    "if exist %BASH_PATH% (goto :RunLAMWMgr ) else (goto :RestoreMsys)",
+    "",
+    "",
+    ":RestoreMsys",
+    "C:\lamw_manager\repair-msys.bat",
+    "C:\lamw_manager\preinstall.bat",
+    "goto :End",
+    "",
+    "",
+    ":RunLAMWMgr",
+    "echo %BASH_PATH%",
+    "%BASH_PATH% simple-lamw-install.sh %*",
+    "goto :End",
+    "",
+    "",
+    ":End",
+    "pause"
+    )
+    $test=$env:homepath + '\' +'Desktop' + '\' + 'out.bat'
+    $fp=[System.IO.StreamWriter] $test
+    if ( Test-Path $test) {
+        Remove-Item $test
+    }
+    for($i=0;$i -lt $buffer_lamw.Count;$i++){
+        # if ( $i -eq  0 ){
+        $str=$buffer_lamw[$i]
+        $fp.WriteLine($str)
+        #     $buffer_lamw[$i] > $test
+        # }else{
+        #     $buffer_lamw[$i] >> $test
+        # }
+    }
+    $fp.close()
+}
+
 
 
 $ARCH=detectArch
 $OLD_FPC_PATH="C:\laz4android1.8\fpc\3.0.4\bin\i386-win32"
-$MSYS_EXEC=""
+$MSYS_EXEC=prepareEnv
 $LAZ4ANDROID_STABLE_VERSION="2.0.0"
 $LAZ4ANDROID_HOME="C:\LAMW4Windows\laz4android" + $LAZ4ANDROID_STABLE_VERSION 
 $FPC_PATH= $LAZ4ANDROID_HOME +"\fpc\3.0.4\bin\i386-win32"
@@ -80,8 +133,8 @@ function RepairPath(){
 
 
 $OLD_PATH=$env:PATH 
-#echo "ARCH=$ARCH"
+#echo "ARCH=$ARCH
 #echo "OLD_FPC_PATH=$OLD_FPC_PATH"
 #echo "OLD_PATH=$OLD_PATH"
-RepairPath
-
+#RepairPath
+writeLAMWManagerbat
