@@ -1,5 +1,6 @@
  How to use LAMW Manager:
- 
+ 	[Important!!]
+ 	Disable your antivirus(temporaly)
     Double-click to run lamw_manager_setup.exe
     
     [Optional]

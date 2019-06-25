@@ -40,6 +40,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 <p>
 	<strong>How to use LAMW Manager:</strong>
 	<ol>
+	<li>Disable your antivirus(temporarily)</li>
 	<li><a href="https://raw.githubusercontent.com/DanielTimelord/Laz4LAMW-win-installer/master/lamw_manager/lamw_manager_setup.exe">Click here to download <em> LAMW Manager Setup</em></a></li> 
 	<li>Double-click to run <strong>lamw_manager_setup.exe</strong></li>
 	<li>Go to folder <strong>C:\lamw_manager</strong></li>
