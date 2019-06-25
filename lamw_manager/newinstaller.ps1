@@ -141,49 +141,45 @@ function RepairPath(){
     $old_env_path=$env:path
     $new_path=""
     #echo "old_env_path=$old_env_path"
+    echo "LAMW Manager does not need to add the paths in FPC and MSYS to% PATH%"
     if (  (Test-Path $lamw_cfg_path ) ){
         if ( $old_env_path.Contains($MSYS_EXEC)){
             $old_env_path=$old_env_path.Replace("$MSYS_EXEC"+';',"")
+            if ( $old_env_path.Contains($OLD_FPC_PATH )){
+                $old_env_path=$old_env_path.Replace("$OLD_FPC_PATH"+';','')
+            #verifica se o último caractere é um ; (ponto e vírgula)
+                if ( ! ( ( getLastChar $old_env_path ) -eq ';') ){
+                    $old_env_path= $old_env_path + ';'
+                }else{
+                    echo "always exists ';'"
+                }
+                $new_path=$old_env_path
+                echo "nova_path $new_path"
+                SETX /M PATH "$new_path"
+                rm -Force $lamw_cfg_path
+            }
         }
-
-        if ( $old_env_path.Contains($OLD_FPC_PATH )){
-            $old_env_path=$old_env_path.Replace("$OLD_FPC_PATH"+';','')
-        }
-        
-        #verifica se o último caractere é um ; (ponto e vírgula)
-        if ( ! ( ( getLastChar $old_env_path ) -eq ';') ){
-            $old_env_path= $old_env_path + ';'
-        }else{
-            echo "always exists ';'"
-        }
-        $new_path=$old_env_path + $MSYS_EXEC +';'  + $FPC_PATH  + ';'
-        echo "nova_path $new_path"
-        SETX /M PATH "$new_path"
-        rm -Force $lamw_cfg_path
-        $env:path = $env:path + $new_path
-
     }else{
        if ( ! ( ( getLastChar $old_env_path ) -eq ';') ){
             $old_env_path= $old_env_path + ';'
         }else{
             echo "always exists ';'"
         }
-        if ( ! $old_env_path.Contains($MSYS_EXEC)){
-            $new_path=$new_path + $MSYS_EXEC +';'
-        
-            if (! $old_env_path.Contains($FPC_PATH+ ';')){
-                $new_path=$new_path + $FPC_PATH + ';'
-            }
-            $new_path= $old_env_path + $new_path
-            if ( $new_path.Length -ge 1024 ){
-                echo "Warm: Your new variable% PATH% variable has more than 1024 characters and therefore will not be installed! You should remove unneeded paths"
+        if ( ! ( Test-Path "C:\lamw_manager\lamw_manager.bat" )) {
+            if ( $old_env_path.Contains($MSYS_EXEC)){
+                $old_env_path=$old_env_path.Replace("$MSYS_EXEC","")
+                    if ( $old_env_path.Contains($FPC_PATH)){
+                        $old_env_path=$old_env_path.Replace("$FPC_PATH","")
+
+                    if ( $old_env_path.Contains('C:\lamw_manager')){
+                        $old_env_path=$old_env_path.Replace("C:\lamw_manager","")
+                    }
+                    $new_path=$old_env_path
+                    SETX /M PATH "$new_path"
+                }
             }else{
-                echo "new_path=$new_path"
-                SETX /M PATH "$new_path"
+                echo "always path updated..."
             }
-            $env:path = $env:path + $new_path
-        }else{
-            echo "always path updated..."
         }
     }
 }
@@ -208,8 +204,8 @@ function installAndroidAPIs(){
 
 $ARCH=detectArch
 $MSYS_EXEC=prepareEnv
-writeLAMWManagerbat
 RepairPath
+writeLAMWManagerbat
 enableChocolateyPackageManager
 installDependencies
 $bash_path=$MSYS_EXEC + '\' + 'bash.exe' 
