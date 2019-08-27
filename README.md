@@ -68,5 +68,4 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 </p>
 <p>
 	By Daniel Oliveira 
-	<br>oliveira.daniel109@gmail.com</br>
 </p>

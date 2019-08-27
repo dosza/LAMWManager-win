@@ -2,7 +2,7 @@
 #!/bin/bash
 #Universidade federal de Mato Grosso
 #Curso ciencia da computação
-#AUTOR: Daniel Oliveira Souza <oliveira.daniel@gmail.com>
+#AUTOR: Daniel Oliveira Souza
 #Versao LAMW-INSTALL: 0.3.0
 #Descrição: Este script configura o ambiente de desenvolvimento para o LAMW
 #---------------------------------
