@@ -271,7 +271,7 @@ GRADLE_CFG_HOME="$USER_DIRECTORY/.gradle"
 
 GRADLE_ZIP_LNK="http://services.gradle.org/distributions/gradle-4.4.1-bin.zip"
 GRADLE_ZIP_FILE="gradle-4.4.1-bin.zip"
-ANT_ZIP_LINK="http://archive.apache.org/dist/pub/apache/ant/binaries/apache-ant-1.10.5-bin.zip"
+ANT_ZIP_LINK="http://archive.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.zip"
 ANT_ZIP_FILE="apache-ant-1.10.5-bin.zip"
 
 ADB_WIN_DRIVER_LINK="http://dl.adbdriver.com/upload/adbdriver.zip"
