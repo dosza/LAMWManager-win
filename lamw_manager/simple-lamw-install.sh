@@ -80,6 +80,10 @@ getSystemLetterDrivertoLinux(){
 	done
 	echo $letter
 }
+
+getLinuxPath(){
+	echo "$1" | sed   's|\\|\/|g'
+}
 #---------------------------------------------------------------
 #GLOBAL VARIABLES 
 
@@ -103,11 +107,12 @@ export JAVA_PATH=""
 export LAZ4ANDROID_STABLE_VERSION="2.0.0"
 if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 	echo "Please wait ..."
-	export WIN_CURRENT_USER=$(getWinEnvPaths 'username' )
-	export WIN_LETTER_HOME_DRIVER=$(getWinEnvPaths "HOMEDRIVE" ) # RETURN LETTER TO DRIVER WIN INSTALL , SAMPLE C:
+	export WIN_CURRENT_USER=$USERNAME #$(getWinEnvPaths 'username' )
+	export WIN_LETTER_HOME_DRIVER=$HOMEDRIVE #$(getWinEnvPaths "HOMEDRIVE" ) # RETURN LETTER TO DRIVER WIN INSTALL , SAMPLE C:
 	export LETTER_HOME_DRIVER=$(getSystemLetterDrivertoLinux $WIN_LETTER_HOME_DRIVER )
-	export WIN_USER_DIRECTORY=$WIN_LETTER_HOME_DRIVER$(getWinEnvPaths "HOMEPATH" )   #ROOT WINU
-	export USER_DIRECTORY="/$LETTER_HOME_DRIVER/Users/$WIN_CURRENT_USER"
+	export WIN_HOMEPATH=$(getLinuxPath $HOMEPATH)
+	export WIN_USER_DIRECTORY=${HOMEDRIVE}${HOMEPATH} #$WIN_LETTER_HOME_DRIVER$(getWinEnvPaths "HOMEPATH" )   #ROOT WINU
+	export USER_DIRECTORY="/$LETTER_HOME_DRIVER$WIN_HOMEPATH"
 	if [ ! -e "$USER_DIRECTORY/.android" ]; then 
 		mkdir "$USER_DIRECTORY/.android"
 	fi
@@ -191,11 +196,10 @@ MINGW_OPT="--reinstall"
 	
 
 
-LAMW_INSTALL_VERSION="0.3.0"
+LAMW_INSTALL_VERSION="0.3.0-R2"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
-	"\t\t<oliveira.daniel109@gmail.com>\n"
 )
 
 
@@ -269,7 +273,7 @@ ANT_HOME="$ANDROID_HOME/apache-ant-1.10.5"
 #WIN_GRADLE_HOME=
 GRADLE_CFG_HOME="$USER_DIRECTORY/.gradle"
 
-GRADLE_ZIP_LNK="http://services.gradle.org/distributions/gradle-4.4.1-bin.zip"
+GRADLE_ZIP_LNK="https://services.gradle.org/distributions/gradle-4.4.1-bin.zip"
 GRADLE_ZIP_FILE="gradle-4.4.1-bin.zip"
 ANT_ZIP_LINK="http://archive.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.zip"
 ANT_ZIP_FILE="apache-ant-1.10.5-bin.zip"
@@ -338,6 +342,9 @@ WIN_LAMW_MENU_PATH="${WIN_LETTER_HOME_DRIVER}\ProgramData\Microsoft\Windows\Star
 LAMW_MENU_PATH="/$LETTER_HOME_DRIVER/ProgramData/Microsoft/Windows/Start Menu/Programs/LAMW4Windows"
 
 
+export ANDROID_SDK_TARGET=28
+export ANDROID_BUILD_TOOLS_TARGET="28.0.3"
+export GRADLE_MIN_BUILD_TOOLS='27.0.3'
 #Rotina que trata control+c
 TrapControlC(){
 	sdk_tools_zip=$ANDROID_SDK
@@ -679,7 +686,7 @@ winCallfromPS1(){
 		#"echo \$env:path"
 		"\$env:PATH=\"$WIN_JAVA_PATH;\" + \$env:path"
 		"\$SDK_MANAGER_FAILS=@(\"platform\",\"platform-tools\", \"build-tools\", \"extras\google\google-google_play_services\", \"extras\android\m2repository\", \"extras\google\market_licensing\" , \"extras\google\market_apk_expansion\")"   
-    	"\$SDK_MANAGER_CMD_PARAMETERS2=@( \"android-26\" ,\"platform-tools\" ,\"build-tools-26.0.2\"  ,\"extra-google-google_play_services\" ,\"extra-android-m2repository\" ,\"extra-google-m2repository\" ,\"extra-google-market_licensing\", \"extra-google-market_apk_expansion\")"
+    	"\$SDK_MANAGER_CMD_PARAMETERS2=@( \"android-$ANDROID_SDK_TARGET\" ,\"platform-tools\" ,\"build-tools-$ANDROID_BUILD_TOOLS_TARGET\"  ,\"extra-google-google_play_services\" ,\"extra-android-m2repository\" ,\"extra-google-m2repository\" ,\"extra-google-market_licensing\", \"extra-google-market_apk_expansion\")"
     	"\$env:PATH=\"$WIN_ANDROID_SDK\tools;\" + \$env:path"
     	#"echo \$env:path"
 		"for(\$i=0; \$i -lt \$SDK_MANAGER_CMD_PARAMETERS2.Count; \$i++){"
@@ -809,9 +816,9 @@ initParameters(){
 
 	if [ $USE_PROXY = 1 ]; then
 		SDK_MANAGER_CMD_PARAMETERS=(
-			"platforms;android-26"
+			"platforms;android-$ANDROID_SDK_TARGET"
 			"platform-tools"
-			"build-tools;26.0.2" 
+			"build-tools;$ANDROID_BUILD_TOOLS_TARGET" 
 			#"tools" 
 			"ndk-bundle" 
 			"extras;android;m2repository" 
@@ -821,9 +828,9 @@ initParameters(){
 			--proxy_port=$PORT_SERVER 
 		)
 		SDK_MANAGER_CMD_PARAMETERS2=(
-			"android-26"
+			"android-$ANDROID_SDK_TARGET"
 			"platform-tools"
-			"build-tools-26.0.2" 
+			"build-tools-$ANDROID_BUILD_TOOLS_TARGET" 
 			"extra-google-google_play_services"
 			"extra-android-m2repository"
 			"extra-google-m2repository"
@@ -842,17 +849,17 @@ initParameters(){
 #	ActiveProxy 1
 	else
 		SDK_MANAGER_CMD_PARAMETERS=(
-		"platforms;android-26"
+		"platforms;android-$ANDROID_SDK_TARGET"
 		"platform-tools" 
-		"build-tools;26.0.2" 
+		"build-tools;$ANDROID_BUILD_TOOLS_TARGET" 
 		#"tools"
 		"ndk-bundle" 
 		"extras;android;m2repository"
 		)			#ActiveProxy 0
 		SDK_MANAGER_CMD_PARAMETERS2=(
-			"android-26"
+			"android-$ANDROID_SDK_TARGET"
 			"platform-tools"
-			"build-tools-26.0.2" 
+			"build-tools-$ANDROID_BUILD_TOOLS_TARGET" 
 			"extra-google-google_play_services"
 			"extra-android-m2repository"
 			"extra-google-m2repository"
@@ -1328,6 +1335,7 @@ parseFPC(){
 	export WIN_FPC_LIB_PATH='$WIN_LETTER_HOME_DRIVER\laz4android1.8\fpc\3.0.4'
 	export PATH=$PATH:$FPC_EXE
 	export FPC_MKCFG_EXE=$(which fpcmkcfg.exe)
+	echo "$FPC_MKCFG_EXE";sleep 5
 	
 }
 
