@@ -91,7 +91,7 @@ function writeLAMWManagerbat(){
 function enableChocolateyPackageManager(){
     $psh_path="$env:SystemRoot\System32"
     echo $psh_path# powershell.exe Set-ExecutionPolicy AllSigned
-    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
     $env:PATH="$env:PATH;$env:ALLUSERSPROFILE\chocolatey\bin"
 
 }
