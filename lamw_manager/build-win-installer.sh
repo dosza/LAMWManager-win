@@ -5,20 +5,22 @@ then
 	mkdir $LAMW_MANAGER_PATH
 fi
 	files=(
-		"preinstall.bat"
-		"preinstall-win32.bat"
-		"preinstall-win64.bat"
+		"../Getting Started.txt"
+		"tools/preinstall.bat"
+		#"preinstall-win32.bat"
+		#"preinstall-win64.bat"
 		"simple-lamw-install.sh"
 		#"lamw_manager.bat"
-		"newinstaller.ps1"
-		"repair-msys.bat"
-		"repair-lamw4windows.bat"	
+		"tools/newinstaller.ps1"
+		"tools/repair-tools/repair-msys.bat"
+		"tools/repair-tools/repair-lamw4windows.bat"
+		"innosetup/lamw_manager.iss"
 	)
 	qt=${#files[*]}
 	for((i=0;i<qt;i++))
 	do 
-		if [ -e ${files[i]} ]; then
-			cp ${files[i]} $LAMW_MANAGER_PATH
+		if [ -e "${files[i]}" ]; then
+			cp "${files[i]}" $LAMW_MANAGER_PATH
 		fi
 	done
 
@@ -52,3 +54,9 @@ fi
 		fi
 	done
 	printf "%b" "${file_str[*]}"
+
+	if [ -e "C:\Program Files (x86)\Inno Setup 5" ]; then
+		"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" "$LAMW_MANAGER_PATH\lamw_manager.iss"
+	fi
+
+	cp "$LAMW_MANAGER_PATH\Output\lamw_manager_setup.exe" ./

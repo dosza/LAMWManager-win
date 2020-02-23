@@ -1101,6 +1101,10 @@ CreateLauncherLAMW(){
 	if [ ! -e "$LAMW_MENU_PATH" ]; then
 		mkdir "$LAMW_MENU_PATH"
 	fi
+
+	if [ -e "$WIN_LAMW_MENU_PATH\LAMW4Windows.lnk" ]; then 
+		rm "$WIN_LAMW_MENU_PATH\LAMW4Windows.lnk"
+	fi
 	powershell_create_launcher=(
 		"function CreateLauncher(){"
 	    "	echo \$ARGS[0]"
@@ -1159,6 +1163,7 @@ LAMW4LinuxPostConfig(){
 		"[NewProject]"
 		"PathToWorkspace=$WIN_LAMW_WORKSPACE_HOME"
 		"PathToJavaTemplates=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\android_wizard\smartdesigner\java"
+		"PathToSmartDesigner=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\android_wizard\smartdesigner"
 		"PathToJavaJDK=$win_java_path"
 		"PathToAndroidNDK=$WIN_USER_DIRECTORY\LAMW\sdk\ndk-bundle"
 		"PathToAndroidSDK=$WIN_USER_DIRECTORY\LAMW\sdk"
@@ -1172,7 +1177,7 @@ LAMW4LinuxPostConfig(){
 		"AndroidPlatform=0"
 		"AntBuildMode=debug"
 		"NDK=5"
-		"PathToSmartDesigner=$WIN_USER_DIRECTORY\LAMW\lazandroidmodulewizard\android_wizard\smartdesigner"
+		
 	)
 
 	lamw_loader_bat_str=(
@@ -1180,7 +1185,7 @@ LAMW4LinuxPostConfig(){
 		"SET PATH=$WIN_JAVA_PATH;%PATH%"
 		"cd \"$WIN_PATH_TO_LAZ4ANDROID\""
 		"SET JAVA_HOME=\"$win_java_path\""
-		"lazarus"
+		'lazarus %*'
 	)
 	lamw_loader_vbs_str="CreateObject(\"Wscript.Shell\").Run  \"$WIN_PATH_TO_LAZ4ANDROID\lamw-ide.bat\",0,True"
 	# "${LAMW_init_str[*]}"
@@ -1471,7 +1476,7 @@ fi
 	printf "${LAMW_INSTALL_WELCOME[*]}"
 	echo "----------------------------------------------------------------------"
 	echo "LAMW Manager (Native Support:Linux supported Debian 9, Ubuntu 16.04 LTS, Linux Mint 18)
-	Windows Compability (from MSYS2): Windows 8.1 and Windows 10"
+	Windows Compability (from MSYS2): Only Windows 8.1 and Windows 10"
 
 	#configure parameters sdk before init download and build
 
