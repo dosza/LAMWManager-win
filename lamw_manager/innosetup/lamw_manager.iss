@@ -26,6 +26,10 @@ DisableProgramGroupPage=yes
 OutputBaseFilename=lamw_manager_setup
 Compression=lzma
 SolidCompression=yes
+MinVersion=6.2
+VersionInfoVersion=0.3.0
+VersionInfoTextVersion=0.3.0-r23-03-2020
+
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
