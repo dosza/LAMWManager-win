@@ -685,8 +685,26 @@ winCallfromPS1(){
 		"\$JAVA_HOME=\"$win_java_path\""
 		#"echo \$env:path"
 		"\$env:PATH=\"$WIN_JAVA_PATH;\" + \$env:path"
-		"\$SDK_MANAGER_FAILS=@(\"platform\",\"platform-tools\", \"build-tools\", \"extras\google\google-google_play_services\", \"extras\android\m2repository\", \"extras\google\market_licensing\" , \"extras\google\market_apk_expansion\")"   
-    	"\$SDK_MANAGER_CMD_PARAMETERS2=@( \"android-$ANDROID_SDK_TARGET\" ,\"platform-tools\" ,\"build-tools-$ANDROID_BUILD_TOOLS_TARGET\"  ,\"extra-google-google_play_services\" ,\"extra-android-m2repository\" ,\"extra-google-m2repository\" ,\"extra-google-market_licensing\", \"extra-google-market_apk_expansion\")"
+		"\$SDK_MANAGER_FAILS=@(
+		\"platform\",
+		\"platform-tools\", 
+		\"build-tools\", 
+		\"extras\google\google-google_play_services\", 
+		\"extras\android\m2repository\", 
+		\"extras\google\market_licensing\", 
+		\"extras\google\market_apk_expansion\"
+		)"   
+    	"\$SDK_MANAGER_CMD_PARAMETERS2=@( 
+    	\"android-$ANDROID_SDK_TARGET\",
+    	\"platform-tools\" ,
+    	\"build-tools-$ANDROID_BUILD_TOOLS_TARGET\",
+    	\"extra-google-google_play_services\",
+    	\"extra-android-m2repository\",
+    	\"extra-google-m2repository\",
+    	\"extra-google-market_licensing\", 
+    	\"extra-google-market_apk_expansion\",
+    	\"build-tools-$GRADLE_MIN_BUILD_TOOLS\"
+    	)"
     	"\$env:PATH=\"$WIN_ANDROID_SDK\tools;\" + \$env:path"
     	#"echo \$env:path"
 		"for(\$i=0; \$i -lt \$SDK_MANAGER_CMD_PARAMETERS2.Count; \$i++){"
@@ -822,6 +840,7 @@ initParameters(){
 			#"tools" 
 			"ndk-bundle" 
 			"extras;android;m2repository" 
+			"build-tools;$GRADLE_MIN_BUILD_TOOLS"
 			--no_https 
 			--proxy=http 
 			--proxy_host=$PROXY_SERVER 
@@ -836,6 +855,7 @@ initParameters(){
 			"extra-google-m2repository"
 			"extra-google-market_licensing"
 			"extra-google-market_apk_expansion"
+			"build-tools-$GRADLE_MIN_BUILD_TOOLS"
 		)
 		SDK_MANAGER_CMD_PARAMETERS2_PROXY=(
 			--no_https 
@@ -855,6 +875,7 @@ initParameters(){
 		#"tools"
 		"ndk-bundle" 
 		"extras;android;m2repository"
+		"build-tools;$GRADLE_MIN_BUILD_TOOLS"
 		)			#ActiveProxy 0
 		SDK_MANAGER_CMD_PARAMETERS2=(
 			"android-$ANDROID_SDK_TARGET"
@@ -866,6 +887,7 @@ initParameters(){
 			"extra-google-market_licensing"
 			"extra-google-market_apk_expansion"
 			"extra-google-usb_driver"
+			"build-tools-$GRADLE_MIN_BUILD_TOOLS"
 		)
 		SDK_LICENSES_PARAMETERS=(--licenses )
 	fi
@@ -1257,6 +1279,7 @@ CleanOldConfig(){
 		fi
 	fi
 	winCallfromPS "taskkill /im adb.exe /f" > /dev/null
+	winCallfromPS "taskkill /im java.exe /f" > /dev/null
 	if [ $? = 0 ]; then
 		echo "adb process stopped..."
 	fi
