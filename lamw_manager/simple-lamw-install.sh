@@ -3,7 +3,7 @@
 #Universidade federal de Mato Grosso
 #Curso ciencia da computação
 #AUTOR: Daniel Oliveira Souza
-#Versao LAMW-INSTALL: 0.3.0
+#Versao LAMW-INSTALL: 0.3.0-r23-02-2020
 #Descrição: Este script configura o ambiente de desenvolvimento para o LAMW
 #---------------------------------
 #----ColorTerm
@@ -196,7 +196,7 @@ MINGW_OPT="--reinstall"
 	
 
 
-LAMW_INSTALL_VERSION="0.3.0-R2"
+LAMW_INSTALL_VERSION="0.3.0-r23-02-2020"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
