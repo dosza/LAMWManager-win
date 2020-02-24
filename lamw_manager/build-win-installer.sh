@@ -9,7 +9,7 @@ fi
 		"tools/preinstall.bat"
 		#"preinstall-win32.bat"
 		#"preinstall-win64.bat"
-		"simple-lamw-install.sh"
+		"tools/simple-lamw-install.sh"
 		#"lamw_manager.bat"
 		"tools/newinstaller.ps1"
 		"tools/repair-tools/repair-msys.bat"
