@@ -1,6 +1,24 @@
 # This script is an uninstaller of LAMW4Windows and its dependencies!
 echo "Warning: The entire development environment installed by LAMW Manager will be uninstalled!"
-$LAMW_MANAGER_ROOT="$env:homedrive" + "\lamw_manager"
+if (Test-Path "$env:homedrive\lamw_manager" ){
+    $global:LAMW_MANAGER_ROOT="$env:homedrive\lamw_manager"
+    $global:del_paths=@(
+        "$env:homedrive\tools"
+        "$env:homedrive\ProgramData\Chocolatey"
+        "$env:homedrive\LAMW4Windows"
+        "$env:homedrive\$env:homepath\LAMW"
+        "$LAMW_MANAGER_ROOT"
+    )
+}else {
+    $global:LAMW_MANAGER_ROOT=[System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition) #get current dir 
+    $global:del_paths=@(
+        "$env:homedrive\tools"
+        "$env:homedrive\ProgramData\Chocolatey"
+        "$env:homedrive\LAMW4Windows"
+        "$env:homedrive\$env:homepath\LAMW"
+    )
+}
+
 #array of commands
 $lamw_manager_uninstall_cmds=@(
     "$LAMW_MANAGER_ROOT\lamw_manager.bat"
@@ -9,13 +27,7 @@ $lamw_manager_uninstall_cmds=@(
 
 
 #array directorys to delete (of LAMW env and lamw_manager)
-$del_paths=@(
-    "$env:homedrive\tools"
-    "$env:homedrive\ProgramData\Chocolatey"
-    "$env:homedrive\LAMW4Windows"
-    "$env:homedrive\$env:homepath\LAMW"
-    "$LAMW_MANAGER_ROOT"
-)
+
 
 $flag=0
 for($i=0; $i -lt $del_paths.Count;$i++){
