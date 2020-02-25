@@ -1,4 +1,7 @@
 #LAMW Manager for windows
+$global:MYDIR = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition) #get current dir 
+echo $MYDIR
+sleep 2
 $LAMW_MANAGER_VERSION="0.3.0"
 $HOME_USER=$env:homepath
 $ROOT_LAMW="$home_user" + "\" + "LAMW"
@@ -55,27 +58,27 @@ function writeLAMWManagerbat(){
     $buffer_lamw=@(
     '@echo off',
     "SET BASH_PATH=$BASH_PATH",
-    "cd C:\lamw_manager",
+ #   "cd C:\lamw_manager",
     "",
     "if exist %BASH_PATH% (goto :RunLAMWMgr ) else (goto :RestoreMsys)",
     "",
     "",
     ":RestoreMsys",
-    "C:\lamw_manager\repair-msys.bat",
-    "C:\lamw_manager\preinstall.bat",
+    "%~dp0\repair-msys.bat",
+    "%~dp0\preinstall.bat",
     "goto :End",
     "",
     "",
     ":RunLAMWMgr",
     "echo %BASH_PATH%",
-    "%BASH_PATH% simple-lamw-install.sh %*",
+    "%BASH_PATH% %~dp0\simple-lamw-install.sh %*",
     "goto :End",
     "",
     "",
     ":End",
     "pause"
     )
-    $lamw_manager_bat_path='C:\lamw_manager\lamw_manager.bat'
+    $lamw_manager_bat_path="$MYDIR\lamw_manager.bat"
     if ( ! (Test-Path $lamw_manager_bat_path)) {
         $fp=[System.IO.StreamWriter] $lamw_manager_bat_path
         for($i=0;$i -lt $buffer_lamw.Count;$i++){
@@ -210,7 +213,7 @@ enableChocolateyPackageManager
 installDependencies
 $bash_path=$MSYS_EXEC + '\' + 'bash.exe' 
 if ( Test-Path $bash_path ){
-  & $bash_path simple-lamw-install.sh  
+  & $bash_path "$MYDIR\simple-lamw-install.sh"
 }else{
     echo "Bash install falls, trying repair ..."
     choco uninstall mingw -y 
@@ -223,7 +226,7 @@ if ( Test-Path $bash_path ){
         }
     }
     installDependencies
-    & $bash_path simple-lamw-install.sh
+    & $bash_path "$MYDIR\simple-lamw-install.sh"
 }
 
 #getFile $ANT_URL C:\Users\Daniel

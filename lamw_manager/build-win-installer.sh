@@ -12,8 +12,8 @@ fi
 		"tools/simple-lamw-install.sh"
 		#"lamw_manager.bat"
 		"tools/newinstaller.ps1"
-		"tools/repair-tools/repair-msys.bat"
-		"tools/repair-tools/repair-lamw4windows.bat"
+		"tools/repair-msys.bat"
+		"tools/repair-lamw4windows.bat"
 		"innosetup/lamw_manager.iss"
 	)
 	qt=${#files[*]}
@@ -24,36 +24,36 @@ fi
 		fi
 	done
 
-	file_str=()
-	i=0
-	str=""
-	while read str
-	do
-		#echo "str=$str"
-		echo "$str" | grep "SET exec_path="
-		if [ $? != 0 ]; then
-			file_str[i]=$str
-		else
-			bar='\'
-			aux="SET exec_path=%HOMEDRIVE%"
-			aux=$aux$bar
-			aux=$aux"lamw_manager"
-			file_str[i]=$aux
-			echo "aux=$aux"
-		fi
-		((i++))
+	# file_str=()
+	# i=0
+	# str=""
+	# while read str
+	# do
+	# 	#echo "str=$str"
+	# 	echo "$str" | grep "SET exec_path="
+	# 	if [ $? != 0 ]; then
+	# 		file_str[i]=$str
+	# 	else
+	# 		bar='\'
+	# 		aux="SET exec_path=%HOMEDRIVE%"
+	# 		aux=$aux$bar
+	# 		aux=$aux"lamw_manager"
+	# 		file_str[i]=$aux
+	# 		echo "aux=$aux"
+	# 	fi
+	# 	((i++))
 
-	done  < $LAMW_MANAGER_PATH/preinstall.bat
-	for((i=0;i<${#file_str[*]};i++))
-	do 
-		echo "i=$i ${file_str[i]}"
-		if [ $i = 0 ]; then
-			echo ${file_str[i]} > $LAMW_MANAGER_PATH/preinstall.bat
-		else
-			echo ${file_str[i]} >> $LAMW_MANAGER_PATH/preinstall.bat
-		fi
-	done
-	printf "%b" "${file_str[*]}"
+	# done  < $LAMW_MANAGER_PATH/preinstall.bat
+	# for((i=0;i<${#file_str[*]};i++))
+	# do 
+	# 	echo "i=$i ${file_str[i]}"
+	# 	if [ $i = 0 ]; then
+	# 		echo ${file_str[i]} > $LAMW_MANAGER_PATH/preinstall.bat
+	# 	else
+	# 		echo ${file_str[i]} >> $LAMW_MANAGER_PATH/preinstall.bat
+	# 	fi
+	# done
+	# printf "%b" "${file_str[*]}"
 
 	if [ -e "C:\Program Files (x86)\Inno Setup 5" ]; then
 		printf "\n\nBuild lamw_manager_setup.exe ...\n\n"
@@ -62,4 +62,3 @@ fi
 			cp "$LAMW_MANAGER_PATH\Output\lamw_manager_setup.exe" ./
 		fi
 	fi
-
