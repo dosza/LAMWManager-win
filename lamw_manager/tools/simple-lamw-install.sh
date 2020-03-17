@@ -79,8 +79,6 @@ winCallfromPS(){
 		done
 		
 		cat /tmp/pscommand.ps1
-		#read
-		#echo "$WIN_JAVA_PATH";read
 		powershell.exe Set-ExecutionPolicy Bypass
 		powershell.exe  /tmp/pscommand.ps1
 	fi
@@ -405,8 +403,10 @@ winMKLink(){
 }
 #this function delete a windows 
 winRMDirf(){
-	local rm_cmd_pwsh="if ( Test-Path \"$*\")\n{\n\tRemove-Item \"$*\" -Force -Recurse\n}\n"
+	#local rm_cmd_pwsh="if ( Test-Path \"$*\")\n{\n\tRemove-Item \"$*\" -Force -Recurse\n}\n"
+	local rm_cmd_pwsh="try{\n\tif ( Test-Path \"$*\" ){\n\t\tRemove-Item \"$*\" -Force -Recurse\n\t}\n}catch{\n\t echo \"trying remove with cmd\"\n\tcmd.exe /c 'if exist \"$*\" ( rmdir \"$*\" /Q /S )'\n}\n"
 	export FLAG_SCAPE=1
+	#echo "if exist \"$*\" ( rmdir /Q /S  \"$*\")" > /tmp/winrm.bat 
 	winCallfromPS "$rm_cmd_pwsh"
 	export FLAG_SCAPE=0
 
@@ -596,7 +596,6 @@ getOldAndroidSDKToolsW32(){
 winCallfromPS1(){
 	args=($*)
 	changeDirectory "/tmp"
-	#echo "WIN_JAVA_PATH=$WIN_JAVA_PATH";read;
 	pscommand_str=(
 		"\$JAVA_HOME=\"$JAVA_HOME\""
 		#"echo \$env:path"
@@ -908,9 +907,8 @@ BuildLazarusIDE(){
 		#rm "$build_win_cmd"
 		echo ""
 	fi
-	#echo  "lazarus --primary-config-path=$WIN_LETTER_HOME_DRIVER$WIN_PATH_LAZ4ANDROID_CFG" > start_laz4lamw.bat
 }
-#Esta função imprime o valor de uma váriavel de ambiente do MS Windows 
+
 #this  fuction create a INI file to config  all paths used in lamw framework 
 
 CreateLauncherLAMW(){
@@ -997,6 +995,8 @@ LAMW4LinuxPostConfig(){
 		"SET JAVA_HOME=\"$JAVA_HOME\""
 		'lazarus %*'
 	)
+
+
 	lamw_loader_vbs_str="CreateObject(\"Wscript.Shell\").Run  \"$LAZ4ANDROID_HOME\\lamw-ide.bat\",0,True"
 	# "${LAMW_init_str[*]}"
 	#escreve o arquivo LAMW.ini
@@ -1020,6 +1020,8 @@ LAMW4LinuxPostConfig(){
 	done
 
 	echo "$lamw_loader_vbs_str" >  "$LAZ4ANDROID_HOME\\start-lamw.vbs"
+	unix2dos "$LAZ4ANDROID_HOME\\lamw-ide.bat"
+	unix2dos "$WIN_PATH_LAZ4ANDROID_CFG\\LAMW.ini"
 	#AddLAMWtoStartMenu
 	#if [ $OLD_ANDROID_SDK = 0 ]; then
 	winMKLink "$ANDROID_SDK\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK\\ndk-bundle\\toolchains\\mipsel-linux-android-4.9"
@@ -1052,8 +1054,8 @@ changeDirectory(){
 CleanOldConfig(){
 
 	local list_to_del=(
-			"$ANDROID_HOME"
-			"$JAVA_HOME"
+			"$ROOT_LAMW"
+			"$(dirname \"$JAVA_HOME\")"
 			"$HOMEPATH\\.android"
 			"$LAMW_MENU_PATH"
 			"$LAMW4WINDOWS_HOME"
@@ -1070,6 +1072,7 @@ CleanOldConfig(){
 			if [ -d "${list_to_del[i]}" ]; then 
 				winRMDirf "${list_to_del[i]}"
 				if [ $? != 0 ]; then
+					echo "falls"
 					rm -rf "${list_to_del[i]}"
 				fi
 			else
@@ -1090,7 +1093,7 @@ writeLAMWLogInstall(){
 		"LAMW workspace : $WIN_LAMW_WORKSPACE_HOME" 
 		"Android SDK:$ANDROID_HOME\sdk" 
 		"Android NDK:$ANDROID_HOME\ndk" 
-		"Gradle:$WIN_GRADLE_HOME" 
+		"Gradle:$GRADLE_HOME" 
 		"OLD_ANDROID_SDK=$OLD_ANDROID_SDK"
 		"SDK_TOOLS_VERSION=$SDK_TOOLS_VERSION"
 		"Install-date:$(date)"
@@ -1103,7 +1106,9 @@ writeLAMWLogInstall(){
 		else
 			printf "%s\n" "${lamw_log_str[i]}" >> "$ANDROID_HOME\\lamw-install.log" 
 		fi
-	done		
+	done
+
+	unix2dos "$ANDROID_HOME\\lamw-install.log" 		
 }
 getStatusInstalation(){
 	if [  -e "$ANDROID_HOME\\lamw-install.log" ]; then
