@@ -52,10 +52,8 @@ winCallfromPS(){
 	if [ $USE_LOCAL_ENV = 0 ];  then
 		if [ $FLAG_SCAPE = 1 ]; then
 			echo -e "$*" > /tmp/pscommand.ps1
-			cat /tmp/pscommand.ps1;sleep 1.5
 		else
 			echo "$*" > /tmp/pscommand.ps1
-			echo ""
 		fi
 		unix2dos /tmp/pscommand.ps1
 		cat /tmp/pscommand.ps1;
@@ -319,10 +317,6 @@ installJava(){
 		changeDirectory "$HOMEDRIVE\\Program Files\\Zulu"
 
 		if [ ! -e "zulu-8" ]; then
-		#	pwd;read
-		#	echo "$JAVA_EXEC_PATH";read
-		#	ls $JAVA_EXEC_PATH
-		#	$JAVA_EXEC_PATH/javac.exe -version
 			$WGET_EXE -c "$ZULU_JDK_URL"
 			if [ $? != 0 ]; then
 				$WGET_EXE -c "$ZULU_JDK_URL"
@@ -333,17 +327,13 @@ installJava(){
 			fi
 			unzip "$ZULU_JDK_ZIP"
 			mv "$ZULU_TMP_PATH" "zulu-8"
-			#echo $PWD | grep ${JAVA_EXEC_PATH};read
 			rm $ZULU_JDK_ZIP
 			export PATH=$PATH:$JAVA_EXEC_PATH
-			#export JAVA_HOME=$JAVA_EXEC_PATH
 			java -version
 		else
 			export PATH=$PATH:$JAVA_EXEC_PATH
-		#	export JAVA_HOME=$JAVA_EXEC_PATH
 			java -version
 		fi
-	#fi
 }
 getTerminalDeps(){
 	pacman -Syy  unzip dos2unix --noconfirm
@@ -379,10 +369,6 @@ getImplicitInstall(){
 
 winMKLinkDir(){
 	if [ $# = 2 ]; then
-		#getWinEnvPaths "TEMP"
-		#echo "LinkDir:target=$1 link=$2"
-		#rm  /tmp/winMKLink.bat
-		#win_temp_path=$(getWinEnvPaths "HOMEDRIVE")
 		if [ ! -e "$2" ]; then
 			win_temp_path="$MSYS_TEMP\\winMKLink.bat"
 			echo " /D $2 $1" > "$MSYS_TEMP\\winMKLink.bat" 
@@ -403,10 +389,8 @@ winMKLink(){
 }
 #this function delete a windows 
 winRMDirf(){
-	#local rm_cmd_pwsh="if ( Test-Path \"$*\")\n{\n\tRemove-Item \"$*\" -Force -Recurse\n}\n"
 	local rm_cmd_pwsh="try{\n\tif ( Test-Path \"$*\" ){\n\t\tRemove-Item \"$*\" -Force -Recurse\n\t}\n}catch{\n\t echo \"trying remove with cmd\"\n\tcmd.exe /c 'if exist \"$*\" ( rmdir \"$*\" /Q /S )'\n}\n"
 	export FLAG_SCAPE=1
-	#echo "if exist \"$*\" ( rmdir /Q /S  \"$*\")" > /tmp/winrm.bat 
 	winCallfromPS "$rm_cmd_pwsh"
 	export FLAG_SCAPE=0
 
@@ -446,8 +430,6 @@ getAnt(){
 				exit 1
 			fi
 		fi
-		#echo "$PWD"
-		#sleep 3
 		magicTrapIndex=1
 		trap TrapControlC 2
 		unzip "$ANT_ZIP_FILE"
@@ -469,11 +451,8 @@ getAndroidSDKToolsW32(){
 		trap TrapControlC 2
 		$WGET_EXE -c "$GRADLE_ZIP_LNK"
 		if [ $? != 0 ] ; then
-			#rm *.zip*
 			$WGET_EXE -c "$GRADLE_ZIP_LNK"
 		fi
-		#echo "$PWD"
-		#sleep 3
 		magicTrapIndex=3
 		trap TrapControlC 2
 		unzip "$GRADLE_ZIP_FILE"
@@ -482,10 +461,7 @@ getAndroidSDKToolsW32(){
 	if [ -e  "$GRADLE_ZIP_FILE" ]; then
 		rm "$GRADLE_ZIP_FILE"
 	fi
-	#ANT
 	
-	#mkdir
-	#changeDirectory $ANDROID_SDK
 	if [ ! -e "sdk" ] ; then
 		mkdir "sdk"
 	fi
@@ -651,10 +627,6 @@ winCallfromPS1(){
 	#read
 	powershell Set-ExecutionPolicy Bypass
 	powershell "/tmp/pscommand.ps1"
-	#if [ -e  /tmp/pscommand.ps1 ]; then 
-	#	rm /tmp/pscommand.ps1
-	#fi
-	#cat $installer_cmd
 
 }
 	
@@ -880,10 +852,7 @@ BuildLazarusIDE(){
 		"--build-ide= --add-package \"$ANDROID_HOME\\lazandroidmodulewizard\\android_wizard\\lazandroidwizardpack.lpk\""
 		"--build-ide= --add-package \"$ANDROID_HOME\\lazandroidmodulewizard\\ide_tools\\amw_ide_tools.lpk\""
 	)
-	#make clean all
-	
-	#echo "make clean all" >> $build_win_cmd
-		#build ide  with lamw framework 
+
 	for((i=0;i< ${#LAZBUILD_PARAMETERS[@]};i++))
 	do
 		echo "BEFORE PATH=%PATH%" > "$build_win_cmd"
@@ -904,8 +873,7 @@ BuildLazarusIDE(){
 	done
 	
 	if [ -e "$build_win_cmd" ]; then
-		#rm "$build_win_cmd"
-		echo ""
+		"$build_win_cmd"
 	fi
 }
 
@@ -998,7 +966,6 @@ LAMW4LinuxPostConfig(){
 
 
 	lamw_loader_vbs_str="CreateObject(\"Wscript.Shell\").Run  \"$LAZ4ANDROID_HOME\\lamw-ide.bat\",0,True"
-	# "${LAMW_init_str[*]}"
 	#escreve o arquivo LAMW.ini
 	for ((i=0;i<${#LAMW_init_str[@]};i++))
 	do
@@ -1022,15 +989,11 @@ LAMW4LinuxPostConfig(){
 	echo "$lamw_loader_vbs_str" >  "$LAZ4ANDROID_HOME\\start-lamw.vbs"
 	unix2dos "$LAZ4ANDROID_HOME\\lamw-ide.bat"
 	unix2dos "$WIN_PATH_LAZ4ANDROID_CFG\\LAMW.ini"
-	#AddLAMWtoStartMenu
-	#if [ $OLD_ANDROID_SDK = 0 ]; then
 	winMKLink "$ANDROID_SDK\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK\\ndk-bundle\\toolchains\\mipsel-linux-android-4.9"
 	winMKLink "$ANDROID_SDK\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK\\ndk-bundle\\toolchains\\mips64el-linux-android-4.9"
-	#fi
 	CreateLauncherLAMW
 
 }
-#Add LAMW4Linux to menu 
 
 #cd not a native command, is a systemcall used to exec, read more in exec man 
 changeDirectory(){
@@ -1053,9 +1016,10 @@ changeDirectory(){
 #this function remove old config of Laz4Lamw  
 CleanOldConfig(){
 
+	local root_java=$(dirname "$JAVA_HOME")
 	local list_to_del=(
 			"$ROOT_LAMW"
-			"$(dirname \"$JAVA_HOME\")"
+			"$root_java"
 			"$HOMEPATH\\.android"
 			"$LAMW_MENU_PATH"
 			"$LAMW4WINDOWS_HOME"
@@ -1206,7 +1170,6 @@ case "$1" in
 			mainInstall
 	;;
 	"update-lamw.ini")
-		#echo ${JAVA_HOME};read;
 		export OLD_ANDROID_SDK=1
 		export NO_GUI_OLD_SDK=1
 		LAMW4LinuxPostConfig
@@ -1215,9 +1178,7 @@ case "$1" in
 	"update-config")
 		LAMW4LinuxPostConfig
 	;;
-	# "update-links")
-	# 	#CreateSDKSimbolicLinks
-	# ;;
+
 	"--sdkmanager")
 		getStatusInstalation;
 		if [ $LAMW_INSTALL_STATUS = 1 ];then
@@ -1225,13 +1186,11 @@ case "$1" in
 			echo "Starting Android SDK Manager...."
 			export USE_LOCAL_ENV=1
 			"$ANDROID_SDK\\tools\\android.bat" "update" "sdk"
-			#changeOwnerAllLAMW 
 
 		else
 			mainInstall
 			export USE_LOCAL_ENV=1
 			"$ANDROID_SDK\\tools\\android.bat" "update" "sdk"
-			#changeOwnerAllLAMW
 		fi 	
 ;;
 	"--update-lamw")
@@ -1240,7 +1199,6 @@ case "$1" in
 			Repair
 			echo "Updating LAMW";
 			getLAMWFramework "pull";
-			#sleep 1;
 			BuildLazarusIDE "1";
 		else
 			mainInstall
@@ -1261,10 +1219,8 @@ case "$1" in
 			printf "Press control+c to exit ...\n"
 			sleep 10 
 			Repair
-			#checkProxyStatus;
 			echo "Updating LAMW";
 			getLAMWFramework;
-		#	sleep 1;
 			BuildLazarusIDE "1";
 		fi					
 	;;
