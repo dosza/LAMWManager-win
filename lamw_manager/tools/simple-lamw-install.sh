@@ -55,7 +55,7 @@ winCallfromPS(){
 		else
 			echo "$*" > /tmp/pscommand.ps1
 		fi
-		unix2dos /tmp/pscommand.ps1
+		unix2dos /tmp/pscommand.ps1 2>/dev/null
 		cat /tmp/pscommand.ps1;
 		powershell.exe Set-ExecutionPolicy Bypass
 		powershell.exe  /tmp/pscommand.ps1
@@ -644,7 +644,7 @@ searchLineinFile(){
 	if [ "$1" != "" ];then
 		if [ -e "$1" ];then
 			if [ "$2" != "" ];then
-				line="NULL"
+				line="/dev/nullL"
 				#file=$1
 				while read line # read a line from
 				do
@@ -987,8 +987,8 @@ LAMW4LinuxPostConfig(){
 	done
 
 	echo "$lamw_loader_vbs_str" >  "$LAZ4ANDROID_HOME\\start-lamw.vbs"
-	unix2dos "$LAZ4ANDROID_HOME\\lamw-ide.bat"
-	unix2dos "$WIN_PATH_LAZ4ANDROID_CFG\\LAMW.ini"
+	unix2dos "$LAZ4ANDROID_HOME\\lamw-ide.bat" 2>/dev/null
+	unix2dos "$WIN_PATH_LAZ4ANDROID_CFG\\LAMW.ini" 2>/dev/null
 	winMKLink "$ANDROID_SDK\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK\\ndk-bundle\\toolchains\\mipsel-linux-android-4.9"
 	winMKLink "$ANDROID_SDK\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK\\ndk-bundle\\toolchains\\mips64el-linux-android-4.9"
 	CreateLauncherLAMW
@@ -1025,10 +1025,10 @@ CleanOldConfig(){
 			"$LAMW4WINDOWS_HOME"
 			"$GRADLE_CFG_HOME"
 	)
-	winCallfromPS "taskkill /im adb.exe /f" > /dev/null
-	winCallfromPS "taskkill /im java.exe /f" > /dev/null
-	winCallfromPS "taskkill /im javac.exe /f" > /dev/null
-	winCallfromPS "taskkill /im make.exe /f" > /dev/null
+	winCallfromPS "taskkill /im adb.exe /f"    2>/dev/null
+	winCallfromPS "taskkill /im java.exe /f"   2>/dev/null
+	winCallfromPS "taskkill /im javac.exe /f"  2>/dev/null
+	winCallfromPS "taskkill /im make.exe /f"   2>/dev/null
 
 	for((i=0;i<${#list_to_del[*]};i++))
 	do
@@ -1072,7 +1072,7 @@ writeLAMWLogInstall(){
 		fi
 	done
 
-	unix2dos "$ANDROID_HOME\\lamw-install.log" 		
+	unix2dos "$ANDROID_HOME\\lamw-install.log" 2> /dev/null
 }
 getStatusInstalation(){
 	if [  -e "$ANDROID_HOME\\lamw-install.log" ]; then
@@ -1114,7 +1114,7 @@ mainInstall(){
 	changeDirectory "$ANDROID_HOME"
 	LAMW4LinuxPostConfig
 	InstallWinADB
-	winCallfromPS "taskkill /im adb.exe /f" > /dev/null
+	winCallfromPS "taskkill /im adb.exe /f" 2>/dev/null
 	writeLAMWLogInstall
 }
 
