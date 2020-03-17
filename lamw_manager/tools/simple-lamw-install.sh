@@ -19,10 +19,13 @@ export AZUL=$'\e[1;34m'
 export NORMAL=$'\e[0m'
 
 #--------------------------
+export FLAG_FORCE_ANDROID_AARCH64=0
+export OLD_ROOT_LAMW=""
 export ROOT_LAMW="$HOMEDRIVE${HOMEPATH}\\LAMW" #DIRETORIO PAI DE TODO O AMBIENTE DE DESENVOLVIMENTO LAMW
 export ANDROID_HOME=$ROOT_LAMW
 ANDROID_SDK="$ANDROID_HOME\\sdk"
-export LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
+export OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
+export LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
 export LAZ4ANDROID_STABLE_VERSION="2.0.0"
 export LAZ4ANDROID_HOME="$LAMW4WINDOWS_HOME\\laz4android${LAZ4ANDROID_STABLE_VERSION}"
 export LAZANDROID_HOME_CFG="${LAZ4ANDROID_HOME}\\config"
@@ -39,6 +42,8 @@ export USE_LOCAL_ENV=0
 export GDB_INDEX=0
 export LAMW_MANAGER_PATH=$(dirname $0)
 
+JDK_VERSION="zulu8.44.0.11-ca-jdk8.0.242"
+JAVA_VERSION="1.8.0_242"
 #Critical Functions to Translate Calls Bash to  WinCalls 
 if [ -e "$HOMEDRIVE\\tools\\msys64\\usr\\bin" ]; then
 	export PATH="$PATH:\\$HOMEDRIVE\\tools\\msys64\\usr\\bin" 
@@ -145,39 +150,33 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
 			export OS_PREBUILD="windows-x86_64"
-			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
-			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
-			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_x64"
-			export JAVA_EXEC_PATH="$HOMEDRIVE\\Program Files\\Zulu\\zulu-8\\bin"
+			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/${JDK_VERSION}-win_x64.zip"
+			export ZULU_JDK_ZIP="${JDK_VERSION}-win_x64.zip"
+			export ZULU_TMP_PATH="${JDK_VERSION}-win_x64"
 			export MSYS_TEMP="$HOMEDRIVE\\tools\\msys64\\tmp"
-			#export USE_LOCAL_ENV=1
 		;;
 		"amd64")
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
 			export OS_PREBUILD="windows-x86_64"
-			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
-			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_x64.zip"
-			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_x64"
-			export JAVA_EXEC_PATH="$HOMEDRIVE\\Program Files\\Zulu\\zulu-8\\bin"
+			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/${JDK_VERSION}-win_x64.zip"
+			export ZULU_JDK_ZIP="${JDK_VERSION}-win_x64.zip"
+			export ZULU_TMP_PATH="${JDK_VERSION}-win_x64"
 			export MSYS_TEMP="$HOMEDRIVE\\tools\\msys64\\tmp"
-			#export USE_LOCAL_ENV=1
 		;;
 		*)
-			#export WIN_MSYS_HOME="/$LETTER_HOME_DRIVER/tools/msys32"
 			export OS_PREBUILD="windows"
 			export WGET_EXE="/$HOMEDRIVE\\ProgramData\\chocolatey\\bin\\wget.exe"
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86.zip"
-			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/zulu8.38.0.13-ca-jdk8.0.212-win_i686.zip"
-			export ZULU_JDK_ZIP="zulu8.38.0.13-ca-jdk8.0.212-win_i686.zip"
-			export ZULU_TMP_PATH="zulu8.38.0.13-ca-jdk8.0.212-win_i686"
-			export JAVA_EXEC_PATH="$HOMEDRIVE\\Program Files\\Zulu\\zulu-8\\bin"
+			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/${JDK_VERSION}-win_i686.zip"
+			export ZULU_JDK_ZIP="${JDK_VERSION}-win_i686.zip"
+			export ZULU_TMP_PATH="${JDK_VERSION}-win_i686"
 			export MSYS_TEMP="$HOMEDRIVE\\tools\\msys32\\tmp"
 			#export USE_LOCAL_ENV=1
 		;;
 	esac
-	 #MSYS_TEMP != %temp%
+	
 	which git
 	if [ $? != 0 ]; then
 		export PATH="$PATH:$HOMEDRIVE\\Program Files\\Git\\bin"
@@ -189,8 +188,10 @@ BARRA_INVERTIDA='\'
 
 #export WIN_CFG_PATH=""
 
-#--------------------------------------------------------------------------
-APT_OPT=""
+#-------------------------------------------------------------------------
+
+PACMAN_LOCK="/var/lib/pacman/db.lck"
+PROGR="unzip dos2unix"
 export PROXY_SERVER="internet.cua.ufmt.br"
 export PORT_SERVER=3128
 PROXY_URL="http://$PROXY_SERVER:$PORT_SERVER"
@@ -276,9 +277,11 @@ lamw_opts=(
 )
 
 #Flag tratador de sinal 
-magicTrapIndex=-1 
+magicTrapIndex=-1
+export OLD_JAVA_EXEC_PATH="$HOMEDRIVE\\Program Files\\Zulu\\zulu-8\\bin"
+export JAVA_EXEC_PATH="$ROOT_LAMW\\jdk\\zulu-8\\bin"
 #remove /bin of JAVA_HOME
-JAVA_HOME=${JAVA_EXEC_PATH%'\bin'}
+export JAVA_HOME=${JAVA_EXEC_PATH%'\bin'}
 #atalhos pro menu iniciar
 
 LAMW_MENU_PATH="$HOMEDRIVE\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
@@ -308,13 +311,28 @@ TrapControlC(){
 	exit 2
 }
 installJava(){
-	#if [ "$ARCH" != "x86_64" ]; then
-		#pwd;read;
-		changeDirectory "$HOMEDRIVE\\Program Files"
-		if [ ! -e "$HOMEDRIVE\\Program Files\\Zulu" ]; then
-			mkdir -p "$HOMEDRIVE\\Program Files\\Zulu"
+
+		local old_jdK_parent=$(dirname $OLD_JAVA_EXEC_PATH)
+		local old_jdK_parent=$(dirname "$old_jdK_parent")
+		local jdk_parent=$(dirname "$JAVA_HOME")
+		echo "$jdk_parent"
+
+		if [ -e "$old_jdK_parent" ]; then
+			winRMDirf "$old_jdK_parent"
 		fi
-		changeDirectory "$HOMEDRIVE\\Program Files\\Zulu"
+
+		#remove old jdk version 
+		if [ -e "$JAVA_EXEC_PATH" ]; then 
+			cat "$JAVA_EXEC_PATH" | grep "$JAVA_VERSION"
+			if [ $? != 0 ]; then 
+				rm "$jdk_parent"
+			fi
+		fi
+		if [ ! -e "$jdk_parent" ]; then 
+			mkdir -p "$jdk_parent"
+		fi
+
+		changeDirectory "$jdk_parent"
 
 		if [ ! -e "zulu-8" ]; then
 			$WGET_EXE -c "$ZULU_JDK_URL"
@@ -336,9 +354,10 @@ installJava(){
 		fi
 }
 getTerminalDeps(){
-	pacman -Syy  unzip dos2unix --noconfirm
+	pacman -Syy $PROGR --noconfirm
 	if [ $? != 0 ]; then 
-		pacman -Syy  unzip  dos2unix --noconfirm
+		rm -f "$PACMAN_LOCK"
+		pacman  $PROGR -Syy  --noconfirm
 	fi
 }
 getImplicitInstall(){
@@ -389,7 +408,9 @@ winMKLink(){
 }
 #this function delete a windows 
 winRMDirf(){
-	local rm_cmd_pwsh="try{\n\tif ( Test-Path \"$*\" ){\n\t\tRemove-Item \"$*\" -Force -Recurse\n\t}\n}catch{\n\t echo \"trying remove with cmd\"\n\tcmd.exe /c 'if exist \"$*\" ( rmdir \"$*\" /Q /S )'\n}\n"
+	local try_rm="$*"
+	echo "try_rm=$try_rm"
+	local rm_cmd_pwsh="try{\n\tif ( Test-Path \"${try_rm}\" ){\n\t\tRemove-Item \"${try_rm}\" -Force -Recurse\n\t}\n}catch{\n\t echo \"trying remove with cmd\"\n\tcmd.exe /c 'if exist \"${try_rm}\" ( rmdir \"${try_rm}\" /Q /S )'\n}\n"
 	export FLAG_SCAPE=1
 	winCallfromPS "$rm_cmd_pwsh"
 	export FLAG_SCAPE=0
@@ -820,8 +841,17 @@ WrappergetAndroidSDKTools(){
 
 #Build lazarus ide
 getLazarus4Android(){
+
+	if [ -e "$OLD_LAMW4WINDOWS_HOME" ]; then
+		if [ $FLAG_FORCE_ANDROID_AARCH64 = 0 ]; then 
+			mv "$OLD_LAMW4WINDOWS_HOME" "$LAMW4WINDOWS_HOME"
+		else
+			winRMDirf "$OLD_LAMW4WINDOWS_HOME"
+			return 
+		fi
+	fi
 	if [ ! -e "$LAMW4WINDOWS_HOME" ]; then
-		mkdir "$LAMW4WINDOWS_HOME"
+		mkdir -p "$LAMW4WINDOWS_HOME"
 	fi
 	changeDirectory "$LAMW4WINDOWS_HOME"
 	if [ ! -e "$LAZ4ANDROID_HOME" ]; then
@@ -837,39 +867,33 @@ getLazarus4Android(){
 }
 BuildLazarusIDE(){
 
-	#changeDirectory $LAMW_IDE_HOME
+	export PATH="$PATH:$FPC_STABLE_EXEC"
 	changeDirectory "$LAZ4ANDROID_HOME"
 	if [ $# = 0 ]; then 
-		#echo "aux=$aux";read
 		local aux="$LAZ4ANDROID_HOME\\build.bat"
 		winCallfromPS "$aux"
 	fi
 	changeDirectory "$HOMEDRIVE"
 	local build_win_cmd="$HOMEDRIVE\\generate-lazarus.bat"
 
-	LAZBUILD_PARAMETERS=(
-		"--build-ide= --add-package \"$ANDROID_HOME\\lazandroidmodulewizard\\android_bridges\\tfpandroidbridge_pack.lpk\""
-		"--build-ide= --add-package \"$ANDROID_HOME\\lazandroidmodulewizard\\android_wizard\\lazandroidwizardpack.lpk\""
-		"--build-ide= --add-package \"$ANDROID_HOME\\lazandroidmodulewizard\\ide_tools\\amw_ide_tools.lpk\""
+	LAMW_PACKAGES=(
+		"$ANDROID_HOME\\lazandroidmodulewizard\\android_bridges\\tfpandroidbridge_pack.lpk"
+		"$ANDROID_HOME\\lazandroidmodulewizard\\android_wizard\\lazandroidwizardpack.lpk"
+		"$ANDROID_HOME\\lazandroidmodulewizard\\ide_tools\\amw_ide_tools.lpk"
 	)
 
-	for((i=0;i< ${#LAZBUILD_PARAMETERS[@]};i++))
+	for((i=0;i<${#LAMW_PACKAGES[@]};i++))
 	do
-		echo "BEFORE PATH=%PATH%" > "$build_win_cmd"
-		echo "SET PATH=$LAZ4ANDROID_HOME;%PATH%" > "$build_win_cmd"
-		echo "NOW %PATH%"
-		echo "cd \"$LAZ4ANDROID_HOME\"" >> "$build_win_cmd"
-		echo "lazbuild ${LAZBUILD_PARAMETERS[i]}" >> "$build_win_cmd"
-		winCallfromPS "$HOMEDRIVE\\generate-lazarus.bat"
+
+		./lazbuild --build-ide= --add-package "${LAMW_PACKAGES[i]}"
 		if [ $? != 0 ]; then 
-			winCallfromPS "$HOMEDRIVE\\generate-lazarus.bat"
+			./lazbuild  --build-ide= --add-package "${LAMW_PACKAGES[i]}"
 		fi
 		#prevent no exists lazarus (common bug)
 		if [ ! -e "$LAZ4ANDROID_HOME\\lazarus.exe" ]; then
-			winCallfromPS "taskkill /im make.exe /f" > /dev/null
-			winCallfromPS "$HOMEDRIVE\\generate-lazarus.bat"
+			winCallfromPS "taskkill /im make.exe /f" 2>/dev/null
+			./lazbuild --build-ide= --add-package "${LAMW_PACKAGES[i]}"
 		fi
-
 	done
 	
 	if [ -e "$build_win_cmd" ]; then
@@ -1015,10 +1039,15 @@ changeDirectory(){
 
 #this function remove old config of Laz4Lamw  
 CleanOldConfig(){
-
+	local old_java_root=$(dirname "$OLD_JAVA_EXEC_PATH" )
+	local old_java_root=$(dirname "$old_java_root" )
 	local root_java=$(dirname "$JAVA_HOME")
+	if [  -e "$ANDROID_SDK${BARRA_INVERTIDA}ndk-bundle${BARRA_INVERTIDA}toolchains${BARRA_INVERTIDA}mipsel-linux-android-4.9" ]; then rm "$ANDROID_SDK${BARRA_INVERTIDA}ndk-bundle${BARRA_INVERTIDA}toolchains${BARRA_INVERTIDA}mipsel-linux-android-4.9"; fi
+	if [  -e "$ANDROID_SDK${BARRA_INVERTIDA}ndk-bundle${BARRA_INVERTIDA}toolchains${BARRA_INVERTIDA}mips64el-linux-android-4.9" ]; then rm "$ANDROID_SDK${BARRA_INVERTIDA}ndk-bundle${BARRA_INVERTIDA}toolchains${BARRA_INVERTIDA}mips64el-linux-android-4.9";fi
 	local list_to_del=(
+			"$OLD_LAMW4WINDOWS_HOME"
 			"$ROOT_LAMW"
+			"$old_java_root"
 			"$root_java"
 			"$HOMEPATH\\.android"
 			"$LAMW_MENU_PATH"
@@ -1057,7 +1086,7 @@ writeLAMWLogInstall(){
 		"LAMW workspace : $WIN_LAMW_WORKSPACE_HOME" 
 		"Android SDK:$ANDROID_HOME\sdk" 
 		"Android NDK:$ANDROID_HOME\ndk" 
-		"Gradle:$GRADLE_HOME" 
+		"Gradle:$GRADLE_HOME"
 		"OLD_ANDROID_SDK=$OLD_ANDROID_SDK"
 		"SDK_TOOLS_VERSION=$SDK_TOOLS_VERSION"
 		"Install-date:$(date)"
