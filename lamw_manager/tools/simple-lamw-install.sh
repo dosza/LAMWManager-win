@@ -784,6 +784,7 @@ getOldAndroidSDK(){
 		"$ANDROID_SDK\\extras\\google\\m2repository" 
 		"$ANDROID_SDK\\extras\\google\\market_licensing" 
 		"$ANDROID_SDK\\extras\\google\\market_apk_expansion"
+		"$ANDROID_SDK\\extras\\google\\usb_driver"
 		"$ANDROID_SDK\\build-tools\\$GRADLE_MIN_BUILD_TOOLS"
 	)
 	if [ -e "$ANDROID_SDK\\tools\\android.bat"  ]; then 
@@ -936,11 +937,14 @@ CreateLauncherLAMW(){
 
 LAMW4LinuxPostConfig(){
 
-	local lazarus_cmd_str='lazarus %*'
 	local instruction_set=1
 	if [ $FLAG_FORCE_ANDROID_AARCH64 = 1 ]; then 
-		local lazarus_cmd_str="lazarus  --pcp=${LAMW_IDE_HOME_CFG} %*"
 		local instruction_set=2
+
+		#ref:https://wiki.freepascal.org/Multiple_Lazarus#Multiple_Lazarus_instances
+		echo "--pcp=${LAMW_IDE_HOME_CFG}" > "$LAMW_IDE_HOME\\lazarus.cfg"   
+		
+		unix2dos "$LAMW_IDE_HOME\\lazarus.cfg" 2>/dev/null
 	fi
 
 	old_lamw_workspace="$USER_DIRECTORY/Dev/lamw_workspace"
@@ -982,7 +986,7 @@ LAMW4LinuxPostConfig(){
 		"SET PATH=$JAVA_EXEC_PATH;%PATH%"
 		"cd \"$LAMW_IDE_HOME\""
 		"SET JAVA_HOME=\"$JAVA_HOME\""
-		"$lazarus_cmd_str"
+		'lazarus %*'
 	)
 
 
@@ -1284,12 +1288,11 @@ BuildLazarusIDE(){
 
 #Run
 ConfigureFPCTrunk(){
-	FPC_CFG_PATH="$FPC_TRUNK_PATH/bin/i386-win32/fpc.cfg"
-	SDK_VERSION=28
-	#if [ ! -e "$FPC_CFG_PATH" ]; then
-		"$FPC_TRUNK_PATH\\bin\\i386-win32\\fpcmkcfg" -d basepath="$FPC_TRUNK_PATH" -o "$FPC_CFG_PATH"
+	local fpc_cfg_path="$FPC_TRUNK_PATH/bin/i386-win32/fpc.cfg"
+	#if [ ! -e "$fpc_cfg_path" ]; then
+		"$FPC_TRUNK_PATH\\bin\\i386-win32\\fpcmkcfg" -d basepath="$FPC_TRUNK_PATH" -o "$fpc_cfg_path"
 	#fi
-		#echo "$FPC_CFG_PATH";read
+		#echo "$fpc_cfg_path";read
 		#this config enable to crosscompile in fpc 
 		fpc_cfg_str=(
 			"#IFDEF ANDROID"
@@ -1298,7 +1301,7 @@ ConfigureFPCTrunk(){
 			"-CfVFPV3"
 			"-Xd"
 			"-XParm-linux-androideabi-"
-			"-Fl$ANDROID_HOME\\sdk\\ndk-bundle\\platforms\\android-${SDK_VERSION}\\arch-arm\\usr\\lib"
+			"-Fl$ANDROID_HOME\\sdk\\ndk-bundle\\platforms\\android-${ANDROID_SDK_TARGET}\\arch-arm\\usr\\lib"
 			"-FLlibdl.so"
 			"-FD${ARM_ANDROID_TOOLS}"
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpc_version\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
@@ -1308,8 +1311,9 @@ ConfigureFPCTrunk(){
 			'#IFDEF CPUAARCH64'
 			'-Xd'
 			'-XPaarch64-linux-android- '
-			"-FlC:ANDROID_HOME\\sdk\\ndk-bundle\\platforms\\android-$SDK_VERSION\\arch-arm64\usr\lib"
+			"-Fl$ANDROID_HOME\\sdk\\ndk-bundle\\platforms\\android-${ANDROID_SDK_TARGET}\\arch-arm64\usr\lib"
 			'-FLlibdl.so'
+			"-FD${AARCH64_ANDROID_TOOLS}"
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpc_version\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\*"
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\rtl" #'-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget/rtl'
@@ -1317,12 +1321,12 @@ ConfigureFPCTrunk(){
 			"#ENDIF"
 		)
 
-		if [ -e "$FPC_CFG_PATH" ] ; then  # se exiir /etc/fpc.cfg
-			cat $FPC_CFG_PATH | grep 'CPUAARCH64'
+		if [ -e "$fpc_cfg_path" ] ; then  # se exiir /etc/fpc.cfg
+			cat $fpc_cfg_path | grep 'CPUAARCH64'
 			if [ $? != 0 ]; then 
 				for ((i = 0 ; i<${#fpc_cfg_str[@]};i++)) 
 				do
-					echo "${fpc_cfg_str[i]}" >>  "$FPC_CFG_PATH"
+					echo "${fpc_cfg_str[i]}" >>  "$fpc_cfg_path"
 				done	
 			fi
 		fi
