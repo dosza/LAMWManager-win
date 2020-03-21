@@ -100,7 +100,7 @@ function enableChocolateyPackageManager(){
 }
 #[bool]
 function installDependencies(){
-    $packages = @("mingw","msys2", "git.install","7zip.install", "wget" )
+    $packages = @("msys2")
     for($i=0;$i -lt $packages.Count;$i++){
         choco install  $packages[$i] -y 
         if ( $? -eq $false ){
@@ -213,7 +213,7 @@ enableChocolateyPackageManager
 installDependencies
 $bash_path=$MSYS_EXEC + '\' + 'bash.exe' 
 if ( Test-Path $bash_path ){
-  & $bash_path "$MYDIR\simple-lamw-install.sh"
+  & $bash_path  "$MYDIR\simple-lamw-install.sh"
 }else{
     echo "Bash install falls, trying repair ..."
     choco uninstall mingw -y 
