@@ -9,7 +9,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 </p>
 
 <p> 
-	Linux user, please,  get here <em><a href="https://github.com/DanielTimelord/LAMWAutoRunScripts"> LAMW Manager for Linux</a></em>
+	Linux user, please,  get here <em><a href="https://github.com/DanielOliveiraSouza/LAMW4Linux-installer"> LAMW Manager for Linux</a></em>
 </p>
 
 
@@ -22,7 +22,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 	<li>Apache Ant</li>
 	<li> Freepascal Compiler
 		<ul>
-			<li>New: Build FPC ARMv7/Android</li>
+			<li>New: Build FPC ARMv7-FPv3/Android</li>
 			<li>New: Build FPC AARCH64/Android</li>
 		</ul>
 	</li>
@@ -41,7 +41,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 		<li>Windows 8.1</li> 
 		<li>Windows 10</li>
 	</ul>		
-	<strong>Note:</strong>LAMW Manager is only tested on Win64
+	<strong>Note:</strong> LAMW Manager is only tested on Win64
 </p>
 
 <p>
@@ -71,7 +71,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 
 <p>
 	 <br><strong>More information read</strong></br>
-	 <a href="https://raw.githubusercontent.com/DanielOliveiraSouza/LAMW4Windows-installer/master/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.1  Manual</strong></a>
+	 <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/master/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.1  Manual</strong></a>
 </p>
 <p>
 	By Daniel Oliveira 
