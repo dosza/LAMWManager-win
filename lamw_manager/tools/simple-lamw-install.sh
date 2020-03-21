@@ -1155,7 +1155,7 @@ BuildFPCTrunk(){
 	BuildCrossAArch64
 }
 
-CopyBinults(){
+getBinults(){
 	cd "$FPC_TRUNK_PATH\\bin\\i386-win32"
 	binutils=(
 		ar.exe as.exe cmp.exe cp.exe cpp.exe diff.exe dlltool.exe fp32.ico gcc.exe gdate.exe 
@@ -1449,3 +1449,4 @@ case "$1" in
 	;;
 	
 esac
+	
