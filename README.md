@@ -71,7 +71,7 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 
 <p>
 	 <br><strong>More information read</strong></br>
-	 <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/master/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.1  Manual</strong></a>
+	 <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.1  Manual</strong></a>
 </p>
 <p>
 	By Daniel Oliveira 
