@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LAMW Manager"
-#define MyAppVersion "0.3.0-r23-02-2020"
+#define MyAppVersion "0.3.1"
 #define MyAppPublisher "LAMW Manager"
 #define MyAppURL "https://github.com/DanielOliveiraSouza/LAMW4Windows-installer"
 #define MyAppExeName "preinstall.bat"
@@ -21,14 +21,14 @@ AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName=c:\lamw_manager
-DisableDirPage=yes
+DisableDirPage=no
 DisableProgramGroupPage=yes
 OutputBaseFilename=lamw_manager_setup
 Compression=lzma
 SolidCompression=yes
 MinVersion=6.2
-VersionInfoVersion=0.3.0
-VersionInfoTextVersion=0.3.0-r23-03-2020
+VersionInfoVersion=0.3.1
+VersionInfoTextVersion=0.3.1-beta
 
 
 [Languages]
@@ -50,6 +50,9 @@ Source: "C:\lamw_builder\repair-lamw4windows.bat"; DestDir: "{app}"; Flags: igno
 Source: "C:\lamw_builder\Getting Started.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+[UninstallDelete]
+Type: files; Name: "{app}\lamw_manager.bat";
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

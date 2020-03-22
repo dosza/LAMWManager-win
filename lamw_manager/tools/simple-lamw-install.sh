@@ -2,7 +2,7 @@
 #Universidade federal de Mato Grosso
 #Curso ciencia da computação
 #AUTOR: Daniel Oliveira Souza
-#Versao LAMW-INSTALL: 0.3.0-r16-03-2020
+#Versao LAMW-INSTALL: 0.3.1-beta
 #Descrição: Este script configura o ambiente de desenvolvimento para o LAMW
 #=========================================================================================================
 
@@ -18,8 +18,35 @@ export NORMAL=$'\e[0m'
 
 export FLAG_FORCE_ANDROID_AARCH64=1
 
+#Critical Functions to Translate Calls Bash to  WinCalls 
+C_DRIVE=${HOMEDRIVE%:*} #replace :
+C_DRIVE=/${C_DRIVE,,}	#letras em caixa baixa
+
+if [ -e "${C_DRIVE}/tools/msys64/usr/bin" ]; then
+	export PATH="$PATH:${C_DRIVE}/tools/msys64/usr/bin"
+else
+	if [ -e "${C_DRIVE}/tools/msys32" ]; then
+		export PATH="$PATH:${C_DRIVE}/tools/msys32/usr/bin"
+	fi
+fi
 export OLD_ROOT_LAMW=""
-export ROOT_LAMW="$HOMEDRIVE${HOMEPATH}\\LAMW" #DIRETORIO PAI DE TODO O AMBIENTE DE DESENVOLVIMENTO LAMW
+if [ -e "$PWD/simple-lamw-install.sh" ]; then
+	LAMW_MANAGER_PATH=$(powershell.exe "cmd.exe /c echo %cd%" )
+else
+	tmp_cd(){ cd "$1" ; }
+	tmp_cd $(dirname "$0" )
+	LAMW_MANAGER_PATH=$(powershell.exe "cmd.exe /c echo %cd%" )
+	unset tmp_cd
+fi
+
+if [ ! -e "$HOMEPATH\\LAMW" ]; then
+	echo "${VERMELHO} Now  ROOT_LAMW=$LAMW_MANAGER_PATH\\LAMW${NORMAL}"
+	export ROOT_LAMW="$LAMW_MANAGER_PATH\\LAMW" 	
+	echo "$ROOT_LAMW"; sleep 3;
+else
+	export ROOT_LAMW="$HOMEDRIVE${HOMEPATH}\\LAMW" #DIRETORIO PAI DE TODO O AMBIENTE DE DESENVOLVIMENTO LAMW
+fi
+
 export ANDROID_HOME=$ROOT_LAMW
 ANDROID_SDK="$ANDROID_HOME\\sdk"
 export OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
@@ -31,28 +58,15 @@ export LAZANDROID_HOME_CFG="${LAZ4ANDROID_HOME}\\config"
 export LAMW_IDE_HOME_CFG="$LAZANDROID_HOME_CFG"
 export FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1-r17-03-2020"
+LAMW_INSTALL_VERSION="0.3.1-beta"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
 
 )
-
-#Critical Functions to Translate Calls Bash to  WinCalls 
-C_DRIVE=${HOMEDRIVE%:*} #replace :
-C_DRIVE=/${C_DRIVE,,}	#letras em caixa baixa
-
-if [ -e "${C_DRIVE}/tools/msys64/usr/bin" ]; then
-	export PATH="$PATH:${C_DRIVE}/tools/msys64/usr/bin"
-else
-	if [ -e "${C_DRIVE}/tools/msys32" ]; then
-		export PATH="$PATH:${C_DRIVE}/tools/msys32/usr/bin"
-	fi
-fi  
+  
 export USE_LOCAL_ENV=0
 export GDB_INDEX=0
-export LAMW_MANAGER_PATH=$(dirname "$0")
-
 JDK_VERSION="zulu8.44.0.11-ca-jdk8.0.242"
 JAVA_VERSION="1.8.0_242"
 export WINDOWS_CMD_WRAPPERS=1
@@ -294,7 +308,8 @@ winCallfromPS(){
 
 
 getLinuxPath(){
-	echo "$1" | sed   's|\\|\/|g'
+	local linux_path=$(echo "$1" | sed   's/://g' | sed 's|\\|\/|g')
+	echo "/$linux_path"
 }
 #--------------Win32 functions-------------------------
 
@@ -359,12 +374,6 @@ initParameters(){
 		SDK_LICENSES_PARAMETERS=( --licenses --no_https --proxy=http --proxy_host=$PROXY_SERVER --proxy_port=$PORT_SERVER )
 		export http_proxy=$PROXY_URL
 		export https_proxy=$PROXY_URL
-	fi
-
-	if [ -e "$PWD/simple-lamw-install.sh" ]; then 
-		export LAMW_MGR_INSTALL="$PWD"
-	else
-		export LAMW_MGR_INSTALL=$(dirname "$0" )
 	fi
 
 
@@ -1072,8 +1081,8 @@ getFPCStable(){
 
 	changeDirectory "$LAMW4WINDOWS_HOME"
 
-	if [ -e "$LAMW_MGR_INSTALL/$FPC_STABLE_ZIP" ]; then 
-		tar -xvf "$LAMW_MGR_INSTALL/$FPC_STABLE_ZIP"
+	if [ -e "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP" ]; then 
+		tar -xvf "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP"
 	else
 		wget -c "$FPC_STABLE_URL"
 		if [  $? != 0 ]; then 
@@ -1246,7 +1255,7 @@ ConfigureFPCTrunk(){
 			"-Fl$ANDROID_HOME\\sdk\\ndk-bundle\\platforms\\android-${ANDROID_SDK_TARGET}\\arch-arm\\usr\\lib"
 			"-FLlibdl.so"
 			"-FD${ARM_ANDROID_TOOLS}"
-			"-Fu$FPC_TRUNK_PARENT""\\\$fpc_version\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
+			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\*"
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\rtl" #'-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget/rtl'
 			"#ENDIF"
@@ -1391,15 +1400,15 @@ case "$1" in
 			export NO_GUI_OLD_SDK=1
 			mainInstall
 	;;
-	"update-lamw.ini")
-		export OLD_ANDROID_SDK=1
-		export NO_GUI_OLD_SDK=1
-		LAMW4LinuxPostConfig
-	;;
+	# "update-lamw.ini")
+	# 	export OLD_ANDROID_SDK=1
+	# 	export NO_GUI_OLD_SDK=1
+	# 	LAMW4LinuxPostConfig
+	# ;;
 	
-	"update-config")
-		LAMW4LinuxPostConfig
-	;;
+	# "update-config")
+	# 	LAMW4LinuxPostConfig
+	# ;;
 
 	"--sdkmanager")
 		getStatusInstalation;
@@ -1425,7 +1434,7 @@ case "$1" in
 	"")
 		getImplicitInstall
 		if [ $LAMW_IMPLICIT_ACTION_MODE = 0 ]; then
-			printf "${NEGRITO}Implicit installation of LAMW starting in 2 seconds  ...${NORMAL}\n"
+			printf "${NEGRITO}Implicit installation of LAMW starting in 2 seconds ...${NORMAL}\n"
 			printf "Press control+c to exit ...\n"
 			sleep 2
 
@@ -1440,10 +1449,10 @@ case "$1" in
 			wrapperBuildLazarusIDE "1";
 		fi					
 	;;
-	"getlaz4android")
-		wrappergetLazAndroid
-		wrapperBuildLazarusIDE
-	;;
+	# "getlaz4android")
+	# 	wrappergetLazAndroid
+	# 	wrapperBuildLazarusIDE
+	# ;;
 	*)
 		printf "%b" "${LAMW_OPTS[*]}"
 	;;
