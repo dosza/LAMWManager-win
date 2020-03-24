@@ -979,9 +979,8 @@ LAMW4LinuxPostConfig(){
 	local lamw_loader_bat_str=(
 		"@echo off"
 		"SET PATH=$JAVA_EXEC_PATH;%PATH%"
-		"cd \"$LAMW_IDE_HOME\""
 		"SET JAVA_HOME=\"$JAVA_HOME\""
-		'lazarus %*'
+		"\"$LAMW_IDE_HOME\\lazarus\" %*"
 	)
 
 
