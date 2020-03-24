@@ -183,7 +183,7 @@ export JAVA_EXEC_PATH="$ROOT_LAMW\\jdk\\zulu-8\\bin"
 export JAVA_HOME=${JAVA_EXEC_PATH%'\bin'} #remove /bin of JAVA_HOME
 
 OLD_LAMW_MENU_PATH="$HOMEDRIVE\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
-LAMW_MENU_PATH="$HOMEPATH\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
+LAMW_MENU_PATH="$HOMEDRIVE${HOMEPATH}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
 
 export ARM_ANDROID_TOOLS="$ROOT_LAMW\\sdk\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9\\prebuilt\\$OS_PREBUILD\\bin"
 #-------------------- AARCH64 SUPPORT HEADERS-------------------------------------------------------------
@@ -1080,28 +1080,29 @@ getFPCStable(){
 	fi
 
 	changeDirectory "$LAMW4WINDOWS_HOME"
-
-	if [ -e "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP" ]; then 
-		tar -xvf "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP"
-	else
-		wget -c "$FPC_STABLE_URL"
-		if [  $? != 0 ]; then 
-			wget "$FPC_STABLE_URL"
-			if [ $? != 0 ]; then
-				echo "possible instability internet! Try later!"
-				exit 1
+	if [ ! -e "$FPC_STABLE_EXEC" ]; then 
+		if [ -e "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP" ]; then 
+			tar -xvf "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP"
+		else
+			wget -c "$FPC_STABLE_URL"
+			if [  $? != 0 ]; then 
+				wget "$FPC_STABLE_URL"
+				if [ $? != 0 ]; then
+					echo "possible instability internet! Try later!"
+					exit 1
+				fi
+			fi
+			tar -xvf "$FPC_STABLE_ZIP"
+			if [ -e "$FPC_STABLE_ZIP" ]; then 
+				rm "$FPC_STABLE_ZIP"
 			fi
 		fi
-		tar -xvf "$FPC_STABLE_ZIP"
-		if [ -e "$FPC_STABLE_ZIP" ]; then 
-			rm "$FPC_STABLE_ZIP"
-		fi
+		local fpc_stable_parent=$(dirname "$FPC_STABLE_EXEC" )
+		echo "$fpc_stable_parent"
+		local fpc_stable_parent=$(dirname "$fpc_stable_parent" )
+		#echo "$fpc_stable_parent";read
+		"${FPC_STABLE_EXEC}\\fpcmkcfg.exe" -d basepath="${fpc_stable_parent}" -o "$FPC_STABLE_EXEC\\fpc.cfg"
 	fi
-	local fpc_stable_parent=$(dirname "$FPC_STABLE_EXEC" )
-	echo "$fpc_stable_parent"
-	local fpc_stable_parent=$(dirname "$fpc_stable_parent" )
-	#echo "$fpc_stable_parent";read
-	"${FPC_STABLE_EXEC}\\fpcmkcfg.exe" -d basepath="${fpc_stable_parent}" -o "$FPC_STABLE_EXEC\\fpc.cfg"
 }
 getFPCTrunkSources(){
 	if [ $FLAG_FORCE_ANDROID_AARCH64 = 0 ]; then 
@@ -1117,10 +1118,10 @@ getFPCTrunkSources(){
 	fi
 
 	cd "$FPC_TRUNK_SOURCE_PATH"
-	svn co "$FPC_TRUNK_SOURCE_URL" --force
+	svn checkout "$FPC_TRUNK_SOURCE_URL"
 	if [ $? != 0 ]; then 
 		winRMDirf "$FPC_TRUNK_SVNTAG"
-		svn co "$FPC_TRUNK_SOURCE_URL" --force
+		svn checkout "$FPC_TRUNK_SOURCE_URL"
 		if [ $? != 0 ]; then
 			echo "possible network instability! Try later!"
 			winRMDirf "$FPC_TRUNK_SVNTAG"
@@ -1172,10 +1173,10 @@ getBinults(){
 		libexpat-1.dll make.exe mv.exe nm.exe objcopy.exe objdump.exe patch.exe 
 		patch.exe.manifest pwd.exe rm.exe strip.exe unzip.exe windres.exe windres.h zip.exe
 	)
-	svn co $BINUTILS_URL binutils
+	svn checkout $BINUTILS_URL binutils
 	if [ $? != 0 ]; then 
 		winRMDirf binutils
-		svn co $BINUTILS_URL binutils
+		svn checkout $BINUTILS_URL binutils
 		if [ $? != 0 ]; then 
 			echo "possible network instability! Try later!"
 			exit 1
@@ -1286,12 +1287,12 @@ ConfigureFPCTrunk(){
 
 getLazarusSource(){
 	cd "$LAMW4WINDOWS_HOME"
-	svn co "$LAZARUS_STABLE_SRC_LNK" --force
+	svn checkout "$LAZARUS_STABLE_SRC_LNK" 
 	if [ $? != 0 ]; then  #case fails last command , try svn chekout 
 		winRMDirf "$LAZARUS_STABLE"
 		#svn cleanup
 		#changeDirectory $LAZ4LAMW_HOME
-		svn co "$LAZARUS_STABLE_SRC_LNK" --force
+		svn checkout "$LAZARUS_STABLE_SRC_LNK"
 		if [ $? != 0 ]; then 
 			winRMDirf "$LAZARUS_STABLE"
 			echo "possible network instability! Try later!"
