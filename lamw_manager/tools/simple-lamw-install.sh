@@ -58,7 +58,7 @@ export LAZANDROID_HOME_CFG="${LAZ4ANDROID_HOME}\\config"
 export LAMW_IDE_HOME_CFG="$LAZANDROID_HOME_CFG"
 export FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1-beta"
+LAMW_INSTALL_VERSION="0.3.1"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"

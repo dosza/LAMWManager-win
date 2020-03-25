@@ -1,4 +1,4 @@
-#LAMW Manager Releases Notes
+# LAMW Manager Releases Notes
 This page contains information about new features and bug fixes.
 
 
