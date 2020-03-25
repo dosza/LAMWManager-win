@@ -1,8 +1,10 @@
-# **LAMW Manager v0.3.1**
+LAMW Manager v0.3.1
+=======================================================================
 
 LAMW Manager is a command line tool to automate the <strong>installation</strong>, <strong>configuration</strong> and <strong>upgrade</strong>  the framework <a href="https://github.com/jmpessoa/lazandroidmodulewizard"><br>LAMW - Lazarus Android Module Wizard</a></br>
 
-**What do you get?** 
+What do you get? 
+----------------------------------------------------------------------
 
 <p>
 	A <a href="http://www.lazarus-ide.org/">Lazarus  IDE </a> ready to develop applications for Android !!
@@ -15,15 +17,17 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 
 
 
-**LAMW Manager install the following tools and dependencies:**
+LAMW Manager install the following tools and dependencies:
+----------------------------------------------------------------------
+
 <ul>
 	<li>Android NDK</li>
 	<li>Android SDK</li>
 	<li>Apache Ant</li>
 	<li> Freepascal Compiler
 		<ul>
-			<li>New: Build FPC ARMv7-FPv3/Android</li>
-			<li>New: Build FPC AARCH64/Android</li>
+			<li>New: Build FPC <strong>ARMv7/Android</strong></li>
+			<li>New: Build FPC <strong>AARCH64/Android</strong></li>
 		</ul>
 	</li>
 	<li>Gradle</li>
@@ -34,7 +38,9 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 </ul>
 
 
-**Windows Supported 64 bits**
+Windows Supported
+----------------------------------------------------------------------
+
 <p>
 	<ul>
 		<!-- <li>Windows 7 - <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/lamw_manager/docs/win7.md">  <strong>Important Requeriments</strong></a></li> -->
@@ -43,6 +49,9 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 	</ul>		
 	<strong>Note:</strong> LAMW Manager is only tested on Win64
 </p>
+
+Getting Started!
+----------------------------------------------------------------------
 
 <p>
 	<strong>How to use LAMW Manager:</strong>
@@ -63,8 +72,15 @@ LAMW Manager is a command line tool to automate the <strong>installation</strong
 	</ol>
 </p>
 
+Releases Notes
+----------------------------------------------------------------------
 <p>
-	<strong> Congratulations!!</strong>
+	For information on new features and bug fixes read the <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/master/lamw_manager/docs/release_notes.md"><strong>Release Notes</strong></a>
+</p>
+
+Congratulations!
+----------------------------------------------------------------------
+<p>
 	You are now a Lazarus for Android developer!
 	<br><a href="https://drive.google.com/open?id=1CeDDpuDfRwYrKpN7VHbossH6GfZUfqjm">Building Android application with <strong>LAMW</strong> is <strong>RAD</strong>!</a></br>
 </p>
