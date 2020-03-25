@@ -1265,7 +1265,7 @@ ConfigureFPCTrunk(){
 			"-Fl$ANDROID_HOME\\sdk\\ndk-bundle\\platforms\\android-${ANDROID_SDK_TARGET}\\arch-arm64\usr\lib"
 			'-FLlibdl.so'
 			"-FD${AARCH64_ANDROID_TOOLS}"
-			"-Fu$FPC_TRUNK_PARENT""\\\$fpc_version\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
+			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\*"
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\rtl" #'-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget/rtl'
 			'#ENDIF'
