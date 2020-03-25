@@ -55,9 +55,9 @@ fi
 	# done
 	# printf "%b" "${file_str[*]}"
 
-	if [ -e "C:\Program Files (x86)\Inno Setup 5" ]; then
+	if [ -e "C:\Program Files (x86)\Inno Setup 6" ]; then
 		printf "\n\nBuild lamw_manager_setup.exe ...\n\n"
-		"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" "$LAMW_MANAGER_PATH\lamw_manager.iss"
+		"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "$LAMW_MANAGER_PATH\lamw_manager.iss"
 		if [ -e "$LAMW_MANAGER_PATH\Output\lamw_manager_setup.exe" ]; then 
 			cp "$LAMW_MANAGER_PATH\Output\lamw_manager_setup.exe" ./
 		fi

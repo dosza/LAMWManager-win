@@ -11,7 +11,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{6AFB54F5-4118-4502-9FA9-70C0735BB6C1}
+AppId={{6AA673C2-7863-40AC-A15D-BB4A4EF78573}
 PrivilegesRequired=admin
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -46,7 +46,7 @@ Source: "C:\lamw_builder\simple-lamw-install.sh"; DestDir: "{app}"; Flags: ignor
 ;Source: "C:\lamw_builder\lamw_manager.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\lamw_builder\newinstaller.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\lamw_builder\repair-msys.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\lamw_builder\repair-lamw4windows.bat"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "C:\lamw_builder\repair-lamw4windows.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\lamw_builder\Getting Started.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

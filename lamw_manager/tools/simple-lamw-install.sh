@@ -23,10 +23,10 @@ C_DRIVE=${HOMEDRIVE%:*} #replace :
 C_DRIVE=/${C_DRIVE,,}	#letras em caixa baixa
 
 if [ -e "${C_DRIVE}/tools/msys64/usr/bin" ]; then
-	export PATH="$PATH:${C_DRIVE}/tools/msys64/usr/bin"
+	export PATH="${C_DRIVE}/tools/msys64/usr/bin:$PATH"
 else
 	if [ -e "${C_DRIVE}/tools/msys32" ]; then
-		export PATH="$PATH:${C_DRIVE}/tools/msys32/usr/bin"
+		export PATH="${C_DRIVE}/tools/msys32/usr/bin:$PATH"
 	fi
 fi
 export OLD_ROOT_LAMW=""
