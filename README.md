@@ -21,6 +21,7 @@ LAMW Manager install the following tools and dependencies:
 ----------------------------------------------------------------------
 
 <ul>
+	<li><a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/master/lamw_manager/docs/third_party.md">Third Part Tools</a></li>
 	<li>Android NDK</li>
 	<li>Android SDK</li>
 	<li>Apache Ant</li>
@@ -34,7 +35,6 @@ LAMW Manager install the following tools and dependencies:
 	<li>Lazarus IDE Sources</li>
 	<li>LAMW framework</li>
 	<li>OpenJDK</li>
-
 </ul>
 
 

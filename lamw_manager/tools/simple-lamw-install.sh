@@ -301,7 +301,7 @@ winCallfromPS(){
 			echo "$*" > /tmp/pscommand.ps1
 		fi
 		unix2dos /tmp/pscommand.ps1 2>/dev/null
-		cat /tmp/pscommand.ps1; sleep 2
+		cat /tmp/pscommand.ps1; sleep 1
 		powershell.exe Set-ExecutionPolicy Bypass
 		powershell.exe  /tmp/pscommand.ps1
 }
@@ -410,11 +410,32 @@ TrapControlC(){
 	fi
 	exit 2
 }
+
+UpdateMsys2Keys(){
+	local msys2_keys=(
+		'http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz'{.sig,}
+	)
+	for i in ${!msys2_keys[@]}; do
+		curl -O ${msys2_keys[i]}
+		if [ $? != 0 ]; then
+			curl -O ${msys2_keys[i]}
+			if [ $? != 0 ]; then
+				echo "possible network instability! Try later!"
+				exit 1
+			fi
+		fi
+	done
+
+	pacman-key --verify msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz{.sig,}
+	pacman -U --config <(echo) msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz --noconfirm
+	rm msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz{.sig,}
+}
 #Get Linux common tools
 getTerminalDeps(){
 	pacman -Sy $PROGR --noconfirm
 	if [ $? != 0 ]; then 
 		rm -f "$PACMAN_LOCK"
+		UpdateMsys2Keys
 		pacman  $PROGR -Syy  --noconfirm
 	fi
 }
@@ -720,9 +741,9 @@ getOldAndroidSDK(){
 
 				if [ ! -e "${sdk_manager_sdk_paths[i]}" ];then
 					echo "y" |   "$ANDROID_SDK\\tools\\android.bat" update sdk --all --no-ui --filter ${SDK_MANAGER_CMD_PARAMETERS2[i]} ${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}
-					if [ $? != 0 ]; then
+					if [ ! -e "${sdk_manager_sdk_paths[i]}" ]; then
 						echo "y" |   "$ANDROID_SDK\\tools\\android.bat" update sdk --all --no-ui --filter ${SDK_MANAGER_CMD_PARAMETERS2[i]} ${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}
-						if [ $? != 0 ]; then
+						if [ ! -e "${sdk_manager_sdk_paths[i]}" ]; then
 							echo "possible network instability! Try later!"
 							exit 1
 						fi
@@ -902,11 +923,9 @@ CleanOldConfig(){
 			"$OLD_LAMW_MENU_PATH"
 			"$LAMW_MENU_PATH"
 			"$LAMW4WINDOWS_HOME"
-			"$GRADLE_CFG_HOME"
+			#"$GRADLE_CFG_HOME"
 	)
 	winCallfromPS "taskkill /im adb.exe /f"    2>/dev/null
-	winCallfromPS "taskkill /im java.exe /f"   2>/dev/null
-	winCallfromPS "taskkill /im javac.exe /f"  2>/dev/null
 	winCallfromPS "taskkill /im make.exe /f"   2>/dev/null
 
 	for((i=0;i<${#list_to_del[*]};i++))
@@ -1353,7 +1372,7 @@ mainInstall(){
 	echo "----------------------------------------------------------------------"
 	printf "${LAMW_INSTALL_WELCOME[*]}"
 	echo "----------------------------------------------------------------------"
-	echo "LAMW Manager (Native Support:Linux supported Debian 9, Ubuntu 16.04 LTS, Linux Mint 18)
+	echo "LAMW Manager (Native Support:Linux supported Debian 10, Ubuntu 16.04 LTS, Linux Mint 18)
 	Windows Compability (from MSYS2): Only Windows 8.1 and Windows 10"
 
 	winCallfromPS "cmd.exe /c ver" | grep "6.1.760" 
