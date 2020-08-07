@@ -47,7 +47,7 @@ else
 	export ROOT_LAMW="$HOMEDRIVE${HOMEPATH}\\LAMW" #DIRETORIO PAI DE TODO O AMBIENTE DE DESENVOLVIMENTO LAMW
 fi
 
-export ANDROID_HOME=$ROOT_LAMW
+export ANDROID_HOME="$ROOT_LAMW"
 ANDROID_SDK="$ANDROID_HOME\\sdk"
 export OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
 export LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
@@ -301,7 +301,7 @@ winCallfromPS(){
 			echo "$*" > /tmp/pscommand.ps1
 		fi
 		unix2dos /tmp/pscommand.ps1 2>/dev/null
-		cat /tmp/pscommand.ps1; sleep 1
+		cat /tmp/pscommand.ps1; sleep 0.5
 		powershell.exe Set-ExecutionPolicy Bypass
 		powershell.exe  /tmp/pscommand.ps1
 }
