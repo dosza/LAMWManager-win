@@ -102,9 +102,9 @@ function enableChocolateyPackageManager(){
 function installDependencies(){
     $packages = @("msys2")
     for($i=0;$i -lt $packages.Count;$i++){
-        choco install  $packages[$i] -y 
+        choco upgrade  $packages[$i] -y
         if ( $? -eq $false ){
-            choco install $packages[$i] -y --force
+            choco upgrade $packages[$i] -y --force
             if ( $? -eq $false ){
                 echo "Install falls, try later!"
                 exit 1

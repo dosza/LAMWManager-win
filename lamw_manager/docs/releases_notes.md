@@ -1,6 +1,15 @@
 # LAMW Manager Releases Notes
 This page contains information about new features and bug fixes.
 
+v0.3.1 Fixes - August 6, 2020
+----
+<p>
+	<strong>FIXED</strong>
+	<ul>
+		<li>Missing Android APIs</li>
+		<li>MSYS2 don't update</li>
+	</ul>
+</p>
 
 v0.3.1 - March, 25, 2020
 -----------------------------
