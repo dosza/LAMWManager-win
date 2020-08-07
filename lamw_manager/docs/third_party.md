@@ -31,6 +31,6 @@
 		<li>By default, chocolatey is installed in $HOMEDRIVE/ProgramData/chocolatey;</li>
 		<li>Items I, II will be resolved in a future version;</li>
 		<li>MSYS2 is installed $HOMEDRIVE/tools/msys64 (for Windows 64 bits) or $HOMEDRIVE/tools/msys32 (for Windows 32 bit);</li>
-		<li>$HOMEDRIVE is a enviroment variable to  hardrive to root of <a href="https://support.microsoft.com/en-us/help/237566/homepath-homeshare-and-homedrive-variables-resolved-incorrectly">Microsoft Distributed File System (DFS)</a>.</li>
+		<li>$HOMEDRIVE (the famous C:\ drive) is a enviroment variable to  hardrive to root of <a href="https://support.microsoft.com/en-us/help/237566/homepath-homeshare-and-homedrive-variables-resolved-incorrectly">Microsoft Distributed File System (DFS)</a>.</li>
 	</ol>
 </p>
