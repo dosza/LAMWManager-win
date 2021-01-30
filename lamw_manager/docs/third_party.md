@@ -16,7 +16,7 @@ Why use third party tools?
 ---
 
 <p>
-	LAMW Manager is a command line tool originally designed for Linux and written in Shell script <a href="https://www.gnu.org/software/bash">(Bash)</a><br/>
+	LAMW Manager is a command line tool originally designed for <strong>Linux</strong> and written in Shell script <a href="https://www.gnu.org/software/bash">(Bash)</a><br/>
 	To make this tool compatible with Windows, the original scripts were adapted to run on MSYS2.<br/>
 	MSYS2 provides utilities and libraries that allow the execution of UNIX / Linux commands.<br/>
 	MSYS2 is automatically installed by Chocolatey Package Manager.

@@ -3,7 +3,6 @@ echo "Warning: The entire development environment installed by LAMW Manager will
 if (Test-Path "$env:homedrive\lamw_manager" ){
     $global:LAMW_MANAGER_ROOT="$env:homedrive\lamw_manager"
     $global:del_paths=@(
-        "$env:homedrive\tools"
         "$env:homedrive\ProgramData\Chocolatey"
         "$env:homedrive\LAMW4Windows"
         "$env:homedrive\$env:homepath\LAMW"
@@ -12,7 +11,6 @@ if (Test-Path "$env:homedrive\lamw_manager" ){
 }else {
     $global:LAMW_MANAGER_ROOT=[System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition) #get current dir 
     $global:del_paths=@(
-        "$env:homedrive\tools"
         "$env:homedrive\ProgramData\Chocolatey"
         "$env:homedrive\LAMW4Windows"
         "$env:homedrive\$env:homepath\LAMW"
