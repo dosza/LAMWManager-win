@@ -29,8 +29,8 @@ Notes
 	<ol type="I">
 		<li>Unfortunately, the <a href="https://chocolatey.org/docs/features-install-directory-override">free version</a> of Chocolatey Package Manager does not allow the choice of installation directory;</li>
 		<li>By default, chocolatey is installed in $HOMEDRIVE/ProgramData/chocolatey;</li>
-		<li>Items I, II will be resolved in a future version;</li>
 		<li>MSYS2 is installed $HOMEDRIVE/tools/msys64 (for Windows 64 bits) or $HOMEDRIVE/tools/msys32 (for Windows 32 bit);</li>
+		<li>If you do not agree with the use of Chocolatey Package Manager, as well as its limitations: <strong>dont install LAMW Manager</strong>. </li>
 		<li>$HOMEDRIVE (the famous C:\ drive) is a enviroment variable to  hardrive to root of <a href="https://support.microsoft.com/en-us/help/237566/homepath-homeshare-and-homedrive-variables-resolved-incorrectly">Microsoft Distributed File System (DFS)</a>.</li>
 	</ol>
 </p>
