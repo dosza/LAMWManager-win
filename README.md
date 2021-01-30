@@ -46,7 +46,7 @@ Windows Supported
 		<li>Windows 8.1</li> 
 		<li>Windows 10</li>
 	</ul>		
-	<strong>Note:</strong> LAMW Manager only supports <strong>64-bit<strong> windows.<br/> Installation on Windows <strong>32 bit</strong> will be disabled in <strong>Aug / 2021</strong>. 
+	<strong>Note:</strong> LAMW Manager only supports <strong>64-bit</strong> windows.<br/> Installation on Windows <strong>32 bit</strong> will be disabled in <strong>Aug / 2021</strong>. 
 </p>
 
 Getting Started!
