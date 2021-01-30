@@ -55,6 +55,7 @@ Getting Started!
 <p>
 	<strong>How to use LAMW Manager:</strong>
 	<ol>
+	<li>First read this README and <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/master/lamw_manager/docs/third_party.md">Third Part Tools</a> to understand the operation and limitations of this tool.
 	<li>Disable your antivirus(temporarily)</li>
 	<li><a href="https://raw.githubusercontent.com/DanielOliveiraSouza/LAMW4Windows-installer/master/lamw_manager/lamw_manager_setup.exe">Click here to download <em> LAMW Manager Setup</em></a></li> 
 	<li>Double-click to run <strong>lamw_manager_setup.exe</strong></li>
