@@ -10,8 +10,6 @@ v0.3.1.1 - January, 2021
 		<li>Android API 29</li>
 		<li>Android Build Tools 29.0.3</li>
 	</ul>
-
-	</ul>
 </p>
 v0.3.1 Fixes - August 6, 2020
 ----
