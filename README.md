@@ -43,11 +43,10 @@ Windows Supported
 
 <p>
 	<ul>
-		<!-- <li>Windows 7 - <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/lamw_manager/docs/win7.md">  <strong>Important Requeriments</strong></a></li> -->
 		<li>Windows 8.1</li> 
 		<li>Windows 10</li>
 	</ul>		
-	<strong>Note:</strong> LAMW Manager is only tested on Win64
+	<strong>Note:</strong>LAMW Manager only supports 64-bit windows. Installation on Windows 32 bit will be disabled in Aug / 2021. 
 </p>
 
 Getting Started!
