@@ -1,6 +1,17 @@
 # LAMW Manager Releases Notes
 This page contains information about new features and bug fixes.
 
+v0.3.1.1 - January, 2021
+---
+<p>
+	<strong>FIXED:</strong>
+	<ul>
+		<li>OpenJDK 8u282</li>
+		<li>Android API 29</li>
+		<li>Android Build Tools 29.0.3</li>
+	</ul>
+</p>
+
 v0.3.1 Fixes - August 6, 2020
 ----
 <p>

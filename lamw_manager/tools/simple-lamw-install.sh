@@ -58,7 +58,7 @@ export LAZANDROID_HOME_CFG="${LAZ4ANDROID_HOME}\\config"
 export LAMW_IDE_HOME_CFG="$LAZANDROID_HOME_CFG"
 export FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1"
+LAMW_INSTALL_VERSION="0.3.1.1"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -67,8 +67,8 @@ LAMW_INSTALL_WELCOME=(
   
 export USE_LOCAL_ENV=0
 export GDB_INDEX=0
-JDK_VERSION="zulu8.44.0.11-ca-jdk8.0.242"
-JAVA_VERSION="1.8.0_242"
+JDK_VERSION="zulu8.52.0.23-ca-jdk8.0.282"
+JAVA_VERSION="1.8.0_282"
 export WINDOWS_CMD_WRAPPERS=1
 export ZULU_TMP_PATH=""
 export LOCAL_ENV=""
@@ -77,16 +77,7 @@ if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
 	export ARCH=$(arch)
 	export OS_PREBUILD=""
 	case "$ARCH" in
-		"x86_64")
-			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
-			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
-			export OS_PREBUILD="windows-x86_64"
-			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/${JDK_VERSION}-win_x64.zip"
-			export ZULU_JDK_ZIP="${JDK_VERSION}-win_x64.zip"
-			export ZULU_TMP_PATH="${JDK_VERSION}-win_x64"
-			export MSYS_TEMP="$HOMEDRIVE\\tools\\msys64\\tmp"
-		;;
-		"amd64")
+		"x86_64" | "amd64")
 			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
 			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
 			export OS_PREBUILD="windows-x86_64"
@@ -117,8 +108,8 @@ export USE_PROXY=0
 export SDK_TOOLS_URL="http://dl.google.com/android/repository/sdk-tools-windows-4333796.zip"
 export SDK_TOOLS_VERSION="r26.1.1" 
 
-export ANDROID_SDK_TARGET=28
-export ANDROID_BUILD_TOOLS_TARGET="28.0.3"
+export ANDROID_SDK_TARGET=29
+export ANDROID_BUILD_TOOLS_TARGET="29.0.3"
 export GRADLE_MIN_BUILD_TOOLS='27.0.3'
 
 SDK_MANAGER_CMD_PARAMETERS2_PROXY=()
@@ -156,12 +147,14 @@ LAMW_PACKAGES=(
 
 LAMW_WORKSPACE_HOME="$HOMEDRIVE${HOMEPATH}\\Dev\\LAMWProjects"  #piath to lamw_workspace
 
-GRADLE_HOME="$ANDROID_HOME\\gradle-4.4.1"
+
 ANT_HOME="$ANDROID_HOME\\apache-ant-1.10.5"
 
 GRADLE_CFG_HOME="$HOMEDRIVE${HOMEPATH}\\.gradle"
-GRADLE_ZIP_LNK="https://services.gradle.org/distributions/gradle-4.4.1-bin.zip"
-GRADLE_ZIP_FILE="gradle-4.4.1-bin.zip"
+GRADLE_VERSION="6.6.1"
+GRADLE_HOME="$ANDROID_HOME\\gradle-${GRADLE_VERSION}"
+GRADLE_ZIP_LNK="https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
+GRADLE_ZIP_FILE="gradle-${GRADLE_VERSION}-bin.zip"
 ANT_ZIP_LINK="http://archive.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.zip"
 ANT_ZIP_FILE="apache-ant-1.10.5-bin.zip"
 
@@ -411,31 +404,11 @@ TrapControlC(){
 	exit 2
 }
 
-UpdateMsys2Keys(){
-	local msys2_keys=(
-		'http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz'{.sig,}
-	)
-	for i in ${!msys2_keys[@]}; do
-		curl -O ${msys2_keys[i]}
-		if [ $? != 0 ]; then
-			curl -O ${msys2_keys[i]}
-			if [ $? != 0 ]; then
-				echo "possible network instability! Try later!"
-				exit 1
-			fi
-		fi
-	done
-
-	pacman-key --verify msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz{.sig,}
-	pacman -U --config <(echo) msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz --noconfirm
-	rm msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz{.sig,}
-}
 #Get Linux common tools
 getTerminalDeps(){
 	pacman -Sy $PROGR --noconfirm
 	if [ $? != 0 ]; then 
 		rm -f "$PACMAN_LOCK"
-		UpdateMsys2Keys
 		pacman  $PROGR -Syy  --noconfirm
 	fi
 }
@@ -1378,6 +1351,12 @@ mainInstall(){
 	winCallfromPS "cmd.exe /c ver" | grep "6.1.760" 
 	if [ $? = 0 ]; then
 		echo -e  "Warning: ${VERMELHO}Windows 7 ended support!${NORMAL}\nRead more in:https://www.microsoft.com/en-US/windows/windows-7-end-of-life-support-information"
+	fi
+
+	if [ "$ARCH" != "amd64" ] && [ "$ARCH" != "x86_64" ]; then
+		echo "${VERMELHO}Warning:${NORMAL}LAMW Manager now only supports ${NEGRITO}64-bit${NORMAL} windows."
+		echo "${NEGRITO}Installation on Windows 32 bit will be disabled in Aug / 2021.${NORMAL}"
+		sleep 2
 	fi
 	echo "Please wait ..."
 

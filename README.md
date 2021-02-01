@@ -43,11 +43,10 @@ Windows Supported
 
 <p>
 	<ul>
-		<!-- <li>Windows 7 - <a href="https://github.com/DanielTimelord/Laz4LAMW-win-installer/blob/master/lamw_manager/docs/win7.md">  <strong>Important Requeriments</strong></a></li> -->
 		<li>Windows 8.1</li> 
 		<li>Windows 10</li>
 	</ul>		
-	<strong>Note:</strong> LAMW Manager is only tested on Win64
+	<strong>Note:</strong> LAMW Manager only supports <strong>64-bit</strong> windows.<br/> Installation on Windows <strong>32 bit</strong> will be disabled in <strong>Aug / 2021</strong>. 
 </p>
 
 Getting Started!
@@ -56,6 +55,7 @@ Getting Started!
 <p>
 	<strong>How to use LAMW Manager:</strong>
 	<ol>
+	<li>First read this README and <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/master/lamw_manager/docs/third_party.md">Third Part Tools</a> to understand the operation and limitations of this tool.
 	<li>Disable your antivirus(temporarily)</li>
 	<li><a href="https://raw.githubusercontent.com/DanielOliveiraSouza/LAMW4Windows-installer/master/lamw_manager/lamw_manager_setup.exe">Click here to download <em> LAMW Manager Setup</em></a></li> 
 	<li>Double-click to run <strong>lamw_manager_setup.exe</strong></li>
@@ -75,7 +75,7 @@ Getting Started!
 Releases Notes
 ----------------------------------------------------------------------
 <p>
-	For information on new features and bug fixes read the <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v031-fixes---august-6-2020"><strong>Release Notes</strong></a>
+	For information on new features and bug fixes read the <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v0311---january-2021"><strong>Release Notes</strong></a>
 </p>
 
 Congratulations!
@@ -87,7 +87,7 @@ Congratulations!
 
 <p>
 	 <br><strong>More information read</strong></br>
-	 <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.1  Manual</strong></a>
+	 <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.1.1  Manual</strong></a>
 </p>
 <p>
 	By Daniel Oliveira 
