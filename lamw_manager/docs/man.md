@@ -1,4 +1,4 @@
-**LAMW Manager v0.3.1 Manual**
+**LAMW Manager v0.3.1.1 Manual**
 
 
 **commands:**
@@ -15,7 +15,6 @@
 
 <ol>
 	<li> Open cmd or powershell as Admin</li>
-	<li> Go to C:\lamw_manager or LAMW4Windows-installer\tools ( to Windows 7 )</li>
 </ol>
 
 
@@ -40,8 +39,6 @@ lamw_manager.bat    <strong>[action]</strong>                            <em>Des
 
 <p>
 	<ol>
-		<li>LAMW Manager v0.3.1 It's not supported on Windows 7!
-		You need run preinstall.bat ( on LAMW4Windows-installer\tools) to install/run lamw_manager.bat!</li>
 		<li>By default the installation waives the use of parameters, if LAMW is installed, it will only be updated!</li>
 		<li>If it is already installed, just run the Android SDK Tools</li>
 	</ol>
