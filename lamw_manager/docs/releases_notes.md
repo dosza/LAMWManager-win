@@ -7,6 +7,7 @@ v0.3.1.1 - January, 2021
 	<strong>FIXED:</strong>
 	<ul>
 		<li>OpenJDK 8u282</li>
+		<li>Gradle 6.6.1</li>
 		<li>Android API 29</li>
 		<li>Android Build Tools 29.0.3</li>
 	</ul>
