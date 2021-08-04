@@ -6,17 +6,7 @@
 #Descrição: Este script configura o ambiente de desenvolvimento para o LAMW
 #=========================================================================================================
 
-#----ColorTerm
-export VERDE=$'\e[1;32m' 
-export AMARELO=$'\e[01;33m'
-export SUBLINHADO='4'
-export NEGRITO=$'\e[1m'
-export VERMELHO=$'\e[1;31m'
-export VERMELHO_SUBLINHADO=$'\e[1;4;31m'
-export AZUL=$'\e[1;34m'
-export NORMAL=$'\e[0m'
 
-export FLAG_FORCE_ANDROID_AARCH64=1
 
 #Critical Functions to Translate Calls Bash to  WinCalls 
 C_DRIVE=${HOMEDRIVE%:*} #replace :
@@ -29,7 +19,8 @@ else
 		export PATH="${C_DRIVE}/tools/msys32/usr/bin:$PATH"
 	fi
 fi
-export OLD_ROOT_LAMW=""
+
+
 if [ -e "$PWD/simple-lamw-install.sh" ]; then
 	LAMW_MANAGER_PATH=$(powershell.exe "cmd.exe /c echo %cd%" )
 else
@@ -48,96 +39,65 @@ else
 fi
 
 export ANDROID_HOME="$ROOT_LAMW"
-ANDROID_SDK="$ANDROID_HOME\\sdk"
-export OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
-export LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
-export LAZ4ANDROID_STABLE_VERSION="2.0.0"
-export LAZ4ANDROID_HOME="$LAMW4WINDOWS_HOME\\laz4android${LAZ4ANDROID_STABLE_VERSION}"
-export LAMW_IDE_HOME="$LAZ4ANDROID_HOME"
-export LAZANDROID_HOME_CFG="${LAZ4ANDROID_HOME}\\config"
-export LAMW_IDE_HOME_CFG="$LAZANDROID_HOME_CFG"
-export FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
+export ANDROID_SDK_ROOT="$ANDROID_HOME\\sdk"
+OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
+LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
+FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1.1"
+LAMW_INSTALL_VERSION="0.3.1.2"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
 
 )
   
-export USE_LOCAL_ENV=0
-export GDB_INDEX=0
-JDK_VERSION="zulu8.52.0.23-ca-jdk8.0.282"
-JAVA_VERSION="1.8.0_282"
-export WINDOWS_CMD_WRAPPERS=1
-export ZULU_TMP_PATH=""
-export LOCAL_ENV=""
-export WIN_LOCAL_ENV=""
-if [  $WINDOWS_CMD_WRAPPERS  = 1 ]; then
-	export ARCH=$(arch)
-	export OS_PREBUILD=""
-	case "$ARCH" in
-		"x86_64" | "amd64")
-			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86_64.zip"
-			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86_64.zip"
-			export OS_PREBUILD="windows-x86_64"
-			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/${JDK_VERSION}-win_x64.zip"
-			export ZULU_JDK_ZIP="${JDK_VERSION}-win_x64.zip"
-			export ZULU_TMP_PATH="${JDK_VERSION}-win_x64"
-			export MSYS_TEMP="$HOMEDRIVE\\tools\\msys64\\tmp"
-		;;
-		*)
-			export OS_PREBUILD="windows"
-			export NDK_URL="http://dl.google.com/android/repository/android-ndk-r18b-windows-x86.zip"
-			export NDK_ZIP_FILE="android-ndk-r18b-windows-x86.zip"
-			export ZULU_JDK_URL="http://cdn.azul.com/zulu/bin/${JDK_VERSION}-win_i686.zip"
-			export ZULU_JDK_ZIP="${JDK_VERSION}-win_i686.zip"
-			export ZULU_TMP_PATH="${JDK_VERSION}-win_i686"
-			export MSYS_TEMP="$HOMEDRIVE\\tools\\msys32\\tmp"
-		;;
-	esac
-fi
+#----ColorTerm
+VERDE=$'\e[1;32m' 
+AMARELO=$'\e[01;33m'
+SUBLINHADO='4'
+NEGRITO=$'\e[1m'
+VERMELHO=$'\e[1;31m'
+VERMELHO_SUBLINHADO=$'\e[1;4;31m'
+AZUL=$'\e[1;34m'
+NORMAL=$'\e[0m'
 
 BARRA_INVERTIDA='\'
 PACMAN_LOCK="/var/lib/pacman/db.lck"
 PROGR="unzip dos2unix subversion tar wget git p7zip"
-export PROXY_SERVER="internet.cua.ufmt.br"
-export PORT_SERVER=3128
+PROXY_SERVER="internet.cua.ufmt.br"
+PORT_SERVER=3128
 PROXY_URL="http://$PROXY_SERVER:$PORT_SERVER"
-export USE_PROXY=0
-export SDK_TOOLS_URL="http://dl.google.com/android/repository/sdk-tools-windows-4333796.zip"
-export SDK_TOOLS_VERSION="r26.1.1" 
+USE_PROXY=0
+FLAG_FORCE_ANDROID_AARCH64=1
+POWERSHELL_EXEC_POLICY=0
+USE_LOCAL_ENV=0
+WINDOWS_CMD_WRAPPERS=1
+ARGS=($@)
+INDEX_FOUND_USE_PROXY=-1
 
-export ANDROID_SDK_TARGET=29
-export ANDROID_BUILD_TOOLS_TARGET="29.0.3"
-export GRADLE_MIN_BUILD_TOOLS='28.0.3'
+JDK_VERSION=8
+FPC_TRUNK_VERSION=3.2.0-beta
+_FPC_TRUNK_VERSION=3.2.0
+FPC_TRUNK_SVNTAG=fixes_3_2
+LAZARUS_STABLE_VERSION="2.2.0_RC1"
+LAZARUS_STABLE=lazarus_${LAZARUS_STABLE_VERSION//\./_}
+CMD_TOOLS_VERSION="7583922"
+CMD_SDK_TOOLS_ZIP="commandlinetools-win-${CMD_TOOLS_VERSION}_latest.zip"
+CMD_SDK_TOOLS_DIR="$ANDROID_SDK_ROOT\\cmdline-tools"
+ANT_VERSION="1.10.5"
 
-SDK_MANAGER_CMD_PARAMETERS2_PROXY=()
-SDK_MANAGER_CMD_PARAMETERS=(
-	"platforms;android-$ANDROID_SDK_TARGET"
-	"platform-tools" 
-	"build-tools;$ANDROID_BUILD_TOOLS_TARGET" 
-	"ndk-bundle" 
-	"extras;android;m2repository"
-	"build-tools;$GRADLE_MIN_BUILD_TOOLS"
-)	
-SDK_MANAGER_CMD_PARAMETERS2=(
-	"android-$ANDROID_SDK_TARGET"
-	"platform-tools"
-	"build-tools-$ANDROID_BUILD_TOOLS_TARGET" 
-	"extra-google-google_play_services"
-	"extra-android-m2repository"
-	"extra-google-m2repository"
-	"extra-google-market_licensing"
-	"extra-google-market_apk_expansion"
-	"extra-google-usb_driver"
-	"build-tools-$GRADLE_MIN_BUILD_TOOLS"
-)
-SDK_LICENSES_PARAMETERS=(--licenses )
-LAZARUS4ANDROID_LNK="http://sourceforge.net/projects/laz4android/files/laz4android${LAZ4ANDROID_STABLE_VERSION}-FPC3.0.4.7z"
-LAZARUS4ANDROID_ZIP="laz4android${LAZ4ANDROID_STABLE_VERSION}-FPC3.0.4.7z"
 
+
+CMD_SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-win-${CMD_TOOLS_VERSION}_latest.zip"
 LAMW_SRC_LNK="http://github.com/jmpessoa/lazandroidmodulewizard"
+LAMW_PACKAGE_URL="https://raw.githubusercontent.com/jmpessoa/lazandroidmodulewizard/master/package.json"
+LAZARUS_STABLE_SRC_LNK="https://gitlab.com/freepascal.org/lazarus/lazarus.git"
+BINUTILS_URL="https://gitlab.com/freepascal.org/fpc/build.git"
+#FPC_TRUNK_SOURCE_URL="https://svn.freepascal.org/svn/fpc/branches/fixes_3_2@43981"
+FPC_TRUNK_SOURCE_URL="https://sourceforge.net/projects/freepascal/files/Source/3.2.0/fpc-3.2.0.source.tar.gz"
+ZULU_API_JDK_URL="https://api.azul.com/zulu/download/community/v1.0/bundles/latest/"
+ANT_ZIP_LINK="http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.zip"
+
 
 LAMW_PACKAGES=(
 	"$ANDROID_HOME\\lazandroidmodulewizard\\android_bridges\\tfpandroidbridge_pack.lpk"
@@ -146,56 +106,34 @@ LAMW_PACKAGES=(
 )
 
 LAMW_WORKSPACE_HOME="$HOMEDRIVE${HOMEPATH}\\Dev\\LAMWProjects"  #piath to lamw_workspace
+SDK_LICENSES_PARAMETERS=(--licenses )
 
-
-ANT_HOME="$ANDROID_HOME\\apache-ant-1.10.5"
-
+ANT_HOME="$ANDROID_HOME\\apache-ant-${ANT_VERSION}"
 GRADLE_CFG_HOME="$HOMEDRIVE${HOMEPATH}\\.gradle"
-GRADLE_VERSION="6.6.1"
-GRADLE_HOME="$ANDROID_HOME\\gradle-${GRADLE_VERSION}"
-GRADLE_ZIP_LNK="https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
-GRADLE_ZIP_FILE="gradle-${GRADLE_VERSION}-bin.zip"
-ANT_ZIP_LINK="http://archive.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.zip"
-ANT_ZIP_FILE="apache-ant-1.10.5-bin.zip"
-
-ADB_WIN_DRIVER_LINK="http://dl.adbdriver.com/upload/adbdriver.zip"
-ADB_WIN_DRIVER_ZIP="adbdriver.zip"
-
+ANT_ZIP_FILE="apache-ant-${ANT_VERSION}-bin.zip"
 FPC_ID_DEFAULT=0
 
-export OLD_ANDROID_SDK=1
-export NO_GUI_OLD_SDK=0
-export LAMW_INSTALL_STATUS=0
-export LAMW_IMPLICIT_ACTION_MODE=0
-export FLAG_SCAPE=0
+OLD_ANDROID_SDK=1
+LAMW_INSTALL_STATUS=0
+LAMW_IMPLICIT_ACTION_MODE=0
+FLAG_SCAPE=0
 
 #Flag tratador de sinal 
 MAGIC_TRAP_INDEX=-1
-export OLD_JAVA_EXEC_PATH="$HOMEDRIVE\\Program Files\\Zulu\\zulu-8\\bin"
-export JAVA_EXEC_PATH="$ROOT_LAMW\\jdk\\zulu-8\\bin"
-export JAVA_HOME=${JAVA_EXEC_PATH%'\bin'} #remove /bin of JAVA_HOME
+OLD_JAVA_HOME="$HOMEDRIVE\\Program Files\\Zulu\\zulu-8"
+JAVA_EXEC_PATH="$ROOT_LAMW\\jdk\\zulu-$JDK_VERSION\\bin"
 
 OLD_LAMW_MENU_PATH="$HOMEDRIVE\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
 LAMW_MENU_PATH="$HOMEDRIVE${HOMEPATH}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
 
-export ARM_ANDROID_TOOLS="$ROOT_LAMW\\sdk\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9\\prebuilt\\$OS_PREBUILD\\bin"
-#-------------------- AARCH64 SUPPORT HEADERS-------------------------------------------------------------
-export AARCH64_ANDROID_TOOLS="$ROOT_LAMW\\sdk\\ndk-bundle\\toolchains\\aarch64-linux-android-4.9\\prebuilt\\$OS_PREBUILD\\bin"
-export PATH="$ARM_ANDROID_TOOLS:$AARCH64_ANDROID_TOOLS:$PATH"
+
 #https://wiki.freepascal.org/Multiple_Lazarus#Using_lazarus.cfg_file 
-BINUTILS_URL="https://svn.freepascal.org/svn/fpcbuild/branches/fixes_3_2/install/binw32"
-FPC_TRUNK_SOURCE_URL="https://svn.freepascal.org/svn/fpc/branches/fixes_3_2@43981"
-FPC_TRUNK_VERSION=3.2.0-beta
-_FPC_TRUNK_VERSION=3.2.0
-FPC_TRUNK_SVNTAG=fixes_3_2
+
+
 FPC_TRUNK_PARENT=$LAMW4WINDOWS_HOME\\fpc
+
 FPC_TRUNK_PATH="$FPC_TRUNK_PARENT\\${_FPC_TRUNK_VERSION}"
 FPC_TRUNK_SOURCE_PATH="$FPC_TRUNK_PATH\\source"
-LAZARUS_STABLE_VERSION="2.0.6"
-LAZARUS_STABLE=lazarus_${LAZARUS_STABLE_VERSION//\./_}
-LAZARUS_STABLE_SRC_LNK="https://svn.freepascal.org/svn/lazarus/tags/$LAZARUS_STABLE"
-
-
 #help of lamw
 LAMW_OPTS=(
 	"syntax:\n"
@@ -219,6 +157,11 @@ LAMW_OPTS=(
 )
 
 #============================================================================================================================
+
+check_error_and_exit(){
+
+	[ $? != 0 ] && echo "$1" && exit 1
+}
 
 #cd not a native command, is a systemcall used to exec, read more in exec man 
 changeDirectory(){
@@ -288,15 +231,13 @@ splitStr(){
 #----------------------------------------------------------------------------------------------
 
 winCallfromPS(){
-		if [ $FLAG_SCAPE = 1 ]; then
-			echo -e "$*" > /tmp/pscommand.ps1
-		else
-			echo "$*" > /tmp/pscommand.ps1
+	local args="$*"
+		if [ $POWERSHELL_EXEC_POLICY != 1 ]; then
+			POWERSHELL_EXEC_POLICY=1
+			powershell.exe Set-ExecutionPolicy Bypass
+
 		fi
-		unix2dos /tmp/pscommand.ps1 2>/dev/null
-		cat /tmp/pscommand.ps1; sleep 0.5
-		powershell.exe Set-ExecutionPolicy Bypass
-		powershell.exe  /tmp/pscommand.ps1
+		powershell.exe -Command "$args"
 }
 
 
@@ -325,15 +266,121 @@ winMKLink(){
 }
 #this function delete a windows 
 winRMDirf(){
-	local try_rm="$*"
-	local rm_cmd_pwsh="cmd.exe /c 'if exist \"${try_rm}\" ( rmdir \"${try_rm}\" /Q /S )'"
+	local rm_cmd_pwsh="cmd.exe /c 'rmdir \"$1\" /Q /S'"
 	winCallfromPS "$rm_cmd_pwsh"
+
+}
+
+
+setWinArch(){
+	ARCH=$(arch)
+
+	case "$ARCH" in
+		"x86_64"| "amd64" )
+			OS_PREBUILD="windows-x86_64"
+			ZULU_API_JDK_URL+="?java_version$JDK_VERSION&jdk_version=$JDK_VERSION&zulu_version=$JDK_VERSION&os=windows&arch=x86&hw_bitness=64&ext=zip&bundle_type=jdk&javafx=false&latest=true&support_term=lts"
+			MSYS_TEMP="$HOMEDRIVE\\tools\\msys64\\tmp"
+			MINGW_PATH="$HOMEDRIVE\\tools\\msys64\\mingw64\\bin:$HOMEDRIVE\\tools\\msys32\\mingw64\\bin"
+			PROGR+=" mingw-w64-x86_64-jq"
+			OS_TARGET="win64"
+			CPU_TARGET="x86_64"
+
+		;;
+
+		*)
+			OS_PREBUILD="windows"
+			ZULU_API_JDK_URL+="?java_version$JDK_VERSION&jdk_version=$JDK_VERSION&zulu_version=$JDK_VERSION&os=windows&arch=x86&hw_bitness=32&ext=zip&bundle_type=jdk&javafx=false&latest=true&support_term=lts"
+			MSYS_TEMP="$HOMEDRIVE\\tools\\msys32\\tmp"
+			PROGR+=" mingw-w64-i686-jq"
+			OS_TARGET="win32"
+			CPU_TARGET="i386"
+			MINGW_PATH="$HOMEDRIVE\\tools\\msys32\\mingw32\\bin"
+		;;
+	esac
+
+	FPPKG_TRUNK_CFG_PATH="$FPC_TRUNK_PATH\\bin\\i386-win32\\fppkg.cfg"
+	export JAVA_HOME=${JAVA_EXEC_PATH%'\bin'} #remove /bin of JAVA_HOME
+	export ARM_ANDROID_TOOLS="$ROOT_LAMW\\sdk\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9\\prebuilt\\$OS_PREBUILD\\bin"
+	export AARCH64_ANDROID_TOOLS="$ROOT_LAMW\\sdk\\ndk-bundle\\toolchains\\aarch64-linux-android-4.9\\prebuilt\\$OS_PREBUILD\\bin"
+	export PATH="$ARM_ANDROID_TOOLS:$AARCH64_ANDROID_TOOLS:$JAVA_EXEC_PATH:$MINGW_PATH:$PATH"
 
 }
 
 #==========================================================================================================
 #									LAMW Manager Core functions
 #----------------------------------------------------------------------------------------------------------
+getLAMWDep(){
+	if [ "$1" = "" ]; then
+		echo 'Need object arg!'
+		exit 1;
+	fi
+
+	if [ "$(which jq)" = "" ]; then
+		return
+	fi
+	echo "$LAMW_DEPENDENCIES" | jq  "$1" | sed 's/"//g'
+}
+
+setAndroidSDKCMDParameters(){
+	SDK_MANAGER_CMD_PARAMETERS=(
+		"platforms;android-$ANDROID_SDK_TARGET" 
+		"platform-tools"
+		"build-tools;$ANDROID_BUILD_TOOLS_TARGET"
+		"ndk-bundle" 
+		"extras;android;m2repository"
+	)
+
+
+	if [ $USE_PROXY = 1 ]; then
+		SDK_LICENSES_PARAMETERS=( --licenses --no_https --proxy=http --proxy_host=$PROXY_SERVER --proxy_port=$PORT_SERVER )
+		SDK_MANAGER_CMD_PARAMETERS+=("--no_https --proxy=http" "--proxy_host=$PROXY_SERVER" "--proxy_port=$PORT_SERVER")
+	fi
+}
+
+setJDKDeps(){
+	ZULU_JDK_JSON="$(wget -O- -q  "$ZULU_API_JDK_URL" | jq )"
+	ZULU_JDK_URL="$(echo $ZULU_JDK_JSON | jq '.url' | sed 's/"//g')"
+	ZULU_JDK_ZIP="$(echo $ZULU_JDK_JSON | jq '.name' | sed 's/"//g' )"
+	ZULU_JDK_FILE="$(echo $ZULU_JDK_ZIP | sed 's/.zip//g')"
+	JAVA_VERSION="1.8.0_$(echo $ZULU_JDK_JSON | jq '.java_version[2]'| sed 's/"//g')"
+}
+
+checkJDKVersionStatus(){
+	setJDKDeps
+	JDK_STATUS=0
+	local java_release_path="$JAVA_HOME\\release"
+	[ ! -e $JAVA_HOME ] || ( [ -e $java_release_path ]  && ! grep $JAVA_VERSION  $java_release_path > /dev/null ) && JDK_STATUS=1
+}
+
+setLAMWDeps(){
+
+	[  "$LAMW_DEPENDENCIES" = "" ] && LAMW_DEPENDENCIES="$(wget -O- -q  "$LAMW_PACKAGE_URL" )"
+	ANDROID_SDK_TARGET=$(getLAMWDep '.dependencies.android.platform')
+	ANDROID_BUILD_TOOLS_TARGET=$(getLAMWDep '.dependencies.android.buildTools')
+	GRADLE_VERSION=$(getLAMWDep '.dependencies.gradle')
+	GRADLE_HOME="$ROOT_LAMW\\gradle-${GRADLE_VERSION}"
+	GRADLE_ZIP_LNK="https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
+	GRADLE_ZIP_FILE="gradle-${GRADLE_VERSION}-bin.zip"
+	setAndroidSDKCMDParameters
+
+
+	#printf "%b" "$ANDROID_SDK_TARGET\n$ANDROID_BUILD_TOOLS_TARGET\n$GRADLE_VERSION\n${SDK_MANAGER_CMD_PARAMETERS[*]}\n"
+}
+
+
+updateLAMWDeps(){
+
+
+	local need_update_lamw_deps=0
+	setLAMWDeps
+
+	if [ ! -e "$GRADLE_HOME" ] ||  [ ! -e "$ANDROID_SDK_ROOT/platforms/android-$ANDROID_SDK_TARGET" ] || [ ! -e "$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS_TARGET" ] ; then
+		need_update_lamw_deps=1
+	fi
+
+	echo "$need_update_lamw_deps"
+
+}
 
 #iniciandoparametros
 initParameters(){
@@ -353,17 +400,11 @@ initParameters(){
 
 	if [ $USE_PROXY = 1 ]; then
 
-		SDK_MANAGER_CMD_PARAMETERS[${#SDK_MANAGER_CMD_PARAMETERS[*]}]="--no_https"
-		SDK_MANAGER_CMD_PARAMETERS[${#SDK_MANAGER_CMD_PARAMETERS[*]}]="--proxy=http" 
-		SDK_MANAGER_CMD_PARAMETERS[${#SDK_MANAGER_CMD_PARAMETERS[*]}]="--proxy_host=$PROXY_SERVER"
-		SDK_MANAGER_CMD_PARAMETERS[${#SDK_MANAGER_CMD_PARAMETERS[*]}]="--proxy_port=$PORT_SERVER" 
+		SDK_MANAGER_CMD_PARAMETERS+=("--no_https")
+		SDK_MANAGER_CMD_PARAMETERS+=("--proxy=http" )
+		SDK_MANAGER_CMD_PARAMETERS+=("--proxy_host=$PROXY_SERVER")
+		SDK_MANAGER_CMD_PARAMETERS+=("--proxy_port=$PORT_SERVER" )
 
-		SDK_MANAGER_CMD_PARAMETERS2_PROXY=(
-			--no_https 
-			#--proxy=http 
-			--proxy-host=$PROXY_SERVER 
-			--proxy-port=$PORT_SERVER 
-		)
 		SDK_LICENSES_PARAMETERS=( --licenses --no_https --proxy=http --proxy_host=$PROXY_SERVER --proxy_port=$PORT_SERVER )
 		export http_proxy=$PROXY_URL
 		export https_proxy=$PROXY_URL
@@ -381,17 +422,16 @@ initParameters(){
 
 #Rotina que trata control+c
 TrapControlC(){
-	local sdk_tools_zip=$ANDROID_SDK
-	#echo "MAGIC_TRAP_INDEX=$MAGIC_TRAP_INDEX";read
+
 	local magic_trap=(
 		"$ANT_TAR_FILE" #0 
 		"$ANT_HOME"		#1
 		"$GRADLE_ZIP_FILE" #2
 		"$GRADLE_HOME"   #3
-		"$sdk_tools_zip" #4
-		"$ANDROID_SDK\\tools" #5
-		"android-ndk-r18b-linux-x86_64.zip" #6
-		"android-ndk-r18b" #7
+		"$SDK_TOOLS_ZIP" #4
+		"$ANDROID_SDK_ROOT\\tools" #5
+		"$CMD_SDK_TOOLS_ZIP" #6
+		"$CMD_SDK_TOOLS_DIR" #7
 	)
 	
 	if [ "$MAGIC_TRAP_INDEX" != "-1" ]; then
@@ -404,6 +444,11 @@ TrapControlC(){
 	exit 2
 }
 
+DisableTrapActions(){
+	trap - SIGINT  #removendo a traps
+	MAGIC_TRAP_INDEX=-1
+}
+
 #Get Linux common tools
 getTerminalDeps(){
 	pacman -Sy $PROGR --noconfirm
@@ -413,75 +458,60 @@ getTerminalDeps(){
 	fi
 }
 
-getJDK(){
-		WGET_EXE=$(which wget)
-		local old_jdK_parent=$(dirname "$OLD_JAVA_EXEC_PATH" )
-		local old_jdK_parent=$(dirname "$old_jdK_parent")
-		local jdk_parent=$(dirname "$JAVA_HOME")
 
-		if [ -e "$old_jdK_parent" ]; then
-			winRMDirf "$old_jdK_parent"
-		fi
-
-		#remove old jdk version 
-		if [ -e "$JAVA_EXEC_PATH" ]; then 
-			cat "$JAVA_HOME\\release" | grep "$JAVA_VERSION"
-			if [ $? != 0 ]; then 
-				winRMDirf "$jdk_parent" 
-			fi
-		fi
-		if [ ! -e "$jdk_parent" ]; then 
-			mkdir -p "$jdk_parent"
-		fi
-
-		changeDirectory "$jdk_parent"
-
-		if [ ! -e "zulu-8" ]; then
-			"$WGET_EXE" -c "$ZULU_JDK_URL"
-			if [ $? != 0 ]; then
-				wget -c "$ZULU_JDK_URL"
-				if [ $? != 0 ]; then
-					echo "possible network instability! Try later!"
-					exit 1
-				fi
-			fi
-			unzip "$ZULU_JDK_ZIP"
-			mv "$ZULU_TMP_PATH" "zulu-8"
-			rm "$ZULU_JDK_ZIP"
-			export PATH=$PATH:$JAVA_EXEC_PATH
-			java -version
-		else
-			export PATH=$PATH:$JAVA_EXEC_PATH
-			java -version
-		fi
-}
 
 getImplicitInstall(){
-	if [  -e  "$ANDROID_HOME\\lamw-install.log" ]; then
-		printf "Checking the Android SDK version installed :"
-		cat "$ANDROID_HOME\\lamw-install.log" |  grep "OLD_ANDROID_SDK=0" > /dev/null
-		if [ $? = 0 ]; then
-			export OLD_ANDROID_SDK=0
-		else 
-			export OLD_ANDROID_SDK=1
-			export NO_GUI_OLD_SDK=1
-		fi
+	if [  -e  "$ROOT_LAMW\\lamw-install.log" ]; then
+		export OLD_ANDROID_SDK=1
 
-		cat "$ANDROID_HOME\\lamw-install.log" |  grep "Generate LAMW_INSTALL_VERSION=$LAMW_INSTALL_VERSION" > /dev/null
+		cat "$ROOT_LAMW\\lamw-install.log" |  grep "Generate LAMW_INSTALL_VERSION=$LAMW_INSTALL_VERSION" > /dev/null
+	
 		if [ $? = 0 ]; then  
 			echo "Only Update LAMW"
-			export LAMW_IMPLICIT_ACTION_MODE=1 #apenas atualiza o lamw 
-		else
-			echo "You need upgrade your LAMW4Linux!"
-			export LAMW_IMPLICIT_ACTION_MODE=0
+			local flag_is_old_lamw=$(updateLAMWDeps)
+
+			if [ $flag_is_old_lamw = 1 ]; then 
+				echo "You need upgrade your LAMW4Linux!"
+				LAMW_IMPLICIT_ACTION_MODE=0
+			else 
+				LAMW_IMPLICIT_ACTION_MODE=1 #apenas atualiza o lamw 
+			fi
 		fi
 	else
-		export OLD_ANDROID_SDK=1 #obetem por padrão o old sdk 
-		export NO_GUI_OLD_SDK=1
+		return 
 	fi
 }
 
+initROOT_LAMW(){
 
+	local init_root_lamw_dirs=(
+		$ANDROID_SDK_ROOT
+		"$(dirname $JAVA_HOME)"
+		$HOMEPATH\\.android
+	)
+
+	for lamw_dir in ${init_root_lamw_dirs[@]}; do
+		[ ! -e "$lamw_dir" ] && mkdir -p "$lamw_dir"
+	done
+
+	[ ! -e $LAMW_USER_HOME/.android/repositories.cfg ] && touch $LAMW_USER_HOME/.android/repositories.cfg  
+	[ ! $HOME/.android/repositories.cfg ] && echo "" > $HOME/.android/repositories.cfg 
+}
+
+getJDK(){
+
+	[ ! -e "$ROOT_LAMW\\jdk" ] && mkdir -p "$ROOT_LAMW\\jdk"
+	checkJDKVersionStatus
+	if [ $JDK_STATUS = 1 ]; then 
+		changeDirectory "$ROOT_LAMW\\jdk"
+		[ -e "$OLD_JAVA_HOME" ] && winRMDirf "$OLD_JAVA_HOME"
+		[ -e "$JAVA_HOME" ] && winRMDirf "$JAVA_HOME"
+		wget -c "$ZULU_JDK_URL"
+		unzip "$ZULU_JDK_ZIP"
+		mv "$ZULU_JDK_FILE" "zulu-$JDK_VERSION"
+		[ -e "$ZULU_JDK_ZIP" ] && rm -rf $ZULU_JDK_ZIP
+	fi
+}
 getAnt(){
 	changeDirectory "$ANDROID_HOME" 
 	if [ ! -e "$ANT_HOME" ]; then
@@ -505,132 +535,116 @@ getAnt(){
 		rm "$ANT_ZIP_FILE"
 	fi
 }
-getAndroidSDKToolsW32(){
-	changeDirectory "$HOMEPATH"
-	if [ ! -e "$ANDROID_HOME" ]; then
-		mkdir "$ANDROID_HOME"
-	fi
-	
-	changeDirectory "$ANDROID_HOME"
+
+
+getGradle(){
+	changeDirectory $ROOT_LAMW
 	if [ ! -e "$GRADLE_HOME" ]; then
-		MAGIC_TRAP_INDEX=-1
-		trap TrapControlC 2
-		wget -c "$GRADLE_ZIP_LNK"
-		if [ $? != 0 ] ; then
-			wget -c "$GRADLE_ZIP_LNK"
-		fi
+		MAGIC_TRAP_INDEX=2 #Set arquivo a ser removido
+		trap TrapControlC  2 # set armadilha para o signal2 (siginterrupt)
+		wget  -c $GRADLE_ZIP_LNK
 		MAGIC_TRAP_INDEX=3
-		trap TrapControlC 2
-		unzip "$GRADLE_ZIP_FILE"
+		unzip -o  $GRADLE_ZIP_FILE
 	fi
 
-	if [ -e  "$GRADLE_ZIP_FILE" ]; then
-		rm "$GRADLE_ZIP_FILE"
+	if [ -e  $GRADLE_ZIP_FILE ]; then
+		rm $GRADLE_ZIP_FILE
 	fi
-	
-	if [ ! -e "sdk" ] ; then
-		mkdir "sdk"
-	fi
-		changeDirectory "sdk"
-		if [ ! -e "tools" ]; then  
-			wget -c "$SDK_TOOLS_URL" #getting sdk 
-			if [ $? != 0 ]; then 
-				wget -c "$SDK_TOOLS_URL"
-			fi
-			unzip "sdk-tools-windows-4333796.zip"
-		fi
-		
-		#mv "sdk-tools-windows-3859397" "tools"
-
-		if [ -e "sdk-tools-windows-4333796.zip" ]; then
-			rm  "sdk-tools-windows-4333796.zip"
-		fi
-	#fi
 }
-#Get Gradle and SDK Tools
-getOldAndroidSDKToolsW32(){
-	export SDK_TOOLS_VERSION="r25.2.5"
-	export SDK_TOOLS_URL="http://dl.google.com/android/repository/tools_r25.2.5-windows.zip" 
-	changeDirectory "$HOMEPATH"
-	if [ ! -e "$ANDROID_HOME" ]; then
-		mkdir "$ANDROID_HOME"
-	fi
-	
-	changeDirectory "$ANDROID_HOME"
-	getAnt
-	if [ ! -e "$GRADLE_HOME" ]; then
-		MAGIC_TRAP_INDEX=-1
-		trap TrapControlC 2
-		wget -c "$GRADLE_ZIP_LNK"
-		if [ $? != 0 ] ; then
-			#rm *.zip*
-			wget -c "$GRADLE_ZIP_LNK"
-			if [ $? != 0 ]; then
-				echo "possible network instability! Try later!"
-				exit 1
-			fi 
-		fi
-		#echo "$PWD"
-		#sleep 3
-		MAGIC_TRAP_INDEX=3
-		trap TrapControlC 2
-		unzip "$GRADLE_ZIP_FILE"
-	fi
-	
-	if [ -e  "$GRADLE_ZIP_FILE" ]; then
-		rm "$GRADLE_ZIP_FILE"
-	fi
-	#mkdir
-	#changeDirectory $ANDROID_SDK
-	if [ ! -e "$ANDROID_SDK" ] ; then
-		mkdir "$ANDROID_SDK"
-	fi
-		changeDirectory "$ANDROID_SDK"
-		if [ ! -e "$ANDROID_SDK\\tools" ]; then
-			MAGIC_TRAP_INDEX=-1
-			trap TrapControlC 2  
-			wget -c "$SDK_TOOLS_URL" #getting sdk 
-			if [ $? != 0 ]; then 
-				wget -c "$SDK_TOOLS_URL"
-				if [ $? != 0 ]; then
-					echo "possible network instability! Try later!"
-					exit 1
-				fi
-			fi
-			#./installer_r24.0.2-windows.exe
-			MAGIC_TRAP_INDEX=5
-			trap TrapControlC 2 
-			unzip "tools_r25.2.5-windows.zip"
-			rm "tools_r25.2.5-windows.zip"
-		fi
 
-	#fi
 
-	if [ ! -e "$ANDROID_SDK\\ndk-bundle" ]; then
-		MAGIC_TRAP_INDEX=-1
-		changeDirectory "$ANDROID_SDK"
-		trap TrapControlC 2 
-		wget -c "$NDK_URL"
+#Get Gradle and SDK Tools 
+getAndroidSDKTools(){
+	initROOT_LAMW
+	changeDirectory $ROOT_LAMW
+	changeDirectory $ANDROID_SDK_ROOT
+	
+	if [ ! -e "$CMD_SDK_TOOLS_DIR" ];then
+		mkdir -p "$CMD_SDK_TOOLS_DIR"
+		changeDirectory "$CMD_SDK_TOOLS_DIR"
+		trap TrapControlC  2
+		MAGIC_TRAP_INDEX=4
+		wget -c $CMD_SDK_TOOLS_URL
+		MAGIC_TRAP_INDEX=5
+		unzip -o  $CMD_SDK_TOOLS_ZIP
+		mv cmdline-tools latest
+		rm $CMD_SDK_TOOLS_ZIP
+	fi
+}
+
+getSDKAntSupportedTools(){
+	initROOT_LAMW
+	changeDirectory $ANDROID_SDK_ROOT
+	SDK_TOOLS_VERSION="r25.2.5"
+	SDK_TOOLS_URL="https://dl.google.com/android/repository/tools_r25.2.5-windows.zip"
+	SDK_TOOLS_ZIP="tools_r25.2.5-windows.zip"
+	SDK_TOOLS_DIR="$ANDROID_SDK_ROOT\\tools"
+	if [ ! -e "$SDK_TOOLS_DIR" ];then
+		trap TrapControlC  2
+		MAGIC_TRAP_INDEX=4
+		wget -c $SDK_TOOLS_URL
+		MAGIC_TRAP_INDEX=5
+		unzip -o  $SDK_TOOLS_ZIP
+		rm $SDK_TOOLS_ZIP
+	fi
+}
+
+getAndroidCmdLineTools(){
+	getSDKAntSupportedTools
+	getAndroidSDKTools
+}
+
+runSDKManagerLicenses(){
+	local sdk_manager_cmd="$CMD_SDK_TOOLS_DIR\\latest\\bin\\sdkmanager.bat"
+	yes | $sdk_manager_cmd ${SDK_LICENSES_PARAMETERS[*]} 
+	if [ $? != 0 ]; then 
+		yes | $sdk_manager_cmd ${SDK_LICENSES_PARAMETERS[*]} 
+		check_error_and_exit "possible network instability! Try later!"
+	fi
+}
+
+runSDKManager(){
+	local sdk_manager_cmd="$CMD_SDK_TOOLS_DIR\\latest\\bin\\sdkmanager.bat"
+	if [ $FORCE_YES = 1 ]; then 
+		yes | $sdk_manager_cmd $*
+
+		if [ $? != 0 ]; then
+			yes | $sdk_manager_cmd $*
+			check_error_and_exit "possible network instability! Try later!"
+		fi
+	else
+		$sdk_manager_cmd $*
+
 		if [ $? != 0 ]; then 
-			wget -c "$NDK_URL"
-			if [ $? != 0 ]; then
-				echo "possible network instability! Try later!"
-				exit 1
-			fi
-		fi
-		MAGIC_TRAP_INDEX=7
-		trap TrapControlC 2 
-		unzip $NDK_ZIP_FILE
-		mv "android-ndk-r18b" "ndk-bundle"
-		
-		if [ -e "$NDK_ZIP_FILE" ]; then
-			rm "$NDK_ZIP_FILE"
+			$sdk_manager_cmd $*
+			check_error_and_exit "possible network instability! Try later!"
 		fi
 	fi
-	trap - SIGINT  #removendo a traps
-	MAGIC_TRAP_INDEX=-1
+}
 
+getAndroidAPIS(){
+	
+	FORCE_YES=1
+	changeDirectory $ANDROID_HOME
+	runSDKManagerLicenses
+	
+	if [ $#  = 0 ]; then 
 
+		for((i=0;i<${#SDK_MANAGER_CMD_PARAMETERS[*]};i++));do
+			echo "Please wait, downloading \"${SDK_MANAGER_CMD_PARAMETERS[i]}\"..."
+			
+			if [ $i = 0 ]; then 
+				runSDKManager ${SDK_MANAGER_CMD_PARAMETERS[i]} # instala sdk sem intervenção humana 
+			else
+				FORCE_YES=0
+				runSDKManager ${SDK_MANAGER_CMD_PARAMETERS[i]} 
+			fi
+		done
+	else 
+		runSDKManager $*
+	fi
+
+	unset FORCE_YES
 }
 
 #GET LAMW FrameWork
@@ -659,179 +673,6 @@ getLAMWFramework(){
 }
 
 
-
-getSDKAndroid(){
-	#changeDirectory $ANDROID_SDK\\tools\\bin #change directory
-	
-	#   winCallfromPS1 "yes" "|" "$ANDROID_SDK\\tools\\bin\\sdkmanager.bat" ${SDK_LICENSES_PARAMETERS[*]}
-	# if [ $? != 0 ]; then 
-	# 		winCallfromPS1 "yes" "|" "$ANDROID_SDK\\tools\\bin\\sdkmanager.bat" ${SDK_LICENSES_PARAMETERS[*]}
-	# 		if [ $? != 0 ]; then 
-	# 			echo "possible network instability! Try later!"
-	# 			exit 1
-	# 		fi
-	# fi
-
-	#echo "len(SDK_MANAGER_CMD_PARAMETERS)=${#SDK_MANAGER_CMD_PARAMETERS[*]}";read;
-	for((i=0;i<${#SDK_MANAGER_CMD_PARAMETERS[*]};i++))
-	do
-		echo "please wait... "
-		winCallfromPS "echo"  "y" "|" "$ANDROID_SDK\\tools\\bin\\sdkmanager.bat" "\"${SDK_MANAGER_CMD_PARAMETERS[i]}\""  # instala sdk sem intervenção humana  
-
-		if [ $? != 0 ]; then 
-			winCallfromPS "echo" "y" "|" "$ANDROID_SDK\\tools\\bin\\sdkmanager.bat" "\"${SDK_MANAGER_CMD_PARAMETERS[i]}\""
-			if [ $? != 0 ]; then
-				echo "possible network instability! Try later!"
-				exit 1;
-			fi
-		fi
-	done
-
-}
-
-getOldAndroidSDK(){
-	local sdk_manager_sdk_paths=(
-		"$ANDROID_SDK\\platforms\\android-$ANDROID_SDK_TARGET"
-		"$ANDROID_SDK\\platform-tools"
-		"$ANDROID_SDK\\build-tools\\$ANDROID_BUILD_TOOLS_TARGET"
-		"$ANDROID_SDK\\extras\\google\\google_play_services"  
-		"$ANDROID_SDK\\extras\\android\\m2repository"
-		"$ANDROID_SDK\\extras\\google\\m2repository" 
-		"$ANDROID_SDK\\extras\\google\\market_licensing" 
-		"$ANDROID_SDK\\extras\\google\\market_apk_expansion"
-		"$ANDROID_SDK\\extras\\google\\usb_driver"
-		"$ANDROID_SDK\\build-tools\\$GRADLE_MIN_BUILD_TOOLS"
-	)
-	if [ -e "$ANDROID_SDK\\tools\\android.bat"  ]; then 
-		#echo "PWD=$PWD";read;
-		if [ $NO_GUI_OLD_SDK = 0 ]; then
-			echo "--> Running Android SDK Tools manager"
-			"$ANDROID_SDK\\tools\\android.bat" "update" "sdk"
-		else
-			for((i=0;i<${#SDK_MANAGER_CMD_PARAMETERS2[*]};i++))
-			do
-				echo "Getting \"${SDK_MANAGER_CMD_PARAMETERS2[i]}\" ..."
-
-				if [ ! -e "${sdk_manager_sdk_paths[i]}" ];then
-					echo "y" |   "$ANDROID_SDK\\tools\\android.bat" update sdk --all --no-ui --filter ${SDK_MANAGER_CMD_PARAMETERS2[i]} ${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}
-					if [ ! -e "${sdk_manager_sdk_paths[i]}" ]; then
-						echo "y" |   "$ANDROID_SDK\\tools\\android.bat" update sdk --all --no-ui --filter ${SDK_MANAGER_CMD_PARAMETERS2[i]} ${SDK_MANAGER_CMD_PARAMETERS2_PROXY[*]}
-						if [ ! -e "${sdk_manager_sdk_paths[i]}" ]; then
-							echo "possible network instability! Try later!"
-							exit 1
-						fi
-					fi
-				fi	
-			done 
-		fi
-	fi
-
-}
-
-
-WrappergetAndroidSDK(){
-	if [ $WINDOWS_CMD_WRAPPERS = 1 ]; then 
-		if [ $OLD_ANDROID_SDK =  0 ]; then
-			getSDKAndroid
-		else
-			getOldAndroidSDK
-		fi
-	fi
-}
-WrappergetAndroidSDKTools(){
-	if [ ! -e "$HOMEDRIVE${HOMEPATH}\\.android" ]; then 
-		mkdir "$HOMEDRIVE${HOMEPATH}\\.android"
-	fi
-
-	echo ""  > "$HOMEDRIVE${HOMEPATH}\\.android\\repositories.cfg"
-	winCallfromPS "cmd.exe /c 'attrib +h \"$HOMEDRIVE${HOMEPATH}\\.android\"'"
-	unix2dos "${HOMEPATH}\\.android\\repositories.cfg" 2>/dev/null
-	if [ $WINDOWS_CMD_WRAPPERS = 1 ]; then
-		if [ $OLD_ANDROID_SDK = 0 ]; then
-			getAndroidSDKToolsW32
-		else
-			getOldAndroidSDKToolsW32
-		fi
-	fi 
-	
-}
-
-
-getLazarus4Android(){
-
-	if [ -e "$OLD_LAMW4WINDOWS_HOME" ]; then
-		if [ $FLAG_FORCE_ANDROID_AARCH64 = 0 ]; then 
-			mv "$OLD_LAMW4WINDOWS_HOME" "$LAMW4WINDOWS_HOME"
-		else
-			return 
-		fi
-	fi
-	if [ ! -e "$LAMW4WINDOWS_HOME" ]; then
-		mkdir -p "$LAMW4WINDOWS_HOME"
-	fi
-	changeDirectory "$LAMW4WINDOWS_HOME"
-	if [ ! -e "$LAMW_IDE_HOME" ]; then
-		wget -c "$LAZARUS4ANDROID_LNK"
-		if [ $? != 0 ]; then
-			wget -c "$LAZARUS4ANDROID_LNK"
-		fi
-		7z x "$LAZARUS4ANDROID_ZIP"
-		if [ -e "$LAZARUS4ANDROID_ZIP" ]; then
-			rm "$LAZARUS4ANDROID_ZIP"
-		fi
-	fi
-}
-
-BuildLaz4Android(){
-	export PATH="$PATH:$FPC_STABLE_EXEC"
-	changeDirectory "$LAMW_IDE_HOME"
-	if [ $# = 0 ]; then 
-		local aux="$LAMW_IDE_HOME\\build.bat"
-		winCallfromPS "$aux"
-	fi
-	changeDirectory "$HOMEDRIVE"
-	local build_win_cmd="$HOMEDRIVE\\generate-lazarus.bat"
-
-	for((i=0;i<${#LAMW_PACKAGES[@]};i++))
-	do
-		./lazbuild --build-ide= --add-package "${LAMW_PACKAGES[i]}"
-		if [ $? != 0 ]; then 
-			./lazbuild  --build-ide= --add-package "${LAMW_PACKAGES[i]}"
-		fi
-		#prevent no exists lazarus (common bug)
-		if [ ! -e "$LAMW_IDE_HOME\\lazarus.exe" ]; then
-			winCallfromPS "taskkill /im make.exe /f" 2>/dev/null
-			./lazbuild --build-ide= --add-package "${LAMW_PACKAGES[i]}"
-		fi
-	done
-	
-	if [ -e "$build_win_cmd" ]; then
-		"$build_win_cmd"
-	fi
-}
-
-InstallWinADB(){
-	changeDirectory "$ANDROID_HOME"
-	if [ ! -e "adbdriver" ]; then 
-		mkdir "adbdriver"
-		changeDirectory "adbdriver" 
-		wget -c "$ADB_WIN_DRIVER_LINK"
-		if [ $? != 0 ]; then
-			wget -c "$ADB_WIN_DRIVER_LINK"
-		fi
-			unzip "$ADB_WIN_DRIVER_ZIP"
-		if [ -e "$ADB_WIN_DRIVER_ZIP" ]; then
-			rm "$ADB_WIN_DRIVER_ZIP"
-		fi
-	fi
-
-	if  [ -e "$ANDROID_HOME\\adbdriver" ]; then
-		changeDirectory "$ANDROID_HOME\\adbdriver"
-		printf "\n\n%s\n\n" "please conect your smartphone to PC and Install the ADBDriver ..."
-		./ADBDriverInstaller.exe
-	fi
-}
-#this  fuction create a INI file to config  all paths used in lamw framework 
 CreateLauncherLAMW(){
 	
 	if [ ! -e "$LAMW_MENU_PATH" ]; then
@@ -883,20 +724,15 @@ CreateLauncherLAMW(){
 
 #this function remove old config of Laz4Lamw  
 CleanOldConfig(){
-	local old_java_root=$(dirname "$OLD_JAVA_EXEC_PATH" )
-	local old_java_root=$(dirname "$old_java_root" )
 	local root_java=$(dirname "$JAVA_HOME")
 	local list_to_del=(
-			"$ANDROID_SDK${BARRA_INVERTIDA}ndk-bundle${BARRA_INVERTIDA}toolchains${BARRA_INVERTIDA}mipsel-linux-android-4.9"
-			"$ANDROID_SDK${BARRA_INVERTIDA}ndk-bundle${BARRA_INVERTIDA}toolchains${BARRA_INVERTIDA}mips64el-linux-android-4.9"
+			"$ANDROID_SDK_ROOT${BARRA_INVERTIDA}ndk-bundle${BARRA_INVERTIDA}toolchains${BARRA_INVERTIDA}mipsel-linux-android-4.9"
+			"$ANDROID_SDK_ROOT${BARRA_INVERTIDA}ndk-bundle${BARRA_INVERTIDA}toolchains${BARRA_INVERTIDA}mips64el-linux-android-4.9"
 			"$OLD_LAMW4WINDOWS_HOME"
 			"$ROOT_LAMW"
-			"$old_java_root"
-			"$root_java"
 			"$OLD_LAMW_MENU_PATH"
 			"$LAMW_MENU_PATH"
 			"$LAMW4WINDOWS_HOME"
-			#"$GRADLE_CFG_HOME"
 	)
 	winCallfromPS "taskkill /im adb.exe /f"    2>/dev/null
 	winCallfromPS "taskkill /im make.exe /f"   2>/dev/null
@@ -953,8 +789,8 @@ LAMW4LinuxPostConfig(){
 		"PathToJavaTemplates=$ANDROID_HOME\\lazandroidmodulewizard\\android_wizard\\smartdesigner\\java"
 		"PathToSmartDesigner=$ANDROID_HOME\\lazandroidmodulewizard\\android_wizard\\smartdesigner"
 		"PathToJavaJDK=$JAVA_HOME"
-		"PathToAndroidNDK=$ANDROID_SDK\\ndk-bundle"
-		"PathToAndroidSDK=$ANDROID_SDK"
+		"PathToAndroidNDK=$ANDROID_SDK_ROOT\\ndk-bundle"
+		"PathToAndroidSDK=$ANDROID_SDK_ROOT"
 		"PathToAntBin=$ANT_HOME\\bin"
 		"PathToGradle=$GRADLE_HOME"
 		"PrebuildOSYS=$OS_PREBUILD"
@@ -971,6 +807,7 @@ LAMW4LinuxPostConfig(){
 	local lamw_loader_bat_str=(
 		"@echo off"
 		"SET PATH=$JAVA_EXEC_PATH;%PATH%"
+		"SET ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
 		"SET JAVA_HOME=\"$JAVA_HOME\""
 		"\"$LAMW_IDE_HOME\\lazarus\" %*"
 	)
@@ -988,7 +825,7 @@ LAMW4LinuxPostConfig(){
 	done
 
 	#escreve o arquivo lamw.bat que contém as variáveis de ambiente do lamw
-	for ((i=0;i<${#lamw_init_str[@]};i++))
+	for ((i=0;i<${#lamw_loader_bat_str[@]};i++))
 	do
 		if [ $i = 0 ]; then 
 			echo "${lamw_loader_bat_str[i]}" > "$LAMW_IDE_HOME\\lamw-ide.bat"
@@ -1001,16 +838,16 @@ LAMW4LinuxPostConfig(){
 	unix2dos "$LAMW_IDE_HOME_CFG\\LAMW.ini" 2>/dev/null
 	unix2dos "$LAMW_IDE_HOME\\lamw-ide.bat" 2>/dev/null
 	unix2dos "$LAMW_IDE_HOME\\start-lamw.vbs" 2>/dev/null
-	winMKLink "$ANDROID_SDK\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK\\ndk-bundle\\toolchains\\mipsel-linux-android-4.9"
-	winMKLink "$ANDROID_SDK\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK\\ndk-bundle\\toolchains\\mips64el-linux-android-4.9"
+	winMKLink "$ANDROID_SDK_ROOT\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK_ROOT\\ndk-bundle\\toolchains\\mipsel-linux-android-4.9"
+	winMKLink "$ANDROID_SDK_ROOT\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9" "$ANDROID_SDK_ROOT\\ndk-bundle\\toolchains\\mips64el-linux-android-4.9"
 	CreateLauncherLAMW
 }
 writeLAMWLogInstall(){
 	local lamw_log_str=(
 		"Generate LAMW_INSTALL_VERSION=$LAMW_INSTALL_VERSION" 
 		"LAMW workspace : $LAMW_WORKSPACE_HOME" 
-		"Android SDK:$ANDROID_SDK" 
-		"Android NDK:$ANDROID_SDK\\ndk-bundle" 
+		"Android SDK:$ANDROID_SDK_ROOT" 
+		"Android NDK:$ANDROID_SDK_ROOT\\ndk-bundle" 
 		"Gradle:$GRADLE_HOME"
 		"OLD_ANDROID_SDK=$OLD_ANDROID_SDK"
 		"SDK_TOOLS_VERSION=$SDK_TOOLS_VERSION"
@@ -1035,9 +872,6 @@ getStatusInstalation(){
 		return 1
 
 	else 
-		#echo "not installed" >&2
-		export OLD_ANDROID_SDK=1
-		export NO_GUI_OLD_SDK=1
 		return 0;
 	fi
 }
@@ -1049,8 +883,8 @@ Repair(){
 			getJDK
 		fi
 		if [ ! -e "$LAMW_IDE_HOME" ]; then
-			wrappergetLazAndroid
-			wrapperBuildLazarusIDE
+			getLazarusSource
+			BuildLazarusIDE
 			LAMW4LinuxPostConfig
 		fi
 	fi
@@ -1077,11 +911,8 @@ getFPCStable(){
 		else
 			wget -c "$FPC_STABLE_URL"
 			if [  $? != 0 ]; then 
-				wget "$FPC_STABLE_URL"
-				if [ $? != 0 ]; then
-					echo "possible instability internet! Try later!"
-					exit 1
-				fi
+				wget -c "$FPC_STABLE_URL"
+				check_error_and_exit "possible instability internet! Try later!"
 			fi
 			tar -xvf "$FPC_STABLE_ZIP"
 			if [ -e "$FPC_STABLE_ZIP" ]; then 
@@ -1096,12 +927,9 @@ getFPCStable(){
 	fi
 }
 getFPCTrunkSources(){
-	if [ $FLAG_FORCE_ANDROID_AARCH64 = 0 ]; then 
-		return 
-	fi
 
 	if [ ! -e "$LAMW4WINDOWS_HOME" ]; then
-		mkdir "$LAMW_IDE_HOME"
+		mkdir -p "$LAMW4WINDOWS_HOME"
 	fi
 	cd $LAMW4WINDOWS_HOME
 	if [ ! -e "$FPC_TRUNK_SOURCE_PATH" ]; then
@@ -1109,28 +937,24 @@ getFPCTrunkSources(){
 	fi
 
 	cd "$FPC_TRUNK_SOURCE_PATH"
-	svn checkout "$FPC_TRUNK_SOURCE_URL"
-	if [ $? != 0 ]; then 
-		winRMDirf "$FPC_TRUNK_SVNTAG"
-		svn checkout "$FPC_TRUNK_SOURCE_URL"
-		if [ $? != 0 ]; then
-			echo "possible network instability! Try later!"
-			winRMDirf "$FPC_TRUNK_SVNTAG"
-			exit 1
-		fi
-	fi
+	if [ ! -e $FPC_TRUNK_SVNTAG ]; then
+		wget -c "$FPC_TRUNK_SOURCE_URL"
+		tar -zxvf fpc-3.2.0.source.tar.gz
+		mv fpc-3.2.0 $FPC_TRUNK_SVNTAG
+		rm fpc-3.2.0.source.tar.gz
+	fi	
 }
 
 BuildCrossAArch64(){
-	if [ $FLAG_FORCE_ANDROID_AARCH64 = 0 ]; then
-		return 
-	fi
+	[ $FLAG_FORCE_ANDROID_AARCH64 = 0 ] && return 
+
 	ln -s "$AARCH64_ANDROID_TOOLS\\aarch64-linux-android-as.exe" "$FPC_STABLE_EXEC\\aarch64-linux-android-as.exe"
 	ln -s "$AARCH64_ANDROID_TOOLS\\aarch64-linux-android-ld.exe" "$FPC_STABLE_EXEC\\aarch64-linux-android-ld.exe"
 	ln -s "$ARM_ANDROID_TOOLS\\arm-linux-androideabi-as.exe" "$FPC_STABLE_EXEC\\arm-linux-androideabi-as.exe"
 	ln -s "$ARM_ANDROID_TOOLS\\arm-linux-androideabi-ld.exe" "$FPC_STABLE_EXEC\\arm-linux-androideabi-ld.exe"
 	cd "$FPC_TRUNK_SOURCE_PATH/${FPC_TRUNK_SVNTAG}"
 	make clean crossall crossinstall CPU_TARGET=aarch64 OS_TARGET=android OPT="-dFPC_ARMHF"  INSTALL_PREFIX="$FPC_TRUNK_PATH" #crosszipinstall
+	
 	if [ $? != 0 ]; then
 		echo "${VERMELHO}Build FPC AARCH64/Android falls"
 		exit 1;
@@ -1150,56 +974,57 @@ BuildFPCTrunk(){
 	cd "$FPC_TRUNK_SOURCE_PATH/${FPC_TRUNK_SVNTAG}"
 	make clean all install OS_TARGET="win32" INSTALL_PREFIX="$FPC_TRUNK_PATH" #zipinstall
 	if [ $? != 0 ]; then
-		echo "${VERMELHO}Build FPC i386/Win32 falls"
+		echo "${VERMELHO}Build FPC $OS_TARGET falls"
 		exit 1;
 	fi
 	BuildCrossAArch64
 }
 
 getBinults(){
-	cd "$FPC_TRUNK_PATH\\bin\\i386-win32"
-	binutils=(
-		ar.exe as.exe cmp.exe cp.exe cpp.exe diff.exe dlltool.exe fp32.ico gcc.exe gdate.exe 
-		gdb.exe gecho.exe ginstall.exe ginstall.exe.manifest gmkdir.exe grep.exe ld.exe 
-		libexpat-1.dll make.exe mv.exe nm.exe objcopy.exe objdump.exe patch.exe 
-		patch.exe.manifest pwd.exe rm.exe strip.exe unzip.exe windres.exe windres.h zip.exe
-	)
-	svn checkout $BINUTILS_URL binutils
+	[ ! -e "$FPC_TRUNK_PATH\\bin\\i386-win32" ] && mkdir  -p "$FPC_TRUNK_PATH\\bin\\i386-win32"
+
+	cd "$FPC_TRUNK_PATH"
+	git clone $BINUTILS_URL  -b $FPC_TRUNK_SVNTAG binutils
 	if [ $? != 0 ]; then 
 		winRMDirf binutils
-		svn checkout $BINUTILS_URL binutils
+		git clone $BINUTILS_URL  -b $FPC_TRUNK_SVNTAG binutils
 		if [ $? != 0 ]; then 
 			echo "possible network instability! Try later!"
 			exit 1
 		fi
 	fi
-	cd binutils
-	cp ${binutils[*]} "$FPC_TRUNK_PATH\\bin\\i386-win32"
-	cd "$FPC_TRUNK_PATH\\bin\\i386-win32"
-	#echo "debug getBinults";read
-	winRMDirf "$FPC_TRUNK_PATH\\bin\\i386-win32\\binutils"
+	
+	cd binutils\\install\\binw32
+	mv ./* "$FPC_TRUNK_PATH\\bin\\i386-win32"
+	cd "$FPC_TRUNK_PATH"
+	winRMDirf binutils
 }
 
 InitLazarusConfig(){
-	if [ ! -e "$LAMW_IDE_HOME_CFG" ]; then
-		mkdir "$LAMW_IDE_HOME_CFG"
-	fi
+	local lazarus_version_str="$($LAMW_IDE_HOME\\tools\\install\\get_lazarus_version.sh)"
+	local lazarus_env_cfg="$LAMW_IDE_HOME_CFG\\environmentoptions.xml"
 	local lazarus_env_cfg_str=(
 		'<?xml version="1.0" encoding="UTF-8"?>'
 		'<CONFIG>'
 		'	<EnvironmentOptions>'
-		"	<LazarusDirectory Value=\"$LAMW_IDE_HOME\"/>"
-		"	<CompilerFilename Value=\"$FPC_TRUNK_PATH\\bin\\i386-win32\\fpc.exe\"/>"
-		"	<FPCSourceDirectory Value=\"$FPC_TRUNK_SOURCE_PATH\\$FPC_TRUNK_SVNTAG\"/>"
+		"		<Version Value=\"110\" Lazarus=\"${lazarus_version_str}\"/>"
+		"		<LazarusDirectory Value=\"$LAMW_IDE_HOME\"/>"
+		"		<CompilerFilename Value=\"$FPC_TRUNK_PATH\\bin\\i386-win32\\fpc.exe\"/>"
+		"		<FPCSourceDirectory Value=\"$FPC_TRUNK_SOURCE_PATH\\$FPC_TRUNK_SVNTAG\"/>"
+		"	<FppkgConfigFile Value=\"${FPPKG_TRUNK_CFG_PATH}\"/>"
+		'    	<Debugger Class="TGDBMIDebugger">'
+      	'			<Configs>'
+        '				<Config ConfigName="FpDebug" ConfigClass="TFpDebugDebugger" Active="True"/>'
+        "				<Config ConfigName=\"Gdb\" ConfigClass=\"TGDBMIDebugger\" DebuggerFilename=\"$FPC_TRUNK_PATH\\bin\\i386-win32\\gdb.exe\"/>"
+        '			</Configs>'
+        	'</Debugger>'
 		"	</EnvironmentOptions>"
 		"</CONFIG>"
 	)
 
-	local lazarus_env_cfg="$LAMW_IDE_HOME_CFG\\environmentoptions.xml"
-
+	[ ! -e $LAMW_IDE_HOME_CFG ] && mkdir -p $LAMW_IDE_HOME_CFG
 	if [ ! -e  "$lazarus_env_cfg" ] ; then
-		for((i=0;i<${#lazarus_env_cfg_str[*]};i++))
-		do
+		for((i=0;i<${#lazarus_env_cfg_str[*]};i++)); do
 			if [ $i = 0 ]; then 
 				printf "%s\n" "${lazarus_env_cfg_str[i]}" > "$lazarus_env_cfg"
 			else
@@ -1214,9 +1039,13 @@ InitLazarusConfig(){
 BuildLazarusIDE(){
 	export PPC_CONFIG_PATH="$FPC_TRUNK_PATH\\bin\\i386-win32" 
 	cd "$LAMW_IDE_HOME"
-	export PATH="$FPC_TRUNK_PATH\\bin\\386-win32:$PATH"
+	export PATH="$FPC_TRUNK_PATH\\bin\\i386-win32:$PATH"
 	if [ $# = 0 ]; then 
 		make clean all "PP=$FPC_TRUNK_PATH\\bin\\i386-win32\\ppc386.exe" 
+		if [ $? != 0 ]; then 
+			echo "${VERMELHO}Error:${NORMAL} Cannot Build Lazarus"
+			exit 1
+		fi
 	fi
 	
 	InitLazarusConfig
@@ -1231,7 +1060,7 @@ BuildLazarusIDE(){
 
 #Run
 ConfigureFPCTrunk(){
-	local fpc_cfg_path="$FPC_TRUNK_PATH/bin/i386-win32/fpc.cfg"
+	local fpc_cfg_path="$FPC_TRUNK_PATH\\bin\\i386-win32\\fpc.cfg"
 	#if [ ! -e "$fpc_cfg_path" ]; then
 		"$FPC_TRUNK_PATH\\bin\\i386-win32\\fpcmkcfg" -d basepath="$FPC_TRUNK_PATH" -o "$fpc_cfg_path"
 	#fi
@@ -1244,7 +1073,7 @@ ConfigureFPCTrunk(){
 			"-CfVFPV3"
 			"-Xd"
 			"-XParm-linux-androideabi-"
-			"-Fl$ANDROID_HOME\\sdk\\ndk-bundle\\platforms\\android-${ANDROID_SDK_TARGET}\\arch-arm\\usr\\lib"
+			"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\arm-linux-androideabi\\""$ANDROID_SDK_TARGET"
 			"-FLlibdl.so"
 			"-FD${ARM_ANDROID_TOOLS}"
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
@@ -1254,7 +1083,7 @@ ConfigureFPCTrunk(){
 			'#IFDEF CPUAARCH64'
 			'-Xd'
 			'-XPaarch64-linux-android- '
-			"-Fl$ANDROID_HOME\\sdk\\ndk-bundle\\platforms\\android-${ANDROID_SDK_TARGET}\\arch-arm64\usr\lib"
+			"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\aarch64-linux-android\\""$ANDROID_SDK_TARGET"
 			'-FLlibdl.so'
 			"-FD${AARCH64_ANDROID_TOOLS}"
 			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
@@ -1263,33 +1092,88 @@ ConfigureFPCTrunk(){
 			'#ENDIF'
 			"#ENDIF"
 		)
+		local fpcpkg_cfg_str=(
+
+			"[Defaults]"
+			"ConfigVersion=5"
+			"LocalRepository={AppConfigDir}"
+			"BuildDir={LocalRepository}build/"
+			"ArchivesDir={LocalRepository}archives/"
+			"CompilerConfigDir={LocalRepository}config/"
+			"RemoteMirrors=https://www.freepascal.org/repository/mirrors.xml"
+			"RemoteRepository=auto"
+			"CompilerConfig=default"
+			"FPMakeCompilerConfig=default"
+			"Downloader=FPC"
+			"InstallRepository=user"
+			""
+			"[Repository]"
+			"Name=fpc"
+			"Description=Packages which are installed along with the Free Pascal Compiler"
+			"Path=${FPC_TRUNK_PATH}"
+			"Prefix=${FPC_TRUNK_PATH}"
+			""
+			"[IncludeFiles]"
+			"FileMask={LocalRepository}config/conf.d/*.conf"
+			""
+			"[Repository]"
+			"Name=user"
+			"Description=User-installed packages"
+			"Path={LocalRepository}"
+			"Prefix={LocalRepository}"
+			""
+		)
+	
+		for((i=0;i<${#fpcpkg_cfg_str[@]};i++)); do 
+			line=${fpcpkg_cfg_str[$i]}
+			if [ $i = 0 ]; then
+				echo "$line " > "$FPPKG_TRUNK_CFG_PATH"
+			else 
+				echo "$line" >> "$FPPKG_TRUNK_CFG_PATH"
+			fi
+		done
 
 		if [ -e "$fpc_cfg_path" ] ; then  # se exiir /etc/fpc.cfg
 			cat $fpc_cfg_path | grep 'CPUAARCH64'
 			if [ $? != 0 ]; then 
-				for ((i = 0 ; i<${#fpc_cfg_str[@]};i++)) 
-				do
+				for ((i = 0 ; i<${#fpc_cfg_str[@]};i++)) ; do
 					echo "${fpc_cfg_str[i]}" >>  "$fpc_cfg_path"
 				done	
 			fi
 		fi
 
+		unix2dos "$fpc_cfg_path" 2> /dev/null
+		unix2dos "$FPPKG_TRUNK_CFG_PATH" 2> /dev/null
+
+
 }
 
 getLazarusSource(){
-	cd "$LAMW4WINDOWS_HOME"
-	svn checkout "$LAZARUS_STABLE_SRC_LNK" 
-	if [ $? != 0 ]; then  #case fails last command , try svn chekout 
-		winRMDirf "$LAZARUS_STABLE"
-		#svn cleanup
-		#changeDirectory $LAZ4LAMW_HOME
-		svn checkout "$LAZARUS_STABLE_SRC_LNK"
+	local git_lock="$LAZARUS_STABLE\\.git\\index.lock"
+	changeDirectory $LAMW4WINDOWS_HOME
+	if [ ! -e $LAZARUS_STABLE ]; then
+		git clone $LAZARUS_STABLE_SRC_LNK -b $LAZARUS_STABLE $LAZARUS_STABLE
 		if [ $? != 0 ]; then 
-			winRMDirf "$LAZARUS_STABLE"
-			echo "possible network instability! Try later!"
-			exit 1
+			
+			[ -e $git_lock ] && winRMDirf "$git_lock"
+			git clone $LAZARUS_STABLE_SRC_LNK -b $LAZARUS_STABLE $LAZARUS_STABLE
+			check_error_and_exit "cannot get lazarus sources"
 		fi
-		#svn revert -R  $LAMW_SRC_LNK
+	else 
+		[ -e $git_lock ] && rm -rf $git_lock
+		changeDirectory $LAZARUS_STABLE
+		git config pull.ff only 
+		git pull origin  $LAZARUS_STABLE
+		if [ $? != 0 ]; then 
+			git reset --hard
+			git pull origin $LAZARUS_STABLE
+			if [ $? != 0 ]; then 
+				echo "cannot update lazarus sources"
+				changeDirectory ..
+				winRMDirf "$LAZARUS_STABLE"
+				exit 1
+			fi
+		fi
 	fi
 }
 
@@ -1297,47 +1181,29 @@ getLazarusSource(){
 
 #----------------------------------------------------------------------------
 
-wrappergetLazAndroid(){
-	if [ $FLAG_FORCE_ANDROID_AARCH64 = 0 ]; then
-		getLazarus4Android
-	else
-		echo "${VERMELHO}Warning: Experimental AARCH64 Support!${NORMAL}"
-		if [ -e "$OLD_LAMW4WINDOWS_HOME" ]; then
-			winRMDirf "$OLD_LAMW4WINDOWS_HOME"
-		fi
 
-		if [ -e "$LAZ4ANDROID_HOME" ]; then 
-			winRMDirf "$LAZ4ANDROID_HOME"
-		fi
-
-		getFPCStable
-		getFPCTrunkSources
-		getLazarusSource
-		BuildFPCTrunk
-		ConfigureFPCTrunk
-		getBinults
-	fi
-}
-wrapperBuildLazarusIDE(){
-	if [ $FLAG_FORCE_ANDROID_AARCH64 = 0 ]; then
-		BuildLaz4Android $*
-	else
-		BuildLazarusIDE $*
-	fi
-}
 
 mainInstall(){
 
 	getTerminalDeps
+	setLAMWDeps
 	getJDK
-	WrappergetAndroidSDKTools
-	WrappergetAndroidSDK
-	wrappergetLazAndroid
+	getAnt
+	getGradle
+	getAndroidCmdLineTools
+	DisableTrapActions
+	getAndroidAPIS
+	getFPCStable
+	getFPCTrunkSources
+	getBinults
+	getLazarusSource
 	getLAMWFramework
-	wrapperBuildLazarusIDE
+	BuildFPCTrunk
+	BuildCrossAArch64
+	ConfigureFPCTrunk
+	BuildLazarusIDE
 	changeDirectory "$ANDROID_HOME"
 	LAMW4LinuxPostConfig
-	InstallWinADB
 	winCallfromPS "taskkill /im adb.exe /f" 2>/dev/null
 	writeLAMWLogInstall
 }
@@ -1359,24 +1225,43 @@ mainInstall(){
 		sleep 2
 	fi
 	echo "Please wait ..."
-
+	setWinArch
 	#configure parameters sdk before init download and build
 
 	#Checa se necessario habilitar remocao forcada
 	#checkForceLAMW4LinuxInstall $*
 
-	if [ $# = 6 ] || [ $# = 7 ]; then
-		if [ "$2" = "--use_proxy" ] ;then 
-			if [ "$3" = "--server" ]; then
-				if [ "$5" = "--port" ] ;then
-					initParameters $2 $4 $6
-				fi
-			fi
-		fi
-	else
-		initParameters $2
+for arg_index in ${!ARGS[@]}; do 
+	arg=${ARGS[$arg_index]}
+	if [ "$arg" = "--use_proxy" ];then
+		INDEX_FOUND_USE_PROXY=$arg_index
+		break
 	fi
-	#GenerateScapesStr
+done
+
+if [ $INDEX_FOUND_USE_PROXY -lt 0 ]; then
+	initParameters
+else 
+	index_proxy_server=$((INDEX_FOUND_USE_PROXY+1))
+	index_server_value=$((index_proxy_server+1))
+	index_port_server=$((index_server_value+1))
+	index_port_value=$((index_port_server+1))
+	if [ "${ARGS[$index_proxy_server]}" = "--server" ]; then
+		if [ "${ARGS[$index_port_server]}" = "--port" ] ;then
+			initParameters "${ARGS[$INDEX_FOUND_USE_PROXY]}" "${ARGS[$index_server_value]}" "${ARGS[$index_port_value]}"
+		else 
+			echo "${VERMELHO}Error:${NORMAL}missing ${NEGRITO}--port${NORMAL}";exit 1
+		fi
+		unset ARGS[$INDEX_FOUND_USE_PROXY]
+		unset ARGS[$index_proxy_server]
+		unset ARGS[$index_server_value]
+		unset ARGS[$index_port_server]
+		unset ARGS[$index_port_value]
+	else 
+		echo "${VERMELHO}Error:${NORMAL}missing ${NEGRITO}--server${NORMAL}";exit 1
+	fi
+fi
+
 	
 
 #Parameters are useful for understanding script operation
@@ -1389,24 +1274,11 @@ case "$1" in
 	 ;;
 	 "--reset")
 		CleanOldConfig
-		export OLD_ANDROID_SDK=1
-		export NO_GUI_OLD_SDK=1
 		mainInstall
 	;;
 	"install")
-			export OLD_ANDROID_SDK=1
-			export NO_GUI_OLD_SDK=1
-			mainInstall
+		mainInstall
 	;;
-	# "update-lamw.ini")
-	# 	export OLD_ANDROID_SDK=1
-	# 	export NO_GUI_OLD_SDK=1
-	# 	LAMW4LinuxPostConfig
-	# ;;
-	
-	# "update-config")
-	# 	LAMW4LinuxPostConfig
-	# ;;
 
 	"--sdkmanager")
 		getStatusInstalation;
@@ -1415,8 +1287,7 @@ case "$1" in
 		else
 			mainInstall
 		fi 	
-		NO_GUI_OLD_SDK=0
-		WrappergetAndroidSDK
+		getAndroidAPIS ${ARGS[@]:1}
 ;;
 	"--update-lamw")
 		getStatusInstalation
@@ -1424,12 +1295,12 @@ case "$1" in
 			Repair
 			echo "Updating LAMW";
 			getLAMWFramework "pull";
-			wrapperBuildLazarusIDE "1";
+			BuildLazarusIDE "1";
 		else
 			mainInstall
 		fi
 	;;
-	"")
+	"" | "--use-proxy" )
 		getImplicitInstall
 		if [ $LAMW_IMPLICIT_ACTION_MODE = 0 ]; then
 			printf "${NEGRITO}Implicit installation of LAMW starting in 2 seconds ...${NORMAL}\n"
@@ -1444,16 +1315,14 @@ case "$1" in
 			Repair
 			echo "Updating LAMW";
 			getLAMWFramework;
-			wrapperBuildLazarusIDE "1";
+			BuildLazarusIDE "1";
 		fi					
 	;;
 	# "getlaz4android")
-	# 	wrappergetLazAndroid
-	# 	wrapperBuildLazarusIDE
+	# 	getLazarusSource
+	# 	BuildLazarusIDE
 	# ;;
 	*)
 		printf "%b" "${LAMW_OPTS[*]}"
-	;;
-	
+	;;	
 esac
-	
