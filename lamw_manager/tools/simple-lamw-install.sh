@@ -134,6 +134,8 @@ FPC_TRUNK_PARENT=$LAMW4WINDOWS_HOME\\fpc
 
 FPC_TRUNK_PATH="$FPC_TRUNK_PARENT\\${_FPC_TRUNK_VERSION}"
 FPC_TRUNK_SOURCE_PATH="$FPC_TRUNK_PATH\\source"
+FPPKG_LOCAL_REPOSITORY="$LAMW4WINDOWS_HOME\\.fppkg\\config"
+FPPKG_LOCAL_REPOSITORY_CFG=$FPPKG_LOCAL_REPOSITORY\\default
 #help of lamw
 LAMW_OPTS=(
 	"syntax:\n"
@@ -374,7 +376,7 @@ updateLAMWDeps(){
 	local need_update_lamw_deps=0
 	setLAMWDeps
 
-	if [ ! -e "$GRADLE_HOME" ] ||  [ ! -e "$ANDROID_SDK_ROOT/platforms/android-$ANDROID_SDK_TARGET" ] || [ ! -e "$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS_TARGET" ] ; then
+	if [ ! -e "$GRADLE_HOME" ] ||  [ ! -e "$ANDROID_SDK_ROOT\\platforms\\android-$ANDROID_SDK_TARGET" ] || [ ! -e "$ANDROID_SDK_ROOT\\build-tools\\$ANDROID_BUILD_TOOLS_TARGET" ] ; then
 		need_update_lamw_deps=1
 	fi
 
@@ -488,6 +490,7 @@ initROOT_LAMW(){
 		$ANDROID_SDK_ROOT
 		"$(dirname $JAVA_HOME)"
 		$HOMEPATH\\.android
+		$FPPKG_LOCAL_REPOSITORY
 	)
 
 	for lamw_dir in ${init_root_lamw_dirs[@]}; do
@@ -507,7 +510,8 @@ getJDK(){
 		[ -e "$OLD_JAVA_HOME" ] && winRMDirf "$OLD_JAVA_HOME"
 		[ -e "$JAVA_HOME" ] && winRMDirf "$JAVA_HOME"
 		wget -c "$ZULU_JDK_URL"
-		unzip "$ZULU_JDK_ZIP"
+		echo "extracting $ZULU_JDK_ZIP..."
+		unzip -q "$ZULU_JDK_ZIP"
 		mv "$ZULU_JDK_FILE" "zulu-$JDK_VERSION"
 		[ -e "$ZULU_JDK_ZIP" ] && rm -rf $ZULU_JDK_ZIP
 	fi
@@ -528,7 +532,8 @@ getAnt(){
 		fi
 		MAGIC_TRAP_INDEX=1
 		trap TrapControlC 2
-		unzip "$ANT_ZIP_FILE"
+		echo "extracting $ANT_ZIP_FILE ..."
+		unzip -q "$ANT_ZIP_FILE"
 	fi
 
 	if [ -e  "$ANT_ZIP_FILE" ]; then
@@ -544,7 +549,8 @@ getGradle(){
 		trap TrapControlC  2 # set armadilha para o signal2 (siginterrupt)
 		wget  -c $GRADLE_ZIP_LNK
 		MAGIC_TRAP_INDEX=3
-		unzip -o  $GRADLE_ZIP_FILE
+		echo "extracting ${GRADLE_ZIP_FILE} ..."
+		unzip -o -q  $GRADLE_ZIP_FILE
 	fi
 
 	if [ -e  $GRADLE_ZIP_FILE ]; then
@@ -566,7 +572,8 @@ getAndroidSDKTools(){
 		MAGIC_TRAP_INDEX=4
 		wget -c $CMD_SDK_TOOLS_URL
 		MAGIC_TRAP_INDEX=5
-		unzip -o  $CMD_SDK_TOOLS_ZIP
+		echo "extracting $CMD_SDK_TOOLS_ZIP ..."
+		unzip -o -q  $CMD_SDK_TOOLS_ZIP
 		mv cmdline-tools latest
 		rm $CMD_SDK_TOOLS_ZIP
 	fi
@@ -584,7 +591,8 @@ getSDKAntSupportedTools(){
 		MAGIC_TRAP_INDEX=4
 		wget -c $SDK_TOOLS_URL
 		MAGIC_TRAP_INDEX=5
-		unzip -o  $SDK_TOOLS_ZIP
+		echo "extracting $SDK_TOOLS_ZIP ..."
+		unzip -o -q  $SDK_TOOLS_ZIP
 		rm $SDK_TOOLS_ZIP
 	fi
 }
@@ -906,15 +914,17 @@ getFPCStable(){
 
 	changeDirectory "$LAMW4WINDOWS_HOME"
 	if [ ! -e "$FPC_STABLE_EXEC" ]; then 
-		if [ -e "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP" ]; then 
-			tar -xvf "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP"
+		if [ -e "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP" ]; then
+			echo "extracting $FPC_STABLE_ZIP ..."
+			tar -xf "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP"
 		else
 			wget -c "$FPC_STABLE_URL"
 			if [  $? != 0 ]; then 
 				wget -c "$FPC_STABLE_URL"
 				check_error_and_exit "possible instability internet! Try later!"
 			fi
-			tar -xvf "$FPC_STABLE_ZIP"
+		echo "extracting $FPC_STABLE_ZIP ..."
+			tar -xf "$FPC_STABLE_ZIP"
 			if [ -e "$FPC_STABLE_ZIP" ]; then 
 				rm "$FPC_STABLE_ZIP"
 			fi
@@ -939,7 +949,7 @@ getFPCTrunkSources(){
 	cd "$FPC_TRUNK_SOURCE_PATH"
 	if [ ! -e $FPC_TRUNK_SVNTAG ]; then
 		wget -c "$FPC_TRUNK_SOURCE_URL"
-		tar -zxvf fpc-3.2.0.source.tar.gz
+		tar -zxf fpc-3.2.0.source.tar.gz
 		mv fpc-3.2.0 $FPC_TRUNK_SVNTAG
 		rm fpc-3.2.0.source.tar.gz
 	fi	
@@ -1096,7 +1106,7 @@ ConfigureFPCTrunk(){
 
 			"[Defaults]"
 			"ConfigVersion=5"
-			"LocalRepository={AppConfigDir}"
+			"LocalRepository=$(dirname "$FPPKG_LOCAL_REPOSITORY")/"
 			"BuildDir={LocalRepository}build/"
 			"ArchivesDir={LocalRepository}archives/"
 			"CompilerConfigDir={LocalRepository}config/"
@@ -1123,6 +1133,13 @@ ConfigureFPCTrunk(){
 			"Prefix={LocalRepository}"
 			""
 		)
+
+		local fppkg_local_cfg=(
+		'[Defaults]'
+		'ConfigVersion=5'
+		"Compiler=$FPC_TRUNK_PATH\\fpc.exe"
+		'OS=Windows'
+	)
 	
 		for((i=0;i<${#fpcpkg_cfg_str[@]};i++)); do 
 			line=${fpcpkg_cfg_str[$i]}
@@ -1133,6 +1150,13 @@ ConfigureFPCTrunk(){
 			fi
 		done
 
+		for ((i = 0 ; i < ${#fppkg_local_cfg[@]};i++)); do 
+			if [ $i = 0 ]; then 
+				echo "${fppkg_local_cfg[$i]}" > $FPPKG_LOCAL_REPOSITORY_CFG
+			else
+				echo "${fppkg_local_cfg[$i]}" >> $FPPKG_LOCAL_REPOSITORY_CFG
+			fi
+		done
 		if [ -e "$fpc_cfg_path" ] ; then  # se exiir /etc/fpc.cfg
 			cat $fpc_cfg_path | grep 'CPUAARCH64'
 			if [ $? != 0 ]; then 
@@ -1144,6 +1168,7 @@ ConfigureFPCTrunk(){
 
 		unix2dos "$fpc_cfg_path" 2> /dev/null
 		unix2dos "$FPPKG_TRUNK_CFG_PATH" 2> /dev/null
+		unix2dos "$FPPKG_LOCAL_REPOSITORY_CFG" 2>/dev/null
 
 
 }
