@@ -107,7 +107,7 @@ LAMW_PACKAGES=(
 
 LAMW_WORKSPACE_HOME="$HOMEDRIVE${HOMEPATH}\\Dev\\LAMWProjects"  #piath to lamw_workspace
 SDK_LICENSES_PARAMETERS=(--licenses )
-
+LAMW_USER_HOME=/${C_DRIVE}/$HOMEPATH
 ANT_HOME="$ANDROID_HOME\\apache-ant-${ANT_VERSION}"
 GRADLE_CFG_HOME="$HOMEDRIVE${HOMEPATH}\\.gradle"
 ANT_ZIP_FILE="apache-ant-${ANT_VERSION}-bin.zip"
@@ -139,18 +139,23 @@ FPPKG_LOCAL_REPOSITORY_CFG=$FPPKG_LOCAL_REPOSITORY\\default
 #help of lamw
 LAMW_OPTS=(
 	"syntax:\n"
-	"bash simple-lamw-install.sh\tor\t./lamw_manger\t${NEGRITO}[actions]${NORMAL} ${VERDE}[options]${NORMAL}\n"
+	"\t./lamw_manager.bat\t${NEGRITO}[actions]${NORMAL} ${VERDE}[options]${NORMAL}\n"
 	"${NEGRITO}Usage${NORMAL}:\n"
-	"\t${NEGRITO}bash simple-lamw-install.sh${NORMAL}                              Install LAMW and dependencies¹\n"
-	"\tbash simple-lamw-install.sh\t${VERDE}--sdkmanager${NORMAL}                Install LAMW and Run Android SDK Manager²\n"
-	"\tbash simple-lamw-install.sh\t${VERDE}--update-lamw${NORMAL}               To just upgrade LAMW framework (with the latest version available in git)\n"
-	"\tbash simple-lamw-install.sh\t${VERDE}--reset${NORMAL}                     To clean and reinstall\n"
-	"\tbash simple-lamw-install.sh\t${NEGRITO}uninstall${NORMAL}                   To uninstall LAMW :(\n"
-	"\tbash simple-lamw-install.sh\t${VERDE}--help${NORMAL}                      Show help\n"                 
+	"\t${NEGRITO}lamw_manager.bat${NORMAL}                              		  Install LAMW and dependencies¹\n"
+	"\tlamw_manager.bat\t${VERDE}--sdkmanager${NORMAL}	${VERDE}[ARGS]${NORMAL}            Install LAMW and Run Android SDK Manager²\n"
+	"\tlamw_manager.bat\t${VERDE}--update-lamw${NORMAL}                     To just upgrade LAMW framework (with the latest version available in git)\n"
+	"\tlamw_manager.bat\t${VERDE}--reset${NORMAL}                           To clean and reinstall\n"
+	"\tlamw_manager.bat\t${NEGRITO}uninstall${NORMAL}                         To uninstall LAMW :(\n"
+	"\tlamw_manager.bat\t${VERDE}--help${NORMAL}                            Show help\n"                 
 	"\n"
 	"${NEGRITO}Proxy Options:${NORMAL}\n"
-	"\tbash simple-lamw-install.sh ${NEGRITO}[action]${NORMAL}  --use_proxy --server ${VERDE}[HOST]${NORMAL} --port ${VERDE}[NUMBER]${NORMAL}\n"
-	"sample:\n\tbash simple-lamw-install.sh --update-lamw --use_proxy --server 10.0.16.1 --port 3128\n"
+	"\tlamw_manager.bat ${NEGRITO}[action]${NORMAL}  --use_proxy --server ${VERDE}[HOST]${NORMAL} --port ${VERDE}[NUMBER]${NORMAL}\n"
+	"sample:\n\tlamw_manager.bat --update-lamw --use_proxy --server 10.0.16.1 --port 3128\n"
+	"\n"
+	"${NEGRITO}Android SDK Manager Options:${NORMAL}\n"
+	"\tlamw_manager.bat\t${VERDE}--sdkmanager${NORMAL}	${VERDE}[ARGS]${NORMAL}\n"
+	"sample:\n\tlamw_manager.bat --sdkmanager ${VERDE}--list_installed${NORMAL}\n"
+	"\n"
 	"\n\n${NEGRITO}Note:\n${NORMAL}"
 	"\t¹ By default the installation waives the use of parameters, if LAMW is installed, it will only be updated!\n"
 	"\t² If it is already installed, just run the Android SDK Tools\n"
@@ -300,7 +305,9 @@ setWinArch(){
 		;;
 	esac
 
-	FPPKG_TRUNK_CFG_PATH="$FPC_TRUNK_PATH\\bin\\i386-win32\\fppkg.cfg"
+	FPC_TRUNK_EXEC_PATH="$FPC_TRUNK_PATH\\bin\\i386-win32"
+	FPPKG_TRUNK_CFG_PATH="$FPC_TRUNK_EXEC_PATH\\fppkg.cfg"
+	
 	export JAVA_HOME=${JAVA_EXEC_PATH%'\bin'} #remove /bin of JAVA_HOME
 	export ARM_ANDROID_TOOLS="$ROOT_LAMW\\sdk\\ndk-bundle\\toolchains\\arm-linux-androideabi-4.9\\prebuilt\\$OS_PREBUILD\\bin"
 	export AARCH64_ANDROID_TOOLS="$ROOT_LAMW\\sdk\\ndk-bundle\\toolchains\\aarch64-linux-android-4.9\\prebuilt\\$OS_PREBUILD\\bin"
@@ -489,7 +496,7 @@ initROOT_LAMW(){
 	local init_root_lamw_dirs=(
 		$ANDROID_SDK_ROOT
 		"$(dirname $JAVA_HOME)"
-		$HOMEPATH\\.android
+		$LAMW_USER_HOME//.android
 		$FPPKG_LOCAL_REPOSITORY
 	)
 
@@ -510,8 +517,9 @@ getJDK(){
 		[ -e "$OLD_JAVA_HOME" ] && winRMDirf "$OLD_JAVA_HOME"
 		[ -e "$JAVA_HOME" ] && winRMDirf "$JAVA_HOME"
 		wget -c "$ZULU_JDK_URL"
-		echo "extracting $ZULU_JDK_ZIP..."
+		printf "%s" "Please wait, extracting \"$ZULU_JDK_ZIP\"... "
 		unzip -q "$ZULU_JDK_ZIP"
+		echo "Done"
 		mv "$ZULU_JDK_FILE" "zulu-$JDK_VERSION"
 		[ -e "$ZULU_JDK_ZIP" ] && rm -rf $ZULU_JDK_ZIP
 	fi
@@ -532,8 +540,9 @@ getAnt(){
 		fi
 		MAGIC_TRAP_INDEX=1
 		trap TrapControlC 2
-		echo "extracting $ANT_ZIP_FILE ..."
+		printf "%s" "Please wait, extracting \"$ANT_ZIP_FILE\" ... "
 		unzip -q "$ANT_ZIP_FILE"
+		echo "Done"
 	fi
 
 	if [ -e  "$ANT_ZIP_FILE" ]; then
@@ -549,8 +558,9 @@ getGradle(){
 		trap TrapControlC  2 # set armadilha para o signal2 (siginterrupt)
 		wget  -c $GRADLE_ZIP_LNK
 		MAGIC_TRAP_INDEX=3
-		echo "extracting ${GRADLE_ZIP_FILE} ..."
+		printf "%s" "Please wait, extracting \"${GRADLE_ZIP_FILE}\" ... "
 		unzip -o -q  $GRADLE_ZIP_FILE
+		echo "Done"
 	fi
 
 	if [ -e  $GRADLE_ZIP_FILE ]; then
@@ -572,8 +582,9 @@ getAndroidSDKTools(){
 		MAGIC_TRAP_INDEX=4
 		wget -c $CMD_SDK_TOOLS_URL
 		MAGIC_TRAP_INDEX=5
-		echo "extracting $CMD_SDK_TOOLS_ZIP ..."
+		printf "%s" "Please wait, extracting \"$CMD_SDK_TOOLS_ZIP\" ... "
 		unzip -o -q  $CMD_SDK_TOOLS_ZIP
+		echo "Done"
 		mv cmdline-tools latest
 		rm $CMD_SDK_TOOLS_ZIP
 	fi
@@ -591,8 +602,9 @@ getSDKAntSupportedTools(){
 		MAGIC_TRAP_INDEX=4
 		wget -c $SDK_TOOLS_URL
 		MAGIC_TRAP_INDEX=5
-		echo "extracting $SDK_TOOLS_ZIP ..."
+		printf "%s" "Please wait, extracting \"$SDK_TOOLS_ZIP\" ... "
 		unzip -o -q  $SDK_TOOLS_ZIP
+		echo "Done"
 		rm $SDK_TOOLS_ZIP
 	fi
 }
@@ -639,7 +651,7 @@ getAndroidAPIS(){
 	if [ $#  = 0 ]; then 
 
 		for((i=0;i<${#SDK_MANAGER_CMD_PARAMETERS[*]};i++));do
-			echo "Please wait, downloading \"${SDK_MANAGER_CMD_PARAMETERS[i]}\"..."
+			echo "Please wait, downloading \"${SDK_MANAGER_CMD_PARAMETERS[i]}\"... "
 			
 			if [ $i = 0 ]; then 
 				runSDKManager ${SDK_MANAGER_CMD_PARAMETERS[i]} # instala sdk sem intervenção humana 
@@ -915,16 +927,18 @@ getFPCStable(){
 	changeDirectory "$LAMW4WINDOWS_HOME"
 	if [ ! -e "$FPC_STABLE_EXEC" ]; then 
 		if [ -e "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP" ]; then
-			echo "extracting $FPC_STABLE_ZIP ..."
+			printf "%s" "Please wait, extracting \"$FPC_STABLE_ZIP\" ... "
 			tar -xf "$LAMW_MANAGER_PATH/$FPC_STABLE_ZIP"
+			echo "Done"
 		else
 			wget -c "$FPC_STABLE_URL"
 			if [  $? != 0 ]; then 
 				wget -c "$FPC_STABLE_URL"
 				check_error_and_exit "possible instability internet! Try later!"
 			fi
-		echo "extracting $FPC_STABLE_ZIP ..."
+		printf "%s" "Please wait, extracting \"$FPC_STABLE_ZIP\" ... "
 			tar -xf "$FPC_STABLE_ZIP"
+			echo "Done"
 			if [ -e "$FPC_STABLE_ZIP" ]; then 
 				rm "$FPC_STABLE_ZIP"
 			fi
@@ -949,9 +963,11 @@ getFPCTrunkSources(){
 	cd "$FPC_TRUNK_SOURCE_PATH"
 	if [ ! -e $FPC_TRUNK_SVNTAG ]; then
 		wget -c "$FPC_TRUNK_SOURCE_URL"
-		tar -zxf fpc-3.2.0.source.tar.gz
-		mv fpc-3.2.0 $FPC_TRUNK_SVNTAG
-		rm fpc-3.2.0.source.tar.gz
+		printf "%s" "Please wait, extracting \"fpc-${_FPC_TRUNK_VERSION}.source.tar.gz\"... "
+		tar -zxf fpc-${_FPC_TRUNK_VERSION}.source.tar.gz
+		echo "Done"
+		mv fpc-${_FPC_TRUNK_VERSION} $FPC_TRUNK_SVNTAG
+		rm fpc-${_FPC_TRUNK_VERSION}.source.tar.gz
 	fi	
 }
 
@@ -991,7 +1007,7 @@ BuildFPCTrunk(){
 }
 
 getBinults(){
-	[ ! -e "$FPC_TRUNK_PATH\\bin\\i386-win32" ] && mkdir  -p "$FPC_TRUNK_PATH\\bin\\i386-win32"
+	[ ! -e "$FPC_TRUNK_EXEC_PATH" ] && mkdir  -p "$FPC_TRUNK_EXEC_PATH"
 
 	cd "$FPC_TRUNK_PATH"
 	git clone $BINUTILS_URL  -b $FPC_TRUNK_SVNTAG binutils
@@ -1005,7 +1021,7 @@ getBinults(){
 	fi
 	
 	cd binutils\\install\\binw32
-	mv ./* "$FPC_TRUNK_PATH\\bin\\i386-win32"
+	mv ./* "$FPC_TRUNK_EXEC_PATH"
 	cd "$FPC_TRUNK_PATH"
 	winRMDirf binutils
 }
@@ -1019,13 +1035,13 @@ InitLazarusConfig(){
 		'	<EnvironmentOptions>'
 		"		<Version Value=\"110\" Lazarus=\"${lazarus_version_str}\"/>"
 		"		<LazarusDirectory Value=\"$LAMW_IDE_HOME\"/>"
-		"		<CompilerFilename Value=\"$FPC_TRUNK_PATH\\bin\\i386-win32\\fpc.exe\"/>"
+		"		<CompilerFilename Value=\"$FPC_TRUNK_EXEC_PATH\\fpc.exe\"/>"
 		"		<FPCSourceDirectory Value=\"$FPC_TRUNK_SOURCE_PATH\\$FPC_TRUNK_SVNTAG\"/>"
 		"	<FppkgConfigFile Value=\"${FPPKG_TRUNK_CFG_PATH}\"/>"
 		'    	<Debugger Class="TGDBMIDebugger">'
       	'			<Configs>'
         '				<Config ConfigName="FpDebug" ConfigClass="TFpDebugDebugger" Active="True"/>'
-        "				<Config ConfigName=\"Gdb\" ConfigClass=\"TGDBMIDebugger\" DebuggerFilename=\"$FPC_TRUNK_PATH\\bin\\i386-win32\\gdb.exe\"/>"
+        "				<Config ConfigName=\"Gdb\" ConfigClass=\"TGDBMIDebugger\" DebuggerFilename=\"$FPC_TRUNK_EXEC_PATH\\gdb.exe\"/>"
         '			</Configs>'
         	'</Debugger>'
 		"	</EnvironmentOptions>"
@@ -1047,11 +1063,11 @@ InitLazarusConfig(){
 }
 
 BuildLazarusIDE(){
-	export PPC_CONFIG_PATH="$FPC_TRUNK_PATH\\bin\\i386-win32" 
+	export PPC_CONFIG_PATH="$FPC_TRUNK_EXEC_PATH" 
 	cd "$LAMW_IDE_HOME"
-	export PATH="$FPC_TRUNK_PATH\\bin\\i386-win32:$PATH"
+	export PATH="$FPC_TRUNK_EXEC_PATH:$PATH"
 	if [ $# = 0 ]; then 
-		make clean all "PP=$FPC_TRUNK_PATH\\bin\\i386-win32\\ppc386.exe" 
+		make clean all "PP=$FPC_TRUNK_EXEC_PATH\\ppc386.exe" 
 		if [ $? != 0 ]; then 
 			echo "${VERMELHO}Error:${NORMAL} Cannot Build Lazarus"
 			exit 1
@@ -1070,9 +1086,9 @@ BuildLazarusIDE(){
 
 #Run
 ConfigureFPCTrunk(){
-	local fpc_cfg_path="$FPC_TRUNK_PATH\\bin\\i386-win32\\fpc.cfg"
+	local fpc_cfg_path="$FPC_TRUNK_EXEC_PATH\\fpc.cfg"
 	#if [ ! -e "$fpc_cfg_path" ]; then
-		"$FPC_TRUNK_PATH\\bin\\i386-win32\\fpcmkcfg" -d basepath="$FPC_TRUNK_PATH" -o "$fpc_cfg_path"
+		"$FPC_TRUNK_EXEC_PATH\\fpcmkcfg" -d basepath="$FPC_TRUNK_PATH" -o "$fpc_cfg_path"
 	#fi
 		#echo "$fpc_cfg_path";read
 		#this config enable to crosscompile in fpc 
@@ -1137,7 +1153,7 @@ ConfigureFPCTrunk(){
 		local fppkg_local_cfg=(
 		'[Defaults]'
 		'ConfigVersion=5'
-		"Compiler=$FPC_TRUNK_PATH\\fpc.exe"
+		"Compiler=$FPC_TRUNK_EXEC_PATH\\fpc.exe"
 		'OS=Windows'
 	)
 	
@@ -1249,7 +1265,7 @@ mainInstall(){
 		echo "${NEGRITO}Installation on Windows 32 bit will be disabled in Aug / 2021.${NORMAL}"
 		sleep 2
 	fi
-	echo "Please wait ..."
+	echo "Please wait ... "
 	setWinArch
 	#configure parameters sdk before init download and build
 

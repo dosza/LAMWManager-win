@@ -5,28 +5,6 @@ sleep 2
 $LAMW_MANAGER_VERSION="0.3.0"
 $HOME_USER=$env:homepath
 $ROOT_LAMW="$home_user" + "\" + "LAMW"
-$ANT_URL="http://ftp.unicamp.br/pub/apache/ant/binaries/apache-ant-1.10.5-bin.zip"
-$ANT_ZIP="apache-ant-1.10.5-bin.zip"
-$ANT_HOME="apache-ant-1.10.5"
-$ANT_VERSION="1.10.5"
-
-$GRADLE_URL="http://services.gradle.org/distributions/gradle-4.4.1-bin.zip"
-$GRADLE_ZIP="gradle-4.4.1-bin.zip"
-$GRADLE_HOME="gradle-4.4.1"
-$GRADLE_VERSION="4.4.1"
-
-
-$SDK_TOOLS_URL="https://dl.google.com/android/repository/sdk-tools-windows-4333796.zip"
-$SDK_TOOLS_ZIP="sdk-tools-windows-4333796.zip"
-$SDK_TOOLS_VERSION="26.1.1"
-
-$NDK_URL=""
-$NDK_ZIP=""
-$NDK_VERSION=""
-
-$SDK_VERSION="28"
-$ARCH=""
-$OS_PREBUILD=""
 $NATIVE_WINDOWS_SUPPPORT=0
 $OLD_FPC_PATH="C:\laz4android1.8\fpc\3.0.4\bin\i386-win32"
 $MSYS_EXEC=""
@@ -229,4 +207,3 @@ if ( Test-Path $bash_path ){
     & $bash_path "$MYDIR\simple-lamw-install.sh"
 }
 
-#getFile $ANT_URL C:\Users\Daniel
