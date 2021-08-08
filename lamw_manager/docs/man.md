@@ -1,34 +1,28 @@
-**LAMW Manager v0.3.1.1 Manual**
+**LAMW Manager v0.3.1.2 Manual**
 
+**lamw_manager.bat**
 
-**commands:**
-<p>
-	<ul>
-		<li>lamw_manager.bat</li>
-	</ul>
-</p>
+1.	Open powershell as Admin
+2.	Enter the folder you installed lamw_manager in (default folder is C:\lamw_manager):
+	```powershell
+		PS C:\> cd C:\lamw_manager
+	```
+3. Run lamw_manager.bat:
 
-
-</pre>
-
-**Installed by LAMW Manager Setup¹**
-
-<ol>
-	<li> Open cmd or powershell as Admin</li>
-</ol>
-
-
+	```powershell
+		PS C:\lamw_manager> .\lamw_manager.bat
+	```
 
 
 **Usage:**
 <pre>					
 <Strong>Syntax:</Strong>
-lamw_manager.bat²
-lamw_manager.bat³ 	<strong>[actions]</strong> <strong>[options]</strong> </pre>
+.\lamw_manager.bat²
+.\lamw_manager.bat³ 	<strong>[actions]</strong> <strong>[options]</strong> </pre>
 
 <p>
 <pre>
-lamw_manager.bat    <strong>[action]</strong>                            <em>Description</em>
+.\lamw_manager.bat    <strong>[action]</strong>                            <em>Description</em>
 						   		Install LAMW and dependencies
 			<strong>--sdkmanager	[ARGS]</strong>               Run Android SDK Manager 
 			<strong>--update-lamw</strong>              	     	Update LAMW sources and rebuild Lazarus IDE
@@ -42,9 +36,9 @@ lamw_manager.bat    <strong>[action]</strong>                            <em>Des
 
 <p>
 	<pre>					<Strong>Syntax:</Strong>
-	lamw_manager.bat	<strong>--sdkmanager</strong>	<strong>[ARGS]</strong>
+	.\lamw_manager.bat	<strong>--sdkmanager</strong>	<strong>[ARGS]</strong>
 <Strong>Sample:</Strong>
-	lamw_manager.bat	<strong>--sdkmanager</strong>	<strong>--list_installed</strong>
+	.\lamw_manager.bat	<strong>--sdkmanager</strong>	<strong>--list_installed</strong>
 	</pre>
 </p>
 
@@ -54,4 +48,9 @@ lamw_manager.bat    <strong>[action]</strong>                            <em>Des
 		<li>If it is already installed, just run the Android SDK Tools with [ARGS]</li>
 	</ol>
 </p>
+
+**Note:**
+
+**PS C:\\>** is the command prompt, equivalent to **$** or **#** on Unix/Linux
+
 
