@@ -107,7 +107,7 @@ LAMW_PACKAGES=(
 
 LAMW_WORKSPACE_HOME="$HOMEDRIVE${HOMEPATH}\\Dev\\LAMWProjects"  #piath to lamw_workspace
 SDK_LICENSES_PARAMETERS=(--licenses )
-LAMW_USER_HOME=/${C_DRIVE}/$HOMEPATH
+LAMW_USER_HOME=${HOMEDRIVE}\\${HOMEPATH}
 ANT_HOME="$ANDROID_HOME\\apache-ant-${ANT_VERSION}"
 GRADLE_CFG_HOME="$HOMEDRIVE${HOMEPATH}\\.gradle"
 ANT_ZIP_FILE="apache-ant-${ANT_VERSION}-bin.zip"
@@ -504,8 +504,7 @@ initROOT_LAMW(){
 		[ ! -e "$lamw_dir" ] && mkdir -p "$lamw_dir"
 	done
 
-	[ ! -e $LAMW_USER_HOME/.android/repositories.cfg ] && touch $LAMW_USER_HOME/.android/repositories.cfg  
-	[ ! $HOME/.android/repositories.cfg ] && echo "" > $HOME/.android/repositories.cfg 
+	[ ! -e $LAMW_USER_HOME/.android/repositories.cfg ] && touch $LAMW_USER_HOME\\.android\\repositories.cfg  
 }
 
 getJDK(){
@@ -979,17 +978,21 @@ BuildCrossAArch64(){
 	ln -s "$ARM_ANDROID_TOOLS\\arm-linux-androideabi-as.exe" "$FPC_STABLE_EXEC\\arm-linux-androideabi-as.exe"
 	ln -s "$ARM_ANDROID_TOOLS\\arm-linux-androideabi-ld.exe" "$FPC_STABLE_EXEC\\arm-linux-androideabi-ld.exe"
 	cd "$FPC_TRUNK_SOURCE_PATH/${FPC_TRUNK_SVNTAG}"
-	make clean crossall crossinstall CPU_TARGET=aarch64 OS_TARGET=android OPT="-dFPC_ARMHF"  INSTALL_PREFIX="$FPC_TRUNK_PATH" #crosszipinstall
+	printf "%s\n" "Please wait, starting Build FPC to AARCH64/Android ..."
+	make -s  clean crossall crossinstall CPU_TARGET=aarch64 OS_TARGET=android OPT="-dFPC_ARMHF"  INSTALL_PREFIX="$FPC_TRUNK_PATH" #crosszipinstall
 	
+	echo "Done"
 	if [ $? != 0 ]; then
 		echo "${VERMELHO}Build FPC AARCH64/Android falls"
 		exit 1;
 	fi
-	make clean crossall crossinstall CPU_TARGET=arm OPT="-dFPC_ARMEL" OS_TARGET=android CROSSOPT="-CpARMV7A -CfVFPV3" INSTALL_PREFIX="$FPC_TRUNK_PATH" #crosszipinstall
+	printf "%s\n" "Please wait, starting Build FPC ARMv7/Android ..."
+	make -s  clean crossall crossinstall CPU_TARGET=arm OPT="-dFPC_ARMEL" OS_TARGET=android CROSSOPT="-CpARMV7A -CfVFPV3" INSTALL_PREFIX="$FPC_TRUNK_PATH" #crosszipinstall
 	if [ $? != 0 ]; then
 		echo "${VERMELHO}Build FPC ARMv7/Android falls"
 		exit 1;
 	fi
+	echo "Done"
 }
 
 BuildFPCTrunk(){
@@ -998,12 +1001,14 @@ BuildFPCTrunk(){
 	fi
 	export PATH="$FPC_STABLE_EXEC:$PATH"
 	cd "$FPC_TRUNK_SOURCE_PATH/${FPC_TRUNK_SVNTAG}"
-	make clean all install OS_TARGET="win32" INSTALL_PREFIX="$FPC_TRUNK_PATH" #zipinstall
+	printf "%s\n" "Please wait, starting Build FPC to i386/Win32 ..."
+	make -s  clean all install OS_TARGET="win32" INSTALL_PREFIX="$FPC_TRUNK_PATH" #zipinstall
 	if [ $? != 0 ]; then
 		echo "${VERMELHO}Build FPC $OS_TARGET falls"
 		exit 1;
 	fi
-	BuildCrossAArch64
+	echo "Done"
+	
 }
 
 getBinults(){
@@ -1067,7 +1072,7 @@ BuildLazarusIDE(){
 	cd "$LAMW_IDE_HOME"
 	export PATH="$FPC_TRUNK_EXEC_PATH:$PATH"
 	if [ $# = 0 ]; then 
-		make clean all "PP=$FPC_TRUNK_EXEC_PATH\\ppc386.exe" 
+		make -s  clean all "PP=$FPC_TRUNK_EXEC_PATH\\ppc386.exe" 
 		if [ $? != 0 ]; then 
 			echo "${VERMELHO}Error:${NORMAL} Cannot Build Lazarus"
 			exit 1
@@ -1122,8 +1127,8 @@ ConfigureFPCTrunk(){
 
 			"[Defaults]"
 			"ConfigVersion=5"
-			"LocalRepository=$(dirname "$FPPKG_LOCAL_REPOSITORY")/"
-			"BuildDir={LocalRepository}build/"
+			"LocalRepository=$(dirname "$FPPKG_LOCAL_REPOSITORY")$BARRA_INVERTIDA"
+			"BuildDir={LocalRepository}build"
 			"ArchivesDir={LocalRepository}archives/"
 			"CompilerConfigDir={LocalRepository}config/"
 			"RemoteMirrors=https://www.freepascal.org/repository/mirrors.xml"
@@ -1154,7 +1159,8 @@ ConfigureFPCTrunk(){
 		'[Defaults]'
 		'ConfigVersion=5'
 		"Compiler=$FPC_TRUNK_EXEC_PATH\\fpc.exe"
-		'OS=Windows'
+		'OS=Win32'
+		'CPU=i386'	
 	)
 	
 		for((i=0;i<${#fpcpkg_cfg_str[@]};i++)); do 
