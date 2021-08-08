@@ -1,4 +1,4 @@
-LAMW Manager v0.3.1
+LAMW Manager
 =======================================================================
 
 LAMW Manager is a command line tool to automate the <strong>installation</strong>, <strong>configuration</strong> and <strong>upgrade</strong>  the framework <a href="https://github.com/jmpessoa/lazandroidmodulewizard"><br>LAMW - Lazarus Android Module Wizard</a></br>
@@ -75,7 +75,7 @@ Getting Started!
 Releases Notes
 ----------------------------------------------------------------------
 <p>
-	For information on new features and bug fixes read the <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v0311-fixes---August-2021"><strong>Release Notes</strong></a>
+	For information on new features and bug fixes read the <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v031-fixes---August-2021"><strong>Release Notes</strong></a>
 </p>
 
 Congratulations!
@@ -86,9 +86,9 @@ Congratulations!
 </p>
 
 <p>
-	 <br><strong>More information read</strong></br>
-	 <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.1.1  Manual</strong></a>
+	<strong>More information read</strong> <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/man.md"><strong>LAMW Manager v0.3.1  Manual</strong></a>
 </p>
+
 <p>
 	By Daniel Oliveira 
 </p>
