@@ -75,7 +75,7 @@ Getting Started!
 Releases Notes
 ----------------------------------------------------------------------
 <p>
-	For information on new features and bug fixes read the <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v0311---january-2021"><strong>Release Notes</strong></a>
+	For information on new features and bug fixes read the <a href="https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v0311-fixes---August-2021"><strong>Release Notes</strong></a>
 </p>
 
 Congratulations!
