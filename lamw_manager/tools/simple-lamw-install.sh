@@ -1064,10 +1064,10 @@ InitLazarusConfig(){
 			fi
 		done
 	else 
-		local old_lazarus_dir="`grep '<LazarusDirectory\sValue=' $LAMW_IDE_HOME_CFG | sed 's/[<>]//g' | awk -F='' '{print $2}'`"
-		sed  -i "s|${old_lazarus_dir}|$LAMW_IDE_HOME_CFG|g"
+		local old_lazarus_dir="`grep '<LazarusDirectory\sValue=' $lazarus_env_cfg | sed 's/[<>]//g' | awk -F='' '{print $2}'`"
+		sed  -i "s|${old_lazarus_dir}|$LAMW_IDE_HOME_CFG|g" $lazarus_env_cfg
 	fi
-	unix2dos "$LAMW_IDE_HOME_CFG/environmentoptions.xml" 2>/dev/null
+	unix2dos "$lazarus_env_cfg" 2>/dev/null
 	winCallfromPS "cmd.exe /c 'attrib +h $LAMW_IDE_HOME_CFG'"
 }
 
