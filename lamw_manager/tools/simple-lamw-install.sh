@@ -44,7 +44,7 @@ OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
 LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
 FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1.2"
+LAMW_INSTALL_VERSION="0.3.1.3-beta"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -144,6 +144,7 @@ LAMW_OPTS=(
 	"\t${NEGRITO}lamw_manager.bat${NORMAL}                              		  Install LAMW and dependencies¹\n"
 	"\tlamw_manager.bat\t${VERDE}--sdkmanager${NORMAL}	${VERDE}[ARGS]${NORMAL}            Install LAMW and Run Android SDK Manager²\n"
 	"\tlamw_manager.bat\t${VERDE}--update-lamw${NORMAL}                     To just upgrade LAMW framework (with the latest version available in git)\n"
+	"\tlamw_manager.bat\t${VERDE}--update-lazarus${NORMAL}                   To just upgrade Lazarus Sources (with the latest version available in git)\n"
 	"\tlamw_manager.bat\t${VERDE}--reset${NORMAL}                           To clean and reinstall\n"
 	"\tlamw_manager.bat\t${NEGRITO}uninstall${NORMAL}                         To uninstall LAMW :(\n"
 	"\tlamw_manager.bat\t${VERDE}--help${NORMAL}                            Show help\n"                 
@@ -421,7 +422,7 @@ initParameters(){
 
 
 	if [ $FLAG_FORCE_ANDROID_AARCH64 = 1 ]; then
-		LAMW_IDE_HOME="$LAMW4WINDOWS_HOME\\$LAZARUS_STABLE"
+		LAMW_IDE_HOME="$LAMW4WINDOWS_HOME\\lazarus_trunk"
 		LAMW_IDE_HOME_CFG="$LAMW4WINDOWS_HOME\\.lamw4windows"
 		FPC_STABLE_EXEC="${LAMW4WINDOWS_HOME}\\fpc\\3.0.4\\bin\\i386-win32"
 		FPC_STABLE_ZIP="fpc-3.0.4-i386-win32.tar.xz"
@@ -1198,26 +1199,27 @@ ConfigureFPCTrunk(){
 getLazarusSource(){
 	local git_lock="$LAZARUS_STABLE\\.git\\index.lock"
 	changeDirectory $LAMW4WINDOWS_HOME
-	if [ ! -e $LAZARUS_STABLE ]; then
-		git clone $LAZARUS_STABLE_SRC_LNK -b $LAZARUS_STABLE $LAZARUS_STABLE
+	local lazarus_dir=$(basename "$LAMW_IDE_HOME")
+	if [ ! -e $lazarus_dir ]; then
+		git clone $LAZARUS_STABLE_SRC_LNK $lazarus_dir
 		if [ $? != 0 ]; then 
 			
 			[ -e $git_lock ] && winRMDirf "$git_lock"
-			git clone $LAZARUS_STABLE_SRC_LNK -b $LAZARUS_STABLE $LAZARUS_STABLE
+			git clone $LAZARUS_STABLE_SRC_LNK  $lazarus_dir
 			check_error_and_exit "cannot get lazarus sources"
 		fi
 	else 
 		[ -e $git_lock ] && rm -rf $git_lock
-		changeDirectory $LAZARUS_STABLE
+		changeDirectory $lazarus_dir
 		git config pull.ff only 
-		git pull origin  $LAZARUS_STABLE
+		git pull
 		if [ $? != 0 ]; then 
 			git reset --hard
-			git pull origin $LAZARUS_STABLE
+			git pull 
 			if [ $? != 0 ]; then 
 				echo "cannot update lazarus sources"
 				changeDirectory ..
-				winRMDirf "$LAZARUS_STABLE"
+				winRMDirf "$lazarus_dir"
 				exit 1
 			fi
 		fi
@@ -1346,6 +1348,15 @@ case "$1" in
 		else
 			mainInstall
 		fi
+	;;
+	"--update-lazarus")
+		getStatusInstalation
+			if [ $LAMW_INSTALL_STATUS = 0 ]; then
+				mainInstall
+			else 
+				getLazarusSource
+				BuildLazarusIDE
+			fi
 	;;
 	"" | "--use-proxy" )
 		getImplicitInstall
