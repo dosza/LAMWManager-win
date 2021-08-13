@@ -144,7 +144,7 @@ LAMW_OPTS=(
 	"\t${NEGRITO}lamw_manager.bat${NORMAL}                              		  Install LAMW and dependencies¹\n"
 	"\tlamw_manager.bat\t${VERDE}--sdkmanager${NORMAL}	${VERDE}[ARGS]${NORMAL}            Install LAMW and Run Android SDK Manager²\n"
 	"\tlamw_manager.bat\t${VERDE}--update-lamw${NORMAL}                     To just upgrade LAMW framework (with the latest version available in git)\n"
-	"\tlamw_manager.bat\t${VERDE}--update-lazarus${NORMAL}                   To just upgrade Lazarus Sources (with the latest version available in git)\n"
+	"\tlamw_manager.bat\t${VERDE}--update-lazarus${NORMAL}                 To just upgrade Lazarus Sources (with the latest version available in git)\n"
 	"\tlamw_manager.bat\t${VERDE}--reset${NORMAL}                           To clean and reinstall\n"
 	"\tlamw_manager.bat\t${NEGRITO}uninstall${NORMAL}                         To uninstall LAMW :(\n"
 	"\tlamw_manager.bat\t${VERDE}--help${NORMAL}                            Show help\n"                 
@@ -1064,8 +1064,8 @@ InitLazarusConfig(){
 			fi
 		done
 	else 
-		local old_lazarus_dir="$(grep '<LazarusDirectory\sValue=' $lazarus_env_cfg | sed 's/[<>]//g' | awk -F'=' '{print $2}')"
-		sed  -i "s|${old_lazarus_dir}|$LAMW_IDE_HOME_CFG|g" $lazarus_env_cfg
+		local old_lazarus_dir="$(grep 'LazarusDirectory\sValue=' $lazarus_env_cfg | sed 's/[<>]//g' | awk -F'=' '{print $2}')"
+		sed  -i "s|$old_lazarus_dir|$LAMW_IDE_HOME|g" $lazarus_env_cfg
 	fi
 	unix2dos "$lazarus_env_cfg" 2>/dev/null
 	winCallfromPS "cmd.exe /c 'attrib +h $LAMW_IDE_HOME_CFG'"
