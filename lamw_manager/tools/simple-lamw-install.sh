@@ -1049,7 +1049,7 @@ InitLazarusConfig(){
         '				<Config ConfigName="FpDebug" ConfigClass="TFpDebugDebugger" Active="True"/>'
         "				<Config ConfigName=\"Gdb\" ConfigClass=\"TGDBMIDebugger\" DebuggerFilename=\"$FPC_TRUNK_EXEC_PATH\\gdb.exe\"/>"
         '			</Configs>'
-        	'</Debugger>'
+        '		</Debugger>'
 		"	</EnvironmentOptions>"
 		"</CONFIG>"
 	)
@@ -1063,6 +1063,9 @@ InitLazarusConfig(){
 				printf "%s\n" "${lazarus_env_cfg_str[i]}" >> "$lazarus_env_cfg"
 			fi
 		done
+	else 
+		local old_lazarus_dir="`grep '<LazarusDirectory\sValue=' $LAMW_IDE_HOME_CFG | sed 's/[<>]//g' | awk -F='' '{print $2}'`"
+		sed  -i "s|${old_lazarus_dir}|$LAMW_IDE_HOME_CFG|g"
 	fi
 	unix2dos "$LAMW_IDE_HOME_CFG/environmentoptions.xml" 2>/dev/null
 	winCallfromPS "cmd.exe /c 'attrib +h $LAMW_IDE_HOME_CFG'"
