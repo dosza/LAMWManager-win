@@ -44,7 +44,7 @@ OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
 LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
 FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1.2"
+LAMW_INSTALL_VERSION="0.3.1.3-beta"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -144,6 +144,7 @@ LAMW_OPTS=(
 	"\t${NEGRITO}lamw_manager.bat${NORMAL}                              		  Install LAMW and dependencies¹\n"
 	"\tlamw_manager.bat\t${VERDE}--sdkmanager${NORMAL}	${VERDE}[ARGS]${NORMAL}            Install LAMW and Run Android SDK Manager²\n"
 	"\tlamw_manager.bat\t${VERDE}--update-lamw${NORMAL}                     To just upgrade LAMW framework (with the latest version available in git)\n"
+	"\tlamw_manager.bat\t${VERDE}--update-lazarus${NORMAL}                 To just upgrade Lazarus Sources (with the latest version available in git)\n"
 	"\tlamw_manager.bat\t${VERDE}--reset${NORMAL}                           To clean and reinstall\n"
 	"\tlamw_manager.bat\t${NEGRITO}uninstall${NORMAL}                         To uninstall LAMW :(\n"
 	"\tlamw_manager.bat\t${VERDE}--help${NORMAL}                            Show help\n"                 
@@ -169,6 +170,17 @@ check_error_and_exit(){
 
 	[ $? != 0 ] && echo "$1" && exit 1
 }
+
+GenerateScapesStr(){
+	if [ "$1" = "" ] ; then
+		echo "There is no string to scape!"
+		return 1
+	else
+		echo "$1" | sed 's|\/|\\\/|g'  | sed "s|\.|\\\.|g" | sed "s|\-|\\\-|g" | sed "s|\"|\\\"|g" | sed "s/'/\\\'/g"
+	fi
+}
+
+
 
 #cd not a native command, is a systemcall used to exec, read more in exec man 
 changeDirectory(){
@@ -421,7 +433,7 @@ initParameters(){
 
 
 	if [ $FLAG_FORCE_ANDROID_AARCH64 = 1 ]; then
-		LAMW_IDE_HOME="$LAMW4WINDOWS_HOME\\$LAZARUS_STABLE"
+		LAMW_IDE_HOME="$LAMW4WINDOWS_HOME\\lazarus_trunk"
 		LAMW_IDE_HOME_CFG="$LAMW4WINDOWS_HOME\\.lamw4windows"
 		FPC_STABLE_EXEC="${LAMW4WINDOWS_HOME}\\fpc\\3.0.4\\bin\\i386-win32"
 		FPC_STABLE_ZIP="fpc-3.0.4-i386-win32.tar.xz"
@@ -496,7 +508,7 @@ initROOT_LAMW(){
 	local init_root_lamw_dirs=(
 		$ANDROID_SDK_ROOT
 		"$(dirname $JAVA_HOME)"
-		$LAMW_USER_HOME//.android
+		$LAMW_USER_HOME\\.android
 		$FPPKG_LOCAL_REPOSITORY
 	)
 
@@ -504,7 +516,7 @@ initROOT_LAMW(){
 		[ ! -e "$lamw_dir" ] && mkdir -p "$lamw_dir"
 	done
 
-	[ ! -e $LAMW_USER_HOME/.android/repositories.cfg ] && touch $LAMW_USER_HOME\\.android\\repositories.cfg  
+	[ ! -e $LAMW_USER_HOME\\.android\\repositories.cfg ] && touch $LAMW_USER_HOME\\.android\\repositories.cfg  
 }
 
 getJDK(){
@@ -719,6 +731,9 @@ CreateLauncherLAMW(){
 	    ''
 	    "\$lamw_path_target=\"$LAMW_IDE_HOME\\start-lamw.vbs\""
 		"\$lamw_path_destination=\"$LAMW_MENU_PATH\\LAMW4Windows.lnk\""
+		"if ( Test-Path \$lamw_path_destination ){"
+		"	Remove-Item \$lamw_path_destination"
+		"}"
 		"\$lamw_icon_path=\"$LAMW_IDE_HOME\\images\\icons\\lazarus_orange.ico\""
 		"CreateLauncher \$lamw_path_target \$lamw_path_destination \$lamw_icon_path"
 	)
@@ -1042,13 +1057,13 @@ InitLazarusConfig(){
 		"		<LazarusDirectory Value=\"$LAMW_IDE_HOME\"/>"
 		"		<CompilerFilename Value=\"$FPC_TRUNK_EXEC_PATH\\fpc.exe\"/>"
 		"		<FPCSourceDirectory Value=\"$FPC_TRUNK_SOURCE_PATH\\$FPC_TRUNK_SVNTAG\"/>"
-		"	<FppkgConfigFile Value=\"${FPPKG_TRUNK_CFG_PATH}\"/>"
+		"		<FppkgConfigFile Value=\"${FPPKG_TRUNK_CFG_PATH}\"/>"
 		'    	<Debugger Class="TGDBMIDebugger">'
       	'			<Configs>'
         '				<Config ConfigName="FpDebug" ConfigClass="TFpDebugDebugger" Active="True"/>'
         "				<Config ConfigName=\"Gdb\" ConfigClass=\"TGDBMIDebugger\" DebuggerFilename=\"$FPC_TRUNK_EXEC_PATH\\gdb.exe\"/>"
         '			</Configs>'
-        	'</Debugger>'
+        '		</Debugger>'
 		"	</EnvironmentOptions>"
 		"</CONFIG>"
 	)
@@ -1062,8 +1077,32 @@ InitLazarusConfig(){
 				printf "%s\n" "${lazarus_env_cfg_str[i]}" >> "$lazarus_env_cfg"
 			fi
 		done
+	else 
+		grep 'FppkgConfigFile' $lazarus_env_cfg >/dev/null
+		local exist_fppkg_cfg_node=$?
+		local fppkg_cfg
+		
+		local update_lamw_env_cfg_cmd="function updateLazarusEnv(){
+		        \$FPPKG_TRUNK_CFG_PATH=\"${FPPKG_TRUNK_CFG_PATH}\"
+		        \$exists_fppkgcfg_node=\$ARGS[0]
+		        \$lazarus_env_cfg=\"$lazarus_env_cfg\"
+				\$lazarus_env_xml=[XML] (Get-Content \$lazarus_env_cfg)
+				\$lazarus_env_xml.CONFIG.EnvironmentOptions.Version.Lazarus=\"$lazarus_version_str\"
+				\$lazarus_env_xml.CONFIG.EnvironmentOptions.LazarusDirectory.Value=\"$LAMW_IDE_HOME\"
+				\$lazarus_env_xml.CONFIG.EnvironmentOptions.CompilerFilename.Value=\"$FPC_TRUNK_EXEC_PATH\\fpc.exe\"
+				\$lazarus_env_xml.CONFIG.EnvironmentOptions.FPCSourceDirectory.Value=\"$FPC_TRUNK_SOURCE_PATH\\$FPC_TRUNK_SVNTAG\"
+		        if ( \$exists_fppkgcfg_node -eq 1 ) {
+		            \$fppkg_node=\$lazarus_env_xml.CONFIG.EnvironmentOptions.AppendChild(\$lazarus_env_xml.CreateElement(\"FppkgConfigFile\"))
+		            \$fppkg_node.SetAttribute(\"Value\",\$FPPKG_TRUNK_CFG_PATH)
+		        }
+				\$lazarus_env_xml.save(\$lazarus_env_cfg)
+			}
+
+			updateLazarusEnv $exist_fppkg_cfg_node"
+		winCallfromPS "$update_lamw_env_cfg_cmd"
+
 	fi
-	unix2dos "$LAMW_IDE_HOME_CFG/environmentoptions.xml" 2>/dev/null
+	unix2dos "$lazarus_env_cfg" 2>/dev/null
 	winCallfromPS "cmd.exe /c 'attrib +h $LAMW_IDE_HOME_CFG'"
 }
 
@@ -1196,28 +1235,29 @@ ConfigureFPCTrunk(){
 }
 
 getLazarusSource(){
-	local git_lock="$LAZARUS_STABLE\\.git\\index.lock"
 	changeDirectory $LAMW4WINDOWS_HOME
-	if [ ! -e $LAZARUS_STABLE ]; then
-		git clone $LAZARUS_STABLE_SRC_LNK -b $LAZARUS_STABLE $LAZARUS_STABLE
+	local lazarus_dir=$(basename "$LAMW_IDE_HOME")
+	local git_lock="$lazarus_dir\\.git\\index.lock"
+	if [ ! -e $lazarus_dir ]; then
+		git clone $LAZARUS_STABLE_SRC_LNK $lazarus_dir
 		if [ $? != 0 ]; then 
 			
 			[ -e $git_lock ] && winRMDirf "$git_lock"
-			git clone $LAZARUS_STABLE_SRC_LNK -b $LAZARUS_STABLE $LAZARUS_STABLE
+			git clone $LAZARUS_STABLE_SRC_LNK  $lazarus_dir
 			check_error_and_exit "cannot get lazarus sources"
 		fi
 	else 
 		[ -e $git_lock ] && rm -rf $git_lock
-		changeDirectory $LAZARUS_STABLE
+		changeDirectory $lazarus_dir
 		git config pull.ff only 
-		git pull origin  $LAZARUS_STABLE
+		git pull
 		if [ $? != 0 ]; then 
 			git reset --hard
-			git pull origin $LAZARUS_STABLE
+			git pull 
 			if [ $? != 0 ]; then 
 				echo "cannot update lazarus sources"
 				changeDirectory ..
-				winRMDirf "$LAZARUS_STABLE"
+				winRMDirf "$lazarus_dir"
 				exit 1
 			fi
 		fi
@@ -1346,6 +1386,17 @@ case "$1" in
 		else
 			mainInstall
 		fi
+	;;
+	"--update-lazarus")
+		getStatusInstalation
+			if [ $LAMW_INSTALL_STATUS = 0 ]; then
+				mainInstall
+			else
+				setLAMWDeps
+				getLazarusSource
+				BuildLazarusIDE
+				LAMW4LinuxPostConfig
+			fi
 	;;
 	"" | "--use-proxy" )
 		getImplicitInstall

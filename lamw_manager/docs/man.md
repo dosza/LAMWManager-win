@@ -1,4 +1,4 @@
-**LAMW Manager v0.3.1.2 Manual**
+**LAMW Manager v0.3.1.3 Manual**
 
 **lamw_manager.bat**
 
@@ -23,11 +23,12 @@
 <p>
 <pre>
 .\lamw_manager.bat    <strong>[action]</strong>                            <em>Description</em>
-						   		Install LAMW and dependencies
-			<strong>--sdkmanager	[ARGS]</strong>               Run Android SDK Manager 
-			<strong>--update-lamw</strong>              	     	Update LAMW sources and rebuild Lazarus IDE
+						   	Install LAMW and dependencies
+			<strong>--sdkmanager	[ARGS]</strong>          Run Android SDK Manager 
+			<strong>--update-lamw</strong>              	Update LAMW sources and rebuild Lazarus IDE
+			<strong>--update-lazarus</strong>          	Update Lazarus sources (<em>with the latest version available in git</em>) and rebuild Lazarus IDE
 			<strong>--reset</strong>			     	Clean and Install LAMW
-			<strong>uninstall</strong>                 	 	Uninstall LAMW completely and erase all settings.
+			<strong>uninstall</strong>                 	Uninstall LAMW completely and erase all settings.
 			<strong>--help</strong>                 	   	Show help
 	</pre>
 </p>
