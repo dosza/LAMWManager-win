@@ -732,7 +732,7 @@ CreateLauncherLAMW(){
 	    "\$lamw_path_target=\"$LAMW_IDE_HOME\\start-lamw.vbs\""
 		"\$lamw_path_destination=\"$LAMW_MENU_PATH\\LAMW4Windows.lnk\""
 		"if ( Test-Path \$lamw_path_destination ){"
-		"\tRemove-Item \$lamw_path_destination"
+		"	Remove-Item \$lamw_path_destination"
 		"}"
 		"\$lamw_icon_path=\"$LAMW_IDE_HOME\\images\\icons\\lazarus_orange.ico\""
 		"CreateLauncher \$lamw_path_target \$lamw_path_destination \$lamw_icon_path"
