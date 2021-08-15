@@ -4,13 +4,13 @@ This page contains information about new features and bug fixes.
 v0.3.1 Fixes - August, 2021
 ---
 **News**
-+	Get JDK by Zulu API
-+	Get LAMW/Android minimum requerement by *lazandroidmodulewizard\\package.json*
++	Get JDK8 by Zulu 
++	Lazarus Trunk
++	Get LAMW/Android minimum requerement by [*package.json*](https://github.com/jmpessoa/lazandroidmodulewizard/blob/master/package.json) (backported from Linux)
 +	News uses new *Android SDK Manager*
 +	News implementation of *winCallfromPS*
-+	Lazarus Trunk
-+	Update Path of Lazarus Directory on (Primary Path Config) *\$LAMW_IDE_CFG\\environmentoptions.xml*
-+	**New command:** *--update-lazarus* to upgrade Lazarus Sources from git (*trunk*)
++	Updates lazarus version, compiler, and FPC source code paths in ([PPC](https://wiki.lazarus.freepascal.org/Multiple_Lazarus)) *\$LAMW_IDE_HOME_CFG\\enviromentoptions.xml*
++	**New command:** *--update-lazarus* to upgrade Lazarus Sources from git
 
 **Fixed**
 +	Remove deprecated code

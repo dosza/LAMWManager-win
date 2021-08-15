@@ -1057,7 +1057,7 @@ InitLazarusConfig(){
 		"		<LazarusDirectory Value=\"$LAMW_IDE_HOME\"/>"
 		"		<CompilerFilename Value=\"$FPC_TRUNK_EXEC_PATH\\fpc.exe\"/>"
 		"		<FPCSourceDirectory Value=\"$FPC_TRUNK_SOURCE_PATH\\$FPC_TRUNK_SVNTAG\"/>"
-		"	<FppkgConfigFile Value=\"${FPPKG_TRUNK_CFG_PATH}\"/>"
+		"		<FppkgConfigFile Value=\"${FPPKG_TRUNK_CFG_PATH}\"/>"
 		'    	<Debugger Class="TGDBMIDebugger">'
       	'			<Configs>'
         '				<Config ConfigName="FpDebug" ConfigClass="TFpDebugDebugger" Active="True"/>'
@@ -1087,8 +1087,10 @@ InitLazarusConfig(){
 		        \$exists_fppkgcfg_node=\$ARGS[0]
 		        \$lazarus_env_cfg=\"$lazarus_env_cfg\"
 				\$lazarus_env_xml=[XML] (Get-Content \$lazarus_env_cfg)
+				\$lazarus_env_xml.CONFIG.EnvironmentOptions.Version.Lazarus=\"$lazarus_version_str\"
 				\$lazarus_env_xml.CONFIG.EnvironmentOptions.LazarusDirectory.Value=\"$LAMW_IDE_HOME\"
-
+				\$lazarus_env_xml.CONFIG.EnvironmentOptions.CompilerFilename.Value=\"$FPC_TRUNK_EXEC_PATH\\fpc.exe\"
+				\$lazarus_env_xml.CONFIG.EnvironmentOptions.FPCSourceDirectory.Value=\"$FPC_TRUNK_SOURCE_PATH\\$FPC_TRUNK_SVNTAG\"
 		        if ( \$exists_fppkgcfg_node -eq 1 ) {
 		            \$fppkg_node=\$lazarus_env_xml.CONFIG.EnvironmentOptions.AppendChild(\$lazarus_env_xml.CreateElement(\"FppkgConfigFile\"))
 		            \$fppkg_node.SetAttribute(\"Value\",\$FPPKG_TRUNK_CFG_PATH)
