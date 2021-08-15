@@ -1081,10 +1081,14 @@ InitLazarusConfig(){
 		grep 'FppkgConfigFile' $lazarus_env_cfg >/dev/null
 		local exist_fppkg_cfg_node=$?
 		local fppkg_cfg
+
+		grep 'LastCalledByLazarusFullPath' $lazarus_env_cfg >/dev/null
+		local exists_last_call_laz=$?
 		
 		local update_lamw_env_cfg_cmd="function updateLazarusEnv(){
 		        \$FPPKG_TRUNK_CFG_PATH=\"${FPPKG_TRUNK_CFG_PATH}\"
 		        \$exists_fppkgcfg_node=\$ARGS[0]
+		        \$exists_last_call_laz=\$ARGS[1]
 		        \$lazarus_env_cfg=\"$lazarus_env_cfg\"
 				\$lazarus_env_xml=[XML] (Get-Content \$lazarus_env_cfg)
 				\$lazarus_env_xml.CONFIG.EnvironmentOptions.Version.Lazarus=\"$lazarus_version_str\"
@@ -1095,10 +1099,13 @@ InitLazarusConfig(){
 		            \$fppkg_node=\$lazarus_env_xml.CONFIG.EnvironmentOptions.AppendChild(\$lazarus_env_xml.CreateElement(\"FppkgConfigFile\"))
 		            \$fppkg_node.SetAttribute(\"Value\",\$FPPKG_TRUNK_CFG_PATH)
 		        }
+		        if ( \$exists_last_call_laz -eq 0 ){
+		        	\$lazarus_env_xml.CONFIG.EnvironmentOptions.LastCalledByLazarusFullPath.Value=\"$LAMW_IDE_HOME\"
+		        }
 				\$lazarus_env_xml.save(\$lazarus_env_cfg)
 			}
 
-			updateLazarusEnv $exist_fppkg_cfg_node"
+			updateLazarusEnv $exist_fppkg_cfg_node $exists_last_call_laz"
 		winCallfromPS "$update_lamw_env_cfg_cmd"
 
 	fi
