@@ -12,8 +12,6 @@
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 
-AppPublisher=Daniel Oliveira Souza
-AppPublisherURL=https://github.com/DanielOliveiraSouza/LAMW4Windows-installer
 AppId={{971E9B55-5E5A-4F36-A3C2-D4C77B8F9CF7}}
 PrivilegesRequired=admin
 AppName={#MyAppName}
