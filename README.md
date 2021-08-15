@@ -57,7 +57,7 @@ For information on new features and bug fixes read the [**Release Notes**](https
 
 Congratulations!
 ---
-You are now a Lazarus for Android developer!<br/>[Building Android application with **LAMW** is **RAD**](https://drive.google.com/open?id=1CeDDpuDfRwYrKpN7VHbossH6GfZUfqjm)
+You are now a Lazarus for Android developer!<br/>[Building Android application with **LAMW** is **RAD**](https://drive.google.com/open?id=1CeDDpuDfRwYrKpN7VHbossH6GfZUfqjm)<br/>
 More information read [**LAMW Manager v0.3.1 Manual**](https://github.com/DanielOliveiraSouza/LAMW4Windows-installer/blob/v0.3.1/lamw_manager/docs/man.md)
 
 By Daniel Oliveira
