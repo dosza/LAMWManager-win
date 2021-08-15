@@ -1100,7 +1100,7 @@ InitLazarusConfig(){
 		            \$fppkg_node.SetAttribute(\"Value\",\$FPPKG_TRUNK_CFG_PATH)
 		        }
 		        if ( \$exists_last_call_laz -eq 0 ){
-		        	\$lazarus_env_xml.CONFIG.EnvironmentOptions.LastCalledByLazarusFullPath.Value=\"$LAMW_IDE_HOME\"
+		        	\$lazarus_env_xml.CONFIG.EnvironmentOptions.LastCalledByLazarusFullPath.Value=\"$LAMW_IDE_HOME\\lazarus.exe\"
 		        }
 				\$lazarus_env_xml.save(\$lazarus_env_cfg)
 			}
