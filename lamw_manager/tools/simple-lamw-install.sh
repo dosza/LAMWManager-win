@@ -171,6 +171,17 @@ check_error_and_exit(){
 	[ $? != 0 ] && echo "$1" && exit 1
 }
 
+GenerateScapesStr(){
+	if [ "$1" = "" ] ; then
+		echo "There is no string to scape!"
+		return 1
+	else
+		echo "$1" | sed 's|\/|\\\/|g'  | sed "s|\.|\\\.|g" | sed "s|\-|\\\-|g" | sed "s|\"|\\\"|g" | sed "s/'/\\\'/g"
+	fi
+}
+
+
+
 #cd not a native command, is a systemcall used to exec, read more in exec man 
 changeDirectory(){
 	#echo "args=$# args=$*";read4
@@ -497,7 +508,7 @@ initROOT_LAMW(){
 	local init_root_lamw_dirs=(
 		$ANDROID_SDK_ROOT
 		"$(dirname $JAVA_HOME)"
-		$LAMW_USER_HOME//.android
+		$LAMW_USER_HOME\\.android
 		$FPPKG_LOCAL_REPOSITORY
 	)
 
@@ -505,7 +516,7 @@ initROOT_LAMW(){
 		[ ! -e "$lamw_dir" ] && mkdir -p "$lamw_dir"
 	done
 
-	[ ! -e $LAMW_USER_HOME/.android/repositories.cfg ] && touch $LAMW_USER_HOME\\.android\\repositories.cfg  
+	[ ! -e $LAMW_USER_HOME\\.android\\repositories.cfg ] && touch $LAMW_USER_HOME\\.android\\repositories.cfg  
 }
 
 getJDK(){
@@ -720,6 +731,9 @@ CreateLauncherLAMW(){
 	    ''
 	    "\$lamw_path_target=\"$LAMW_IDE_HOME\\start-lamw.vbs\""
 		"\$lamw_path_destination=\"$LAMW_MENU_PATH\\LAMW4Windows.lnk\""
+		"if ( Test-Path \$lamw_path_destination ){"
+		"\tRemove-Item \$lamw_path_destination"
+		"}"
 		"\$lamw_icon_path=\"$LAMW_IDE_HOME\\images\\icons\\lazarus_orange.ico\""
 		"CreateLauncher \$lamw_path_target \$lamw_path_destination \$lamw_icon_path"
 	)
@@ -1064,8 +1078,27 @@ InitLazarusConfig(){
 			fi
 		done
 	else 
-		local old_lazarus_dir="$(grep 'LazarusDirectory\sValue=' $lazarus_env_cfg | sed 's/[<>]//g' | awk -F'=' '{print $2}')"
-		sed  -i "s|$old_lazarus_dir|$LAMW_IDE_HOME|g" $lazarus_env_cfg
+		grep 'FppkgConfigFile' $lazarus_env_cfg >/dev/null
+		local exist_fppkg_cfg_node=$?
+		local fppkg_cfg
+		
+		local update_lamw_env_cfg_cmd="function updateLazarusEnv(){
+		        \$FPPKG_TRUNK_CFG_PATH=\"${FPPKG_TRUNK_CFG_PATH}\"
+		        \$exists_fppkgcfg_node=\$ARGS[0]
+		        \$lazarus_env_cfg=\"$lazarus_env_cfg\"
+				\$lazarus_env_xml=[XML] (Get-Content \$lazarus_env_cfg)
+				\$lazarus_env_xml.CONFIG.EnvironmentOptions.LazarusDirectory.Value=\"$LAMW_IDE_HOME\"
+
+		        if ( \$exists_fppkgcfg_node -eq 1 ) {
+		            \$fppkg_node=\$lazarus_env_xml.CONFIG.EnvironmentOptions.AppendChild(\$lazarus_env_xml.CreateElement(\"FppkgConfigFile\"))
+		            \$fppkg_node.SetAttribute(\"Value\",\$FPPKG_TRUNK_CFG_PATH)
+		        }
+				\$lazarus_env_xml.save(\$lazarus_env_cfg)
+			}
+
+			updateLazarusEnv $exist_fppkg_cfg_node"
+		winCallfromPS "$update_lamw_env_cfg_cmd"
+
 	fi
 	unix2dos "$lazarus_env_cfg" 2>/dev/null
 	winCallfromPS "cmd.exe /c 'attrib +h $LAMW_IDE_HOME_CFG'"
@@ -1200,9 +1233,9 @@ ConfigureFPCTrunk(){
 }
 
 getLazarusSource(){
-	local git_lock="$LAZARUS_STABLE\\.git\\index.lock"
 	changeDirectory $LAMW4WINDOWS_HOME
 	local lazarus_dir=$(basename "$LAMW_IDE_HOME")
+	local git_lock="$lazarus_dir\\.git\\index.lock"
 	if [ ! -e $lazarus_dir ]; then
 		git clone $LAZARUS_STABLE_SRC_LNK $lazarus_dir
 		if [ $? != 0 ]; then 
@@ -1356,9 +1389,11 @@ case "$1" in
 		getStatusInstalation
 			if [ $LAMW_INSTALL_STATUS = 0 ]; then
 				mainInstall
-			else 
+			else
+				setLAMWDeps
 				getLazarusSource
 				BuildLazarusIDE
+				LAMW4LinuxPostConfig
 			fi
 	;;
 	"" | "--use-proxy" )
