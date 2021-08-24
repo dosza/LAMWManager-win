@@ -11,6 +11,7 @@ v0.3.1 Fixes - August, 2021
 +	News implementation of *winCallfromPS*
 +	Updates lazarus version, compiler, and FPC source code paths in ([PPC](https://wiki.lazarus.freepascal.org/Multiple_Lazarus)) *\$LAMW_IDE_HOME_CFG\\enviromentoptions.xml*
 +	**New command:** *--update-lazarus* to upgrade Lazarus Sources from git
++	**Windows 8.1** is no longer supported by LAMW Manager,tests will only be done on windows 10 64 bit
 
 **Fixed**
 +	Remove deprecated code
