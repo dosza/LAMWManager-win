@@ -1059,11 +1059,11 @@ InitLazarusConfig(){
 		"		<FPCSourceDirectory Value=\"$FPC_TRUNK_SOURCE_PATH\\$FPC_TRUNK_SVNTAG\"/>"
 		"		<FppkgConfigFile Value=\"${FPPKG_TRUNK_CFG_PATH}\"/>"
 		'    	<Debugger Class="TGDBMIDebugger">'
-      	'			<Configs>'
-        '				<Config ConfigName="FpDebug" ConfigClass="TFpDebugDebugger" Active="True"/>'
-        "				<Config ConfigName=\"Gdb\" ConfigClass=\"TGDBMIDebugger\" DebuggerFilename=\"$FPC_TRUNK_EXEC_PATH\\gdb.exe\"/>"
-        '			</Configs>'
-        '		</Debugger>'
+		'			<Configs>'
+		'				<Config ConfigName="FpDebug" ConfigClass="TFpDebugDebugger" Active="True"/>'
+		"				<Config ConfigName=\"Gdb\" ConfigClass=\"TGDBMIDebugger\" DebuggerFilename=\"$FPC_TRUNK_EXEC_PATH\\gdb.exe\"/>"
+		'			</Configs>'
+		'		</Debugger>'
 		"	</EnvironmentOptions>"
 		"</CONFIG>"
 	)
