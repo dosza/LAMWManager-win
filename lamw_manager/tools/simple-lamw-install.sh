@@ -1306,11 +1306,16 @@ mainInstall(){
 	printf "${LAMW_INSTALL_WELCOME[*]}"
 	echo "----------------------------------------------------------------------"
 	echo "LAMW Manager (Native Support:Linux supported Debian 10, Ubuntu 16.04 LTS, Linux Mint 18)
-	Windows Compability (from MSYS2): Only Windows 8.1 and Windows 10"
+	Windows Compability (from MSYS2): Only Windows 10 64 bits"
 
 	winCallfromPS "cmd.exe /c ver" | grep "6.1.760" 
 	if [ $? = 0 ]; then
 		echo -e  "Warning: ${VERMELHO}Windows 7 ended support!${NORMAL}\nRead more in:https://www.microsoft.com/en-US/windows/windows-7-end-of-life-support-information"
+	fi
+
+	winCallfromPS "cmd.exe /c ver" | grep "6.2.9200\|6.3.9600" 
+	if [ $? = 0 ]; then
+		echo -e  "Warning: ${VERMELHO}Windows 8/8.1${NORMAL} there is no longer supported by LAMW Manager"
 	fi
 
 	if [ "$ARCH" != "amd64" ] && [ "$ARCH" != "x86_64" ]; then
