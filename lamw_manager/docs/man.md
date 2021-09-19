@@ -5,7 +5,7 @@
 1.	Open powershell as Admin
 2.	Enter the folder you installed lamw_manager in (default folder is C:\lamw_manager):
 	```powershell
-		PS C:\> cd C:\lamw_manager
+		PS C:\Windows\System32> cd C:\lamw_manager
 	```
 3. Run lamw_manager.bat:
 
