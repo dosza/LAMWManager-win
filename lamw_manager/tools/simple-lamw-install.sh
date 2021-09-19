@@ -44,7 +44,7 @@ OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
 LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
 FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1.3-beta"
+LAMW_INSTALL_VERSION="0.3.1.4-beta"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -349,6 +349,7 @@ setAndroidSDKCMDParameters(){
 		"build-tools;$ANDROID_BUILD_TOOLS_TARGET"
 		"ndk-bundle" 
 		"extras;android;m2repository"
+		"extras;google;"{google_play_services,market_apk_expansion,market_licensing}
 	)
 
 
@@ -706,6 +707,7 @@ getLAMWFramework(){
 
 CreateLauncherLAMW(){
 	
+	local lamw4windows_menu_launcher="$LAMW_MENU_PATH\\LAMW4Windows.lnk"
 	if [ ! -e "$LAMW_MENU_PATH" ]; then
 		mkdir "$LAMW_MENU_PATH"
 	fi
@@ -718,39 +720,22 @@ CreateLauncherLAMW(){
 		rm "$OLD_LAMW_MENU_PATH\\LAMW4Windows.lnk"
 	fi
 
-	powershell_create_launcher=(
-		"function CreateLauncher(){"
-	    "	echo \$ARGS[0]"
-	    "	echo \$ARGS[1]"
-	    '	$wscript= New-Object -comObject WScript.Shell'
-	    '	$atalho= $wscript.CreateShortcut($ARGS[1])'
-	    '	$atalho.TargetPath = $ARGS[0]'
-	    '	$atalho.iconLocation=$ARGS[2]'
-	    '	$atalho.Save()'
-	    '}'
-	    ''
-	    "\$lamw_path_target=\"$LAMW_IDE_HOME\\start-lamw.vbs\""
-		"\$lamw_path_destination=\"$LAMW_MENU_PATH\\LAMW4Windows.lnk\""
-		"if ( Test-Path \$lamw_path_destination ){"
-		"	Remove-Item \$lamw_path_destination"
-		"}"
-		"\$lamw_icon_path=\"$LAMW_IDE_HOME\\images\\icons\\lazarus_orange.ico\""
-		"CreateLauncher \$lamw_path_target \$lamw_path_destination \$lamw_icon_path"
-	)
+	local create_lamw_launcher_ps_str="function CreateLauncher(){
+	    	\$wscript= New-Object -comObject WScript.Shell
+	    	\$atalho= \$wscript.CreateShortcut(\$ARGS[1])
+	    	\$atalho.TargetPath = \$ARGS[0]
+	    	\$atalho.iconLocation=\$ARGS[2]
+	    	\$atalho.Save()
+	    }
 
-	for ((i=0; i < ${#powershell_create_launcher[*]};i++))
-	do
-		if [ $i = 0 ]; then
-			echo "${powershell_create_launcher[i]}" > /tmp/createlauncher.ps1
-		else
-			echo "${powershell_create_launcher[i]}" >> /tmp/createlauncher.ps1
-		fi
-	done
 
-	cat /tmp/createlauncher.ps1
-	sleep 5
-	powershell.exe Set-ExecutionPolicy Bypass
-	powershell.exe  /tmp/createlauncher.ps1
+	    \$lamw_path_target=\"$LAMW_IDE_HOME\\start-lamw.vbs\"
+		\$lamw_path_destination=\"$lamw4windows_menu_launcher\"
+		\$lamw_icon_path=\"$LAMW_IDE_HOME\\images\\icons\\lazarus_orange.ico\"
+		CreateLauncher \$lamw_path_target \$lamw_path_destination \$lamw_icon_path"
+
+		winCallfromPS "$create_lamw_launcher_ps_str"
+
 	
 }
 
