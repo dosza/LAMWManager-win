@@ -1,5 +1,3 @@
-<head><meta name="robots" content="noindex"></head>
-
 LAMW Manager
 ===
 
@@ -49,6 +47,14 @@ Getting Started!
 
 1.	Go to folder **C:\lamw_manager**
 2.	Right-click **lamw_manager.bat** and select **Run as administrator**
+
+Know Issues
+---
+**Cannot Build [LAMW Demos](https://github.com/jmpessoa/lazandroidmodulewizard/tree/master/demos)**
+
+By default LAMW Manager uses (Android) Crosscompile to **ARMv7+vFPV3**, but LAMW Demos uses **ARMV6+Cfsoft**, you need apply this configuration:
+1.	Open your LAMW Demo with LAMW4Linux
+2.	On menu bar go to Project --> [LAMW] Android Project Options --> Build --> Chipset --> ARMV7a+FVPv3
 
 Releases Notes
 ---
