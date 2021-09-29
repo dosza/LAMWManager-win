@@ -35,7 +35,7 @@ Getting Started!
 ---
 **How to use LAMW Manager:**
 
-1.	First read this README and [Third Part Tools](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
+1.	First read this README and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
 2.	Disable your antivirus(temporarily)
 3.	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
 4.	Double-click to run **lamw_manager_setup.exe**
@@ -53,19 +53,18 @@ Know Issues
 ### Cannot Build [LAMW Demos](https://github.com/jmpessoa/lazandroidmodulewizard/tree/master/demos) ###
 
 By default LAMW Manager uses (Android) Crosscompile to **ARMv7+vFPV3**, but LAMW Demos uses **ARMV6+Cfsoft**, you need apply this configuration:
-1.	Open your LAMW Demo with LAMW4Linux
+1.	Open your LAMW Demo with LAMW4Windows
 2.	On menu bar go to Project --> [LAMW] Android Project Options --> Build --> Chipset --> ARMV7a+FVPv3
 
 ### LAMW Manager stills in same point for long time... ###
 This error is not related to LAMW Manager, but to the windows command prompt.<br/>The [*Quick Edition*](https://stackoverflow.com/questions/13599822/command-prompt-gets-stuck-and-continues-on-enter-key-press) mode pauses the screen to copy the content to the clipboard.
-
 To continue LAMW install, follow this steps:
 1. Check title of prompt command starts with: **Selected**
 2. If the prompt title starts with **Selected**, press Enter to continue the process 
 
 Releases Notes
 ---
-For information on new features and bug fixes read the [**Release Notes**](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v031-fixes---August-2021)
+For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v031-fixes---August-2021)
 
 Congratulations!
 ---
