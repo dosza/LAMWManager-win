@@ -1287,33 +1287,35 @@ mainInstall(){
 	writeLAMWLogInstall
 }
 
-	echo "----------------------------------------------------------------------"
-	printf "${LAMW_INSTALL_WELCOME[*]}"
-	echo "----------------------------------------------------------------------"
-	echo "LAMW Manager (Native Support:Linux supported Debian 10, Ubuntu 16.04 LTS, Linux Mint 18)
-	Windows Compability (from MSYS2): Only Windows 10 64 bits"
 
-	winCallfromPS "cmd.exe /c ver" | grep "6.1.760" 
-	if [ $? = 0 ]; then
-		echo -e  "Warning: ${VERMELHO}Windows 7 ended support!${NORMAL}\nRead more in:https://www.microsoft.com/en-US/windows/windows-7-end-of-life-support-information"
-	fi
+setWinArch
+echo "----------------------------------------------------------------------"
+printf "${LAMW_INSTALL_WELCOME[*]}"
+echo "----------------------------------------------------------------------"
+echo "LAMW Manager (Official Support : Linux supported Debian 10, Ubuntu 18.04)
+Windows Port (from MSYS2): Only Windows 10 64 bits"
 
-	winCallfromPS "cmd.exe /c ver" | grep "6.2.9200\|6.3.9600" 
-	if [ $? = 0 ]; then
-		echo -e  "Warning: ${VERMELHO}Windows 8/8.1${NORMAL} there is no longer supported by LAMW Manager"
-	fi
+winCallfromPS "cmd.exe /c ver" | grep "6.1.760" 
+if [ $? = 0 ]; then
+	echo -e  "Warning: ${VERMELHO}Windows 7 ended support!${NORMAL}\nRead more in:https://www.microsoft.com/en-US/windows/windows-7-end-of-life-support-information"
+fi
 
-	if [ "$ARCH" != "amd64" ] && [ "$ARCH" != "x86_64" ]; then
-		echo "${VERMELHO}Warning:${NORMAL}LAMW Manager now only supports ${NEGRITO}64-bit${NORMAL} windows."
-		echo "${NEGRITO}Installation on Windows 32 bit will be disabled in Aug / 2021.${NORMAL}"
-		sleep 2
-	fi
-	echo "Please wait ... "
-	setWinArch
-	#configure parameters sdk before init download and build
+winCallfromPS "cmd.exe /c ver" | grep "6.2.9200\|6.3.9600" 
+if [ $? = 0 ]; then
+	echo -e  "Warning: ${VERMELHO}Windows 8/8.1${NORMAL} there is no longer supported by LAMW Manager"
+fi
 
-	#Checa se necessario habilitar remocao forcada
-	#checkForceLAMW4LinuxInstall $*
+if [ "$ARCH" != "amd64" ] && [ "$ARCH" != "x86_64" ]; then
+	echo "${VERMELHO}Warning:${NORMAL}LAMW Manager now only supports ${NEGRITO}64-bit${NORMAL} windows."
+	echo "${NEGRITO}Installation on Windows 32 bit will be disabled in Aug / 2021.${NORMAL}"
+	sleep 2
+fi
+
+echo "Please wait ... "
+#configure parameters sdk before init download and build
+
+#Checa se necessario habilitar remocao forcada
+#checkForceLAMW4LinuxInstall $*
 
 for arg_index in ${!ARGS[@]}; do 
 	arg=${ARGS[$arg_index]}
