@@ -50,15 +50,14 @@ Getting Started!
 
 Know Issues
 ---
-#### Cannot Build [LAMW Demos](https://github.com/jmpessoa/lazandroidmodulewizard/tree/master/demos) ####
+#### Cannot Build LAMW Demos ####
 
-By default LAMW Manager uses (Android) Crosscompile to **ARMv7+vFPV3**, but LAMW Demos uses **ARMV6+Cfsoft**, you need apply this configuration:
+By default LAMW Manager uses (Android) Crosscompile to **ARMv7+vFPV3**, but [*LAMW Demos*](https://github.com/jmpessoa/lazandroidmodulewizard/tree/master/demos) uses **ARMV6+Cfsoft**, you need apply this configuration:
 1.	Open your LAMW Demo with LAMW4Windows
 2.	On menu bar go to Project --> [LAMW] Android Project Options --> Build --> Chipset --> ARMV7a+FVPv3
 
 #### LAMW Manager stills in same point for long time... ####
-This error is not related to LAMW Manager, but to the windows command prompt.<br/>The [*Quick Edition*](https://stackoverflow.com/questions/13599822/command-prompt-gets-stuck-and-continues-on-enter-key-press) mode pauses the screen to copy the content to the clipboard.
-To continue LAMW install, follow this steps:
+This error is not related to LAMW Manager, but to the windows command prompt.The [*Quick Edition*](https://stackoverflow.com/questions/13599822/command-prompt-gets-stuck-and-continues-on-enter-key-press) mode pauses the screen to copy the content to the clipboard. To continue LAMW install, follow this steps:
 1. Check title of prompt command starts with: **Selected**
 2. If the prompt title starts with **Selected**, press Enter to continue the process 
 
