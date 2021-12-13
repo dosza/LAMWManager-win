@@ -64,7 +64,7 @@ This error is not related to LAMW Manager, but to the windows command prompt.The
 #### Error on set *onClick Method* in fist LAMW Project in Lazarus Trunk ####
 
 In Lazarus versions > 2.0.12 it fails when trying to insert onClick method in first LAMW project..
-1) Close LAMW4Linux
+1) Close LAMW4Windows
 2) Reopen the LAMW project
 3) Delete the Button (or component) from the form
 4) Reinsert element
