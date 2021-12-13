@@ -39,14 +39,25 @@ Getting Started!
 2.	Disable your antivirus(temporarily)
 3.	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
 4.	Double-click to run **lamw_manager_setup.exe**
-5. 	Go to folder **C:\lamw_manager**
-6.	Right-click **lamw_manager.bat** and select **Run as administrator**
+5.	Accept permission to run lamw_manager_setup as Admin
+6.  Select the destination folder for lamw_manager by clicking the "Browse..." button 
+7.	Click in *Next*, *Next* and wait ...
+
 
 
 **How to update LAMW framework**
 
-1.	Go to folder **C:\lamw_manager**
-2.	Right-click **lamw_manager.bat** and select **Run as administrator**
+1. Go to Powershell and open as Admin 
+2. Go to lamw_manager install folder (default is c:\lamw_manager) with command:
+	```powershell
+	cd c:\lamw_manager
+	```
+3. Run .\lamw_manager.bat command
+	```powershell
+	.\lamw_manager.bat
+	```
+
+**Note**: By default lamw_manager is installed in C:\lamw_manager !!
 
 Know Issues
 ---
