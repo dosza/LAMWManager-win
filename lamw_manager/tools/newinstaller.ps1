@@ -196,13 +196,6 @@ if ( Test-Path $bash_path ){
     echo "Bash install falls, trying repair ..."
     choco uninstall mingw -y 
     choco uninstall msys2 -y
-   $msys_falls_path=$env:homedrive + '\' +'tools'
-    if ( Test-Path $msys_falls_path ){
-        Remove-Item $msys_falls_path -Force -Recurse 
-        if ( $? -eq $false ){
-          Remove-Item $msys_falls_path -Force -Recurse   
-        }
-    }
     installDependencies
     & $bash_path "$MYDIR\simple-lamw-install.sh"
 }

@@ -35,18 +35,34 @@ Getting Started!
 ---
 **How to use LAMW Manager:**
 
-1.	First read this README and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
-2.	Disable your antivirus(temporarily)
-3.	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
-4.	Double-click to run **lamw_manager_setup.exe**
-5. 	Go to folder **C:\lamw_manager**
-6.	Right-click **lamw_manager.bat** and select **Run as administrator**
+1)	First read this README and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
+2)	Disable your antivirus(temporarily)
+3)	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
+4)	Double-click to run **lamw_manager_setup.exe**
+5)  If the *Windows Protected Your PC* dialog box appears
+	1) Click on *more information...*
+	2) Check *I understand the Risks and want to run this app*
+	3) 	Click on *run anyway* 
+
+6)	Accept permission to run lamw_manager_setup as Admin 
+7)  Select the destination folder for lamw_manager by clicking the *Browse...* button 
+8)	Click in *Next*, *Next* and wait ...
+
 
 
 **How to update LAMW framework**
 
-1.	Go to folder **C:\lamw_manager**
-2.	Right-click **lamw_manager.bat** and select **Run as administrator**
+1. Go to Powershell and open as Admin 
+2. Go to lamw_manager install folder (default is c:\lamw_manager) with command:
+	```powershell
+	cd c:\lamw_manager
+	```
+3. Run .\lamw_manager.bat command
+	```powershell
+	.\lamw_manager.bat
+	```
+
+**Note**: By default lamw_manager is installed in C:\lamw_manager !!
 
 Know Issues
 ---
@@ -60,6 +76,15 @@ By default LAMW Manager uses (Android) Crosscompile to **ARMv7+vFPV3**, but [*LA
 This error is not related to LAMW Manager, but to the windows command prompt.The [*Quick Edition*](https://stackoverflow.com/questions/13599822/command-prompt-gets-stuck-and-continues-on-enter-key-press) mode pauses the screen to copy the content to the clipboard. To continue LAMW install, follow this steps:
 1. Check title of prompt command starts with: **Selected**
 2. If the prompt title starts with **Selected**, press Enter to continue the process 
+
+#### Error on set *onClick Method* in fist LAMW Project in Lazarus Trunk ####
+
+In Lazarus versions > 2.0.12 it fails when trying to insert onClick method in first LAMW project..
+1) Close LAMW4Windows
+2) Reopen the LAMW project
+3) Delete the Button (or component) from the form
+4) Reinsert element
+5) Click on the element to insert the *onClick* method 
 
 Releases Notes
 ---
