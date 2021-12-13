@@ -43,8 +43,7 @@ Getting Started!
 	1) Click on *more information...*
 	2) Check *I understand the Risks and want to run this app*
 	3) 	Click on *run anyway* 
-
-6)	Accept permission to run lamw_manager_setup as Admin 
+6)	Accept permission to run **lamw_manager_setup.exe* as **Admin** 
 7)  Select the destination folder for lamw_manager by clicking the *Browse...* button 
 8)	Click in *Next*, *Next* and wait ...
 
