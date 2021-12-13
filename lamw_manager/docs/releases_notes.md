@@ -16,7 +16,7 @@ v0.3.1 Fixes - August, 2021
 **Fixed**
 +	Remove deprecated code
 +	Get FPC Sources from SourceForge (while FPC migrates to gitlab)
-+	LAMW4Windows Launcher old data
++	Remove Old LAMW4Windows Launcher
 
 v0.3.1.1 - January, 2021
 ---
