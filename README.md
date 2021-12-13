@@ -35,13 +35,18 @@ Getting Started!
 ---
 **How to use LAMW Manager:**
 
-1.	First read this README and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
-2.	Disable your antivirus(temporarily)
-3.	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
-4.	Double-click to run **lamw_manager_setup.exe**
-5.	Accept permission to run lamw_manager_setup as Admin
-6.  Select the destination folder for lamw_manager by clicking the "Browse..." button 
-7.	Click in *Next*, *Next* and wait ...
+1)	First read this README and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
+2)	Disable your antivirus(temporarily)
+3)	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
+4)	Double-click to run **lamw_manager_setup.exe**
+5)  If the *Windows Protected Your PC* dialog box appears
+	1) Click on *more information...*
+	2) Check *I understand the Risks and want to run this app*
+	3) 	Click on *run anyway* 
+
+6)	Accept permission to run lamw_manager_setup as Admin 
+7)  Select the destination folder for lamw_manager by clicking the *Browse...* button 
+8)	Click in *Next*, *Next* and wait ...
 
 
 
