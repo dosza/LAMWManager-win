@@ -68,7 +68,7 @@ Getting Started!
 
 If LAMW requires new Android APIs or new Gradle version, you must run [*lamw_manager_setup.exe*](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) again
 
-Following [*Installation Instructions*](#how-to-use-lamw-manager)
+Read the [*Getting Started*](#getting-started)
 
 
 Know Issues
