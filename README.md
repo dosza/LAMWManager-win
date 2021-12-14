@@ -33,38 +33,43 @@ Windows Supported
 
 Getting Started!
 ---
-**How to use LAMW Manager:**
+#### How to use LAMW Manager: ####
 
-1)	First read this README and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
+1)	First read this [*README.md*](https://github.com/dosza/LAMWManager-win) and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
 2)	Disable your antivirus(temporarily)
 3)	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
 4)	Double-click to run **lamw_manager_setup.exe**
 5)  If the *Windows Protected Your PC* dialog box appears
-	1) Click on *more information...*
-	2) Check *I understand the Risks and want to run this app*
-	3) 	Click on *run anyway* 
-6)	Accept permission to run **lamw_manager_setup.exe* as **Admin** 
-7)  Select the destination folder for lamw_manager by clicking the *Browse...* button 
-8)	Click in *Next*, *Next* and wait ...
+	1)	Click on *more information...*
+	2)	Check *I understand the Risks and want to run this app*
+	3)	Click on *run anyway* 
+6)	Accept permission to run *lamw_manager_setup.exe* as *Admin*
+7)  Select the destination folder for lamw_manager by clicking the *Browse...* 
+8)	Click in *Next*, *Next*...
+9)	Still check *Launch LAMW Manager* and click in *finish*
+10) Wait *lamw_manager* install LAMW enviroment
 
 
-
-**How to update LAMW framework**
+#### How to update LAMW enviroment ####
 
 1. Go to Powershell and open as Admin 
-2. Go to lamw_manager install folder (default is c:\lamw_manager) with command:
+2. Go to lamw_manager install folder with command:
 	```powershell
 	cd c:\lamw_manager
 	```
-3. Run .\lamw_manager.bat command
+3. Run:
 	```powershell
 	.\lamw_manager.bat
 	```
+#### Upgrading all LAMW environment ####
 
+If LAMW requires new Android APIs or new Gradle version, you must run lamw_manager_setup.exe again
+Following [*installation instructions*](https://github.com/dosza/LAMWManager-win/README.md#how-to-use-lamw-manager)
 **Note**: By default lamw_manager is installed in C:\lamw_manager !!
 
 Know Issues
 ---
+
 #### Cannot Build LAMW Demos ####
 
 By default LAMW Manager uses (Android) Crosscompile to **ARMv7+vFPV3**, but [*LAMW Demos*](https://github.com/jmpessoa/lazandroidmodulewizard/tree/master/demos) uses **ARMV6+Cfsoft**, you need apply this configuration:
@@ -76,9 +81,9 @@ This error is not related to LAMW Manager, but to the windows command prompt.The
 1. Check title of prompt command starts with: **Selected**
 2. If the prompt title starts with **Selected**, press Enter to continue the process 
 
-#### Error on set *onClick Method* in fist LAMW Project in Lazarus Trunk ####
+#### Error on set *onClick Method* in first LAMW Project in Lazarus Trunk ####
 
-In Lazarus versions > 2.0.12 it fails when trying to insert onClick method in first LAMW project..
+In Lazarus versions > 2.0.12 it fails when trying to insert *onClick* method in first LAMW project..
 1) Close LAMW4Windows
 2) Reopen the LAMW project
 3) Delete the Button (or component) from the form
