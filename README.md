@@ -50,7 +50,7 @@ Getting Started!
 10) Wait *lamw_manager* install LAMW enviroment
 
 
-#### How to update LAMW enviroment ####
+#### How to update LAMW Framework ####
 
 1. Go to Powershell and open as Admin 
 2. Go to lamw_manager install folder with command:
