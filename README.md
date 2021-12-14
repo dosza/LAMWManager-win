@@ -47,7 +47,7 @@ Getting Started!
 7)  Select the destination folder for *lamw_manager* by clicking the *Browse...* 
 8)	Click in *Next*, *Next*...
 9)	Still check *Launch LAMW Manager* and click in *finish*
-10) Wait *lamw_manager* install LAMW enviroment
+10) Wait *lamw_manager* install LAMW environment
 
 
 #### How to update LAMW Framework ####
@@ -63,7 +63,8 @@ Getting Started!
 	```
 #### Upgrading all LAMW environment ####
 
-If LAMW requires new Android APIs or new Gradle version, you must run lamw_manager_setup.exe again
+If LAMW requires new Android APIs or new Gradle version, you must run [lamw_manager_setup.exe](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) again [recommended!!]
+
 Following [*installation instructions*](#how-to-use-lamw-manager)
 **Note**: By default lamw_manager is installed in C:\lamw_manager !!
 
