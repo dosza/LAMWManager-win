@@ -85,8 +85,7 @@ This error is not related to LAMW Manager, but to the windows command prompt.The
 1. Check title of prompt command starts with: **Selected**
 2. If the prompt title starts with **Selected**, press Enter to continue the process 
 
-#### Error on set *onClick Method* in first LAMW Project in Lazarus Trunk ####
-
+#### Error: *unit not found: AndroidWidget* in first LAMW Project in Lazarus Trunk  ####
 In Lazarus versions > 2.0.12 it fails when trying to insert *onClick* method in first LAMW project..
 1) Close LAMW4Windows
 2) Reopen the LAMW project
