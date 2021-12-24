@@ -85,21 +85,14 @@ This error is not related to LAMW Manager, but to the windows command prompt.The
 1. Check title of prompt command starts with: **Selected**
 2. If the prompt title starts with **Selected**, press Enter to continue the process 
 
-#### Error: *unit not found: AndroidWidget* in first LAMW Project in Lazarus Trunk  ####
-In Lazarus versions > 2.0.12 it fails when trying to insert *onClick* method in first LAMW project..
-1) Close LAMW4Windows
-2) Reopen the LAMW project
-3) Delete the Button (or component) from the form
-4) Reinsert element
-5) Click on the element to insert the *onClick* method 
-
 Releases Notes
 ---
-For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v031-fixes---August-2021)
+For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v031-fixes-2021)
 
 Congratulations!
 ---
 You are now a Lazarus for Android developer!<br/>[Building Android application with **LAMW** is **RAD**](https://drive.google.com/open?id=1CeDDpuDfRwYrKpN7VHbossH6GfZUfqjm)<br/>
+
 More information read [**LAMW Manager v0.3.1 Manual**](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/man.md)
 
 By Daniel Oliveira

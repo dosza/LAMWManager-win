@@ -44,7 +44,7 @@ OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
 LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
 FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1.4-beta"
+LAMW_INSTALL_VERSION="0.3.1.5-beta"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -79,7 +79,7 @@ JDK_VERSION=8
 FPC_TRUNK_VERSION=3.2.0-beta
 _FPC_TRUNK_VERSION=3.2.0
 FPC_TRUNK_SVNTAG=fixes_3_2
-LAZARUS_STABLE_VERSION="2.2.0_RC1"
+LAZARUS_STABLE_VERSION="2.0.12"
 LAZARUS_STABLE=lazarus_${LAZARUS_STABLE_VERSION//\./_}
 CMD_TOOLS_VERSION="7583922"
 CMD_SDK_TOOLS_ZIP="commandlinetools-win-${CMD_TOOLS_VERSION}_latest.zip"
@@ -1235,17 +1235,18 @@ getLazarusSource(){
 		if [ $? != 0 ]; then 
 			
 			[ -e $git_lock ] && winRMDirf "$git_lock"
-			git clone $LAZARUS_STABLE_SRC_LNK  $lazarus_dir
+			git clone $LAZARUS_STABLE_SRC_LNK   -b ${LAZARUS_STABLE} $lazarus_dir
 			check_error_and_exit "cannot get lazarus sources"
 		fi
 	else 
 		[ -e $git_lock ] && rm -rf $git_lock
 		changeDirectory $lazarus_dir
 		git config pull.ff only 
-		git pull
+
+		git pull origin $LAZARUS_STABLE
 		if [ $? != 0 ]; then 
 			git reset --hard
-			git pull 
+			git pull origin $LAZARUS_STABLE
 			if [ $? != 0 ]; then 
 				echo "cannot update lazarus sources"
 				changeDirectory ..
