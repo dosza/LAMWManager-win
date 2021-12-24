@@ -1,11 +1,10 @@
 # LAMW Manager Releases Notes
 This page contains information about new features and bug fixes.
 
-v0.3.1 Fixes - August, 2021
+v0.3.1 Fixes, 2021
 ---
 **News**
-+	Get JDK8 by Zulu 
-+	Lazarus Trunk
++	Get JDK8 by Zulu
 +	Get LAMW/Android minimum requerement by [*package.json*](https://github.com/jmpessoa/lazandroidmodulewizard/blob/master/package.json) (backported from Linux)
 +	News uses new *Android SDK Manager*
 +	News implementation of *winCallfromPS*
@@ -17,6 +16,7 @@ v0.3.1 Fixes - August, 2021
 +	Remove deprecated code
 +	Get FPC Sources from SourceForge (while FPC migrates to gitlab)
 +	Remove Old LAMW4Windows Launcher
++	Dowgrade to lazarus 2.0.12
 
 v0.3.1.1 - January, 2021
 ---
