@@ -1242,7 +1242,7 @@ getLazarusSource(){
 		[ -e $git_lock ] && rm -rf $git_lock
 		changeDirectory $lazarus_dir
 		git config pull.ff only 
-
+		git checkout $LAZARUS_STABLE
 		git pull origin $LAZARUS_STABLE
 		if [ $? != 0 ]; then 
 			git reset --hard
