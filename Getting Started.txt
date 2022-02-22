@@ -1,24 +1,25 @@
- How to use LAMW Manager:
- 	[Important!!]
- 	Disable your antivirus(temporaly)
-    Double-click to run lamw_manager_setup.exe
-    
-    [Optional]
-    Go to folder C:\lamw_manager
-    Right-click lamw_manager.bat and select Run as administrator
+How to use LAMW Manager:
+[Important!!]
+   Disable your antivirus(temporaly)
+   Double-click to run lamw_manager_setup.exe
 
-How to update LAMW framework
-
-    Go to folder C:\lamw_manager
-    Right-click lamw_manager.bat and select Run as administrator
-
-   Errors: 
-   Retry run lamw_manager_setup.exe
-
-   Others errors or Reset LAMW installation, Run command:
+[Optional]
    Open powershell as Administrator
    cd c:\lamw_manager
-      .\lamw_manager --reset
+   .\lamw_manager.bat
+
+How to update LAMW framework
+      Open powershell as Administrator
+      cd c:\lamw_manager
+      .\lamw_manager.bat
+
+Errors: 
+   Retry run lamw_manager_setup.exe
+
+Others errors or Reset LAMW installation, Run command:
+   Open powershell as Administrator
+   cd c:\lamw_manager
+   .\lamw_manager.bat --reset
 
 
 
