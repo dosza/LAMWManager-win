@@ -44,7 +44,7 @@ OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
 LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
 FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1.5-beta"
+LAMW_INSTALL_VERSION="0.3.1.6-beta"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -1231,7 +1231,7 @@ getLazarusSource(){
 	local lazarus_dir=$(basename "$LAMW_IDE_HOME")
 	local git_lock="$lazarus_dir\\.git\\index.lock"
 	if [ ! -e $lazarus_dir ]; then
-		git clone $LAZARUS_STABLE_SRC_LNK $lazarus_dir
+			git clone $LAZARUS_STABLE_SRC_LNK  -b ${LAZARUS_STABLE} $lazarus_dir
 		if [ $? != 0 ]; then 
 			
 			[ -e $git_lock ] && winRMDirf "$git_lock"
@@ -1295,6 +1295,7 @@ printf "${LAMW_INSTALL_WELCOME[*]}"
 echo "----------------------------------------------------------------------"
 echo "LAMW Manager (Official Support : Linux supported Debian 10, Ubuntu 18.04)
 Windows Port (from MSYS2): Only Windows 10 64 bits"
+
 
 winCallfromPS "cmd.exe /c ver" | grep "6.1.760" 
 if [ $? = 0 ]; then

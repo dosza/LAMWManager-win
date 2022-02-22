@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LAMW Manager"
-#define MyAppVersion "0.3.1.5-beta"
+#define MyAppVersion "0.3.1.6-beta"
 #define MyAppPublisher "LAMW Manager"
 #define MyAppURL "https://github.com/DanielOliveiraSouza/LAMW4Windows-installer"
 #define MyAppExeName "preinstall.bat"
@@ -12,7 +12,7 @@
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 
-AppId={{971E9B55-5E5A-4F36-A3C2-D4C77B8F9CF7}}
+AppId={{B70344BE-C008-4023-A5DB-74F2C39A8B26}}
 PrivilegesRequired=admin
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -28,8 +28,8 @@ OutputBaseFilename=lamw_manager_setup
 Compression=lzma
 SolidCompression=yes
 MinVersion=6.2
-VersionInfoVersion=0.3.1
-VersionInfoTextVersion=0.3.1-beta
+VersionInfoVersion=0.3.1.6
+VersionInfoTextVersion=0.3.1.6-beta
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
