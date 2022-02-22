@@ -1,6 +1,7 @@
 LAMW Manager - Windows Port
 ===
 
+### v0.3.1.6-beta ###
 
 LAMW Manager is a command line tool to automate the **installation**, **configuration** and **upgrade** the framework<br/>[LAMW - Lazarus Android Module Wizard](https://github.com/jmpessoa/lazandroidmodulewizard)
 
@@ -101,7 +102,7 @@ This error is not related to LAMW Manager, but to the windows command prompt.The
 
 Releases Notes
 ---
-For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v031-fixes-2021)
+For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v0316-beta---feb-22-2022)
 
 Congratulations!
 ---

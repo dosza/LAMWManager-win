@@ -1,6 +1,12 @@
 # LAMW Manager Releases Notes
 This page contains information about new features and bug fixes.
 
+v0.3.1.6-beta - Feb 22, 2022
+---
+**Fixes**
++	Fix select branch bug in *git clone lazarus* 
++	Update *Getting Started.txt*
+
 v0.3.1 Fixes, 2021
 ---
 **News**
