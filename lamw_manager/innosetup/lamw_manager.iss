@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LAMW Manager"
-#define MyAppVersion "0.3.1.5-beta"
+#define MyAppVersion "0.3.1.6-beta"
 #define MyAppPublisher "LAMW Manager"
 #define MyAppURL "https://github.com/DanielOliveiraSouza/LAMW4Windows-installer"
 #define MyAppExeName "preinstall.bat"
@@ -28,8 +28,8 @@ OutputBaseFilename=lamw_manager_setup
 Compression=lzma
 SolidCompression=yes
 MinVersion=6.2
-VersionInfoVersion=0.3.1
-VersionInfoTextVersion=0.3.1-beta
+VersionInfoVersion=0.3.1.6
+VersionInfoTextVersion=0.3.1.6-beta
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
