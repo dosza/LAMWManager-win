@@ -670,11 +670,17 @@ getAndroidAPIS(){
 
 	unset FORCE_YES
 }
-
+gitAddSafeConfigRepository(){
+	local git_path="$(getLinuxPath $1)"
+	grep "$git_path" ~/.gitconfig -q && return
+	git config --global --add safe.directory  "$git_path"
+}
 #GET LAMW FrameWork
 getLAMWFramework(){
 	changeDirectory "$ANDROID_HOME"
 	export git_param=("clone" "$LAMW_SRC_LNK")
+
+	gitAddSafeConfigRepository "$ANDROID_HOME\\lazandroidmodulewizard"
 	if [ -e "$ANDROID_HOME\\lazandroidmodulewizard\\.git" ]  ; then
 		changeDirectory "$ANDROID_HOME\\lazandroidmodulewizard"
 		export git_param=("pull")
@@ -1013,6 +1019,7 @@ getBinults(){
 	[ ! -e "$FPC_TRUNK_EXEC_PATH" ] && mkdir  -p "$FPC_TRUNK_EXEC_PATH"
 
 	cd "$FPC_TRUNK_PATH"
+	gitAddSafeConfigRepository "$PWD/binutils"
 	git clone $BINUTILS_URL  -b $FPC_TRUNK_SVNTAG binutils
 	if [ $? != 0 ]; then 
 		winRMDirf binutils
@@ -1228,6 +1235,7 @@ getLazarusSource(){
 	changeDirectory $LAMW4WINDOWS_HOME
 	local lazarus_dir=$(basename "$LAMW_IDE_HOME")
 	local git_lock="$lazarus_dir\\.git\\index.lock"
+	gitAddSafeConfigRepository "$LAMW_IDE_HOME"
 	if [ ! -e $lazarus_dir ]; then
 			git clone $LAZARUS_STABLE_SRC_LNK  -b ${LAZARUS_STABLE} $lazarus_dir
 		if [ $? != 0 ]; then 
