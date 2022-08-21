@@ -48,6 +48,7 @@ v0.3.1 - March, 25, 2020
 +	Build Freepascal Cross-compile ARMv7(VFPv3)/Android
 +	Build Freepascal Cross-compile ARM64/Android
 +	Choose installation directory
++	**Windows 7 SP1** is no longer supported by LAMW Manager,tests will only be done on windows 8.1/10 64 bit
 
 **FIXED**
 +	Breakline Unix replaced to CRLF

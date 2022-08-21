@@ -801,6 +801,16 @@ LAMW4LinuxPostConfig(){
 		mkdir -p "$LAMW_WORKSPACE_HOME"
 	fi
 
+	#testa modificação de workspace
+	if [ -e "$LAMW_IDE_HOME_CFG\\LAMW.ini" ]; then 
+		local current_lamw_workspace=$(
+			grep '^PathToWorkspace=' "$LAMW_IDE_HOME_CFG\\LAMW.ini"  | 
+			sed 's/PathToWorkspace=//g' )
+
+		[ "$current_lamw_workspace" != "$LAMW_WORKSPACE_HOME" ] && 
+			LAMW_WORKSPACE_HOME="$current_lamw_workspace"	
+	fi
+
 # contem o arquivo de configuração do lamw
 	local lamw_init_str=(
 		"[NewProject]"
