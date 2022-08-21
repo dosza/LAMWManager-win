@@ -30,10 +30,8 @@ else
 	unset tmp_cd
 fi
 
-if [ ! -e "$HOMEPATH\\LAMW" ]; then
-	echo "${VERMELHO} Now  ROOT_LAMW=$LAMW_MANAGER_PATH\\LAMW${NORMAL}"
+if [ ! -e "$HOMEPATH\\LAMW\\lamw-install.log" ]; then
 	export ROOT_LAMW="$LAMW_MANAGER_PATH\\LAMW" 	
-	echo "$ROOT_LAMW"; sleep 3;
 else
 	export ROOT_LAMW="$HOMEDRIVE${HOMEPATH}\\LAMW" #DIRETORIO PAI DE TODO O AMBIENTE DE DESENVOLVIMENTO LAMW
 fi
@@ -125,11 +123,6 @@ JAVA_EXEC_PATH="$ROOT_LAMW\\jdk\\zulu-$JDK_VERSION\\bin"
 
 OLD_LAMW_MENU_PATH="$HOMEDRIVE\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
 LAMW_MENU_PATH="$HOMEDRIVE${HOMEPATH}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
-
-
-#https://wiki.freepascal.org/Multiple_Lazarus#Using_lazarus.cfg_file 
-
-
 FPC_TRUNK_PARENT=$LAMW4WINDOWS_HOME\\fpc
 
 FPC_TRUNK_PATH="$FPC_TRUNK_PARENT\\${_FPC_TRUNK_VERSION}"
@@ -251,17 +244,18 @@ splitStr(){
 
 winCallfromPS(){
 	local args="$*"
-		if [ $POWERSHELL_EXEC_POLICY != 1 ]; then
-			POWERSHELL_EXEC_POLICY=1
-			powershell.exe Set-ExecutionPolicy Bypass
 
-		fi
-		powershell.exe -Command "$args"
+	if [ $POWERSHELL_EXEC_POLICY != 1 ]; then
+		POWERSHELL_EXEC_POLICY=1
+		powershell.exe Set-ExecutionPolicy Bypass
+	fi               
+
+	powershell.exe -Command "$args"
 }
 
 
 getLinuxPath(){
-	local linux_path=$(echo "$1" | sed   's/://g' | sed 's|\\|\/|g')
+	local linux_path=$(echo "${1,}" | sed   's/://g;s|\\|\/|g')
 	echo "/$linux_path"
 }
 #--------------Win32 functions-------------------------
@@ -385,8 +379,6 @@ setLAMWDeps(){
 	GRADLE_ZIP_FILE="gradle-${GRADLE_VERSION}-bin.zip"
 	setAndroidSDKCMDParameters
 
-
-	#printf "%b" "$ANDROID_SDK_TARGET\n$ANDROID_BUILD_TOOLS_TARGET\n$GRADLE_VERSION\n${SDK_MANAGER_CMD_PARAMETERS[*]}\n"
 }
 
 
