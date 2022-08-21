@@ -489,13 +489,13 @@ getImplicitInstall(){
 		cat "$ROOT_LAMW\\lamw-install.log" |  grep "Generate LAMW_INSTALL_VERSION=$LAMW_INSTALL_VERSION" > /dev/null
 	
 		if [ $? = 0 ]; then  
-			echo "Only Update LAMW"
 			local flag_is_old_lamw=$(updateLAMWDeps)
 
 			if [ $flag_is_old_lamw = 1 ]; then 
 				echo "You need upgrade your LAMW4Linux!"
 				LAMW_IMPLICIT_ACTION_MODE=0
 			else 
+				echo "Only Update LAMW"
 				LAMW_IMPLICIT_ACTION_MODE=1 #apenas atualiza o lamw 
 			fi
 		fi
@@ -667,8 +667,8 @@ getAndroidAPIS(){
 			
 			if [ $i = 0 ]; then 
 				runSDKManager ${SDK_MANAGER_CMD_PARAMETERS[i]} # instala sdk sem intervenção humana 
-			else
 				FORCE_YES=0
+			else
 				runSDKManager ${SDK_MANAGER_CMD_PARAMETERS[i]} 
 			fi
 		done
@@ -742,6 +742,8 @@ CreateLauncherLAMW(){
 
 
 #this function remove old config of Laz4Lamw  
+
+
 CleanOldConfig(){
 	local root_java=$(dirname "$JAVA_HOME")
 	local list_to_del=(
@@ -756,13 +758,14 @@ CleanOldConfig(){
 	winCallfromPS "taskkill /im adb.exe /f"    2>/dev/null
 	winCallfromPS "taskkill /im make.exe /f"   2>/dev/null
 
+	echo "Uninstalling LAMW4Windows IDE ..."
 	for((i=0;i<${#list_to_del[*]};i++))
 	do
 		if [ -e "${list_to_del[i]}" ]; then 
 			if [ -d "${list_to_del[i]}" ]; then 
 				winRMDirf "${list_to_del[i]}"
 				if [ $? != 0 ]; then
-					echo "falls"
+					echo "fails"
 					winRMDirf "${list_to_del[i]}"
 				fi
 			else
@@ -771,9 +774,6 @@ CleanOldConfig(){
 		fi
 	done
 }
-
-
-#this function returns a version fpc 
 
 
 #write log lamw install 
@@ -896,7 +896,6 @@ writeLAMWLogInstall(){
 }
 getStatusInstalation(){
 	if [  -e "$ANDROID_HOME\\lamw-install.log" ]; then
-		#cat $LAMW4LINUX_HOME/lamw-install.log
 		export LAMW_INSTALL_STATUS=1
 		return 1
 
@@ -925,6 +924,7 @@ Repair(){
 
 
 getFPCStable(){
+	local fpc_stable_parent="$(dirname "$(dirname "$FPC_STABLE_EXEC" )")"
 	if [ $FLAG_FORCE_ANDROID_AARCH64 = 0 ]; then 
 		return
 	fi
@@ -945,17 +945,13 @@ getFPCStable(){
 				wget -c "$FPC_STABLE_URL"
 				check_error_and_exit "possible instability internet! Try later!"
 			fi
-		printf "%s" "Please wait, extracting \"$FPC_STABLE_ZIP\" ... "
+			printf "%s" "Please wait, extracting \"$FPC_STABLE_ZIP\" ... "
 			tar -xf "$FPC_STABLE_ZIP"
 			echo "Done"
 			if [ -e "$FPC_STABLE_ZIP" ]; then 
 				rm "$FPC_STABLE_ZIP"
 			fi
 		fi
-		local fpc_stable_parent=$(dirname "$FPC_STABLE_EXEC" )
-		echo "$fpc_stable_parent"
-		local fpc_stable_parent=$(dirname "$fpc_stable_parent" )
-		#echo "$fpc_stable_parent";read
 		"${FPC_STABLE_EXEC}\\fpcmkcfg.exe" -d basepath="${fpc_stable_parent}" -o "$FPC_STABLE_EXEC\\fpc.cfg"
 	fi
 }
@@ -991,15 +987,15 @@ BuildCrossAArch64(){
 	printf "%s\n" "Please wait, starting Build FPC to AARCH64/Android ..."
 	make -s  clean crossall crossinstall CPU_TARGET=aarch64 OS_TARGET=android OPT="-dFPC_ARMHF"  INSTALL_PREFIX="$FPC_TRUNK_PATH" #crosszipinstall
 	
-	echo "Done"
 	if [ $? != 0 ]; then
-		echo "${VERMELHO}Build FPC AARCH64/Android falls"
+		echo "${VERMELHO}Build FPC AARCH64/Android fails"
 		exit 1;
 	fi
+	echo "Done"
 	printf "%s\n" "Please wait, starting Build FPC ARMv7/Android ..."
 	make -s  clean crossall crossinstall CPU_TARGET=arm OPT="-dFPC_ARMEL" OS_TARGET=android CROSSOPT="-CpARMV7A -CfVFPV3" INSTALL_PREFIX="$FPC_TRUNK_PATH" #crosszipinstall
 	if [ $? != 0 ]; then
-		echo "${VERMELHO}Build FPC ARMv7/Android falls"
+		echo "${VERMELHO}Build FPC ARMv7/Android fails"
 		exit 1;
 	fi
 	echo "Done"
@@ -1014,7 +1010,7 @@ BuildFPCTrunk(){
 	printf "%s\n" "Please wait, starting Build FPC to i386/Win32 ..."
 	make -s  clean all install OS_TARGET="win32" INSTALL_PREFIX="$FPC_TRUNK_PATH" #zipinstall
 	if [ $? != 0 ]; then
-		echo "${VERMELHO}Build FPC $OS_TARGET falls"
+		echo "${VERMELHO}Build FPC $OS_TARGET fails"
 		exit 1;
 	fi
 	echo "Done"
@@ -1123,9 +1119,12 @@ BuildLazarusIDE(){
 	InitLazarusConfig
 	for((i=0;i<${#LAMW_PACKAGES[*]};i++))
 	do
-		./lazbuild   --build-ide= --add-package ${LAMW_PACKAGES[i]} --pcp="$LAMW_IDE_HOME_CFG"
-		if [ $? != 0 ]; then 
-			./lazbuild --build-ide= --add-package ${LAMW_PACKAGES[i]} --pcp="$LAMW_IDE_HOME_CFG"
+		if ! ./lazbuild   --build-ide= --add-package ${LAMW_PACKAGES[i]} --pcp="$LAMW_IDE_HOME_CFG"; then
+		
+			if ! ./lazbuild --build-ide= --add-package ${LAMW_PACKAGES[i]} --pcp="$LAMW_IDE_HOME_CFG"; then
+				echo "${VERMELHO}Error:${NORMAL} Cannot Build $(basename ${LAMW_PACKAGES[$i]})" 
+				return 1
+			fi
 		fi
 	done
 }
@@ -1133,70 +1132,67 @@ BuildLazarusIDE(){
 #Run
 ConfigureFPCTrunk(){
 	local fpc_cfg_path="$FPC_TRUNK_EXEC_PATH\\fpc.cfg"
-	#if [ ! -e "$fpc_cfg_path" ]; then
-		"$FPC_TRUNK_EXEC_PATH\\fpcmkcfg" -d basepath="$FPC_TRUNK_PATH" -o "$fpc_cfg_path"
-	#fi
-		#echo "$fpc_cfg_path";read
-		#this config enable to crosscompile in fpc 
-		fpc_cfg_str=(
-			"#IFDEF ANDROID"
-			"#IFDEF CPUARM"
-			"-CpARMV7A"
-			"-CfVFPV3"
-			"-Xd"
-			"-XParm-linux-androideabi-"
-			"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\arm-linux-androideabi\\""$ANDROID_SDK_TARGET"
-			"-FLlibdl.so"
-			"-FD${ARM_ANDROID_TOOLS}"
-			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
-			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\*"
-			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\rtl" #'-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget/rtl'
-			"#ENDIF"
-			'#IFDEF CPUAARCH64'
-			'-Xd'
-			'-XPaarch64-linux-android- '
-			"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\aarch64-linux-android\\""$ANDROID_SDK_TARGET"
-			'-FLlibdl.so'
-			"-FD${AARCH64_ANDROID_TOOLS}"
-			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
-			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\*"
-			"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\rtl" #'-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget/rtl'
-			'#ENDIF'
-			"#ENDIF"
-		)
-		local fpcpkg_cfg_str=(
+	"$FPC_TRUNK_EXEC_PATH\\fpcmkcfg" -d basepath="$FPC_TRUNK_PATH" -o "$fpc_cfg_path"
+	 
+	fpc_cfg_str=(
+		"#IFDEF ANDROID"
+		"#IFDEF CPUARM"
+		"-CpARMV7A"
+		"-CfVFPV3"
+		"-Xd"
+		"-XParm-linux-androideabi-"
+		"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\arm-linux-androideabi\\""$ANDROID_SDK_TARGET"
+		"-FLlibdl.so"
+		"-FD${ARM_ANDROID_TOOLS}"
+		"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
+		"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\*"
+		"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\rtl" #'-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget/rtl'
+		"#ENDIF"
+		'#IFDEF CPUAARCH64'
+		'-Xd'
+		'-XPaarch64-linux-android- '
+		"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\aarch64-linux-android\\""$ANDROID_SDK_TARGET"
+		'-FLlibdl.so'
+		"-FD${AARCH64_ANDROID_TOOLS}"
+		"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
+		"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\*"
+		"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget\\rtl" #'-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget/rtl'
+		'#ENDIF'
+		"#ENDIF"
+	)
+	local fpcpkg_cfg_str=(
 
-			"[Defaults]"
-			"ConfigVersion=5"
-			"LocalRepository=$(dirname "$FPPKG_LOCAL_REPOSITORY")$BARRA_INVERTIDA"
-			"BuildDir={LocalRepository}build"
-			"ArchivesDir={LocalRepository}archives/"
-			"CompilerConfigDir={LocalRepository}config/"
-			"RemoteMirrors=https://www.freepascal.org/repository/mirrors.xml"
-			"RemoteRepository=auto"
-			"CompilerConfig=default"
-			"FPMakeCompilerConfig=default"
-			"Downloader=FPC"
-			"InstallRepository=user"
-			""
-			"[Repository]"
-			"Name=fpc"
-			"Description=Packages which are installed along with the Free Pascal Compiler"
-			"Path=${FPC_TRUNK_PATH}"
-			"Prefix=${FPC_TRUNK_PATH}"
-			""
-			"[IncludeFiles]"
-			"FileMask={LocalRepository}config/conf.d/*.conf"
-			""
-			"[Repository]"
-			"Name=user"
-			"Description=User-installed packages"
-			"Path={LocalRepository}"
-			"Prefix={LocalRepository}"
-			""
-		)
+		"[Defaults]"
+		"ConfigVersion=5"
+		"LocalRepository=$(dirname "$FPPKG_LOCAL_REPOSITORY")$BARRA_INVERTIDA"
+		"BuildDir={LocalRepository}build"
+		"ArchivesDir={LocalRepository}archives/"
+		"CompilerConfigDir={LocalRepository}config/"
+		"RemoteMirrors=https://www.freepascal.org/repository/mirrors.xml"
+		"RemoteRepository=auto"
+		"CompilerConfig=default"
+		"FPMakeCompilerConfig=default"
+		"Downloader=FPC"
+		"InstallRepository=user"
+		""
+		"[Repository]"
+		"Name=fpc"
+		"Description=Packages which are installed along with the Free Pascal Compiler"
+		"Path=${FPC_TRUNK_PATH}"
+		"Prefix=${FPC_TRUNK_PATH}"
+		""
+		"[IncludeFiles]"
+		"FileMask={LocalRepository}config/conf.d/*.conf"
+		""
+		"[Repository]"
+		"Name=user"
+		"Description=User-installed packages"
+		"Path={LocalRepository}"
+		"Prefix={LocalRepository}"
+		""
+	)
 
-		local fppkg_local_cfg=(
+	local fppkg_local_cfg=(
 		'[Defaults]'
 		'ConfigVersion=5'
 		"Compiler=$FPC_TRUNK_EXEC_PATH\\fpc.exe"
@@ -1298,69 +1294,70 @@ mainInstall(){
 	writeLAMWLogInstall
 }
 
+welcomeMessages(){
+	echo "----------------------------------------------------------------------"
+	printf "${LAMW_INSTALL_WELCOME[*]}"
+	echo "----------------------------------------------------------------------"
+	echo "LAMW Manager (Official Support : Linux supported Debian 10, Ubuntu 18.04)
+	Windows Port (from MSYS2): Only Windows 10 64 bits"
 
-setWinArch
-echo "----------------------------------------------------------------------"
-printf "${LAMW_INSTALL_WELCOME[*]}"
-echo "----------------------------------------------------------------------"
-echo "LAMW Manager (Official Support : Linux supported Debian 10, Ubuntu 18.04)
-Windows Port (from MSYS2): Only Windows 10 64 bits"
-
-
-winCallfromPS "cmd.exe /c ver" | grep "6.1.760" 
-if [ $? = 0 ]; then
-	echo -e  "Warning: ${VERMELHO}Windows 7 ended support!${NORMAL}\nRead more in:https://www.microsoft.com/en-US/windows/windows-7-end-of-life-support-information"
-fi
-
-winCallfromPS "cmd.exe /c ver" | grep "6.2.9200\|6.3.9600" 
-if [ $? = 0 ]; then
-	echo -e  "Warning: ${VERMELHO}Windows 8/8.1${NORMAL} there is no longer supported by LAMW Manager"
-fi
-
-if [ "$ARCH" != "amd64" ] && [ "$ARCH" != "x86_64" ]; then
-	echo "${VERMELHO}Warning:${NORMAL}LAMW Manager now only supports ${NEGRITO}64-bit${NORMAL} windows."
-	echo "${NEGRITO}Installation on Windows 32 bit will be disabled in Aug / 2021.${NORMAL}"
-	sleep 2
-fi
-
-echo "Please wait ... "
-#configure parameters sdk before init download and build
-
-#Checa se necessario habilitar remocao forcada
-#checkForceLAMW4LinuxInstall $*
-
-for arg_index in ${!ARGS[@]}; do 
-	arg=${ARGS[$arg_index]}
-	if [ "$arg" = "--use_proxy" ];then
-		INDEX_FOUND_USE_PROXY=$arg_index
-		break
-	fi
-done
-
-if [ $INDEX_FOUND_USE_PROXY -lt 0 ]; then
-	initParameters
-else 
-	index_proxy_server=$((INDEX_FOUND_USE_PROXY+1))
-	index_server_value=$((index_proxy_server+1))
-	index_port_server=$((index_server_value+1))
-	index_port_value=$((index_port_server+1))
-	if [ "${ARGS[$index_proxy_server]}" = "--server" ]; then
-		if [ "${ARGS[$index_port_server]}" = "--port" ] ;then
-			initParameters "${ARGS[$INDEX_FOUND_USE_PROXY]}" "${ARGS[$index_server_value]}" "${ARGS[$index_port_value]}"
-		else 
-			echo "${VERMELHO}Error:${NORMAL}missing ${NEGRITO}--port${NORMAL}";exit 1
-		fi
-		unset ARGS[$INDEX_FOUND_USE_PROXY]
-		unset ARGS[$index_proxy_server]
-		unset ARGS[$index_server_value]
-		unset ARGS[$index_port_server]
-		unset ARGS[$index_port_value]
-	else 
-		echo "${VERMELHO}Error:${NORMAL}missing ${NEGRITO}--server${NORMAL}";exit 1
-	fi
-fi
-
+	echo "Please wait ... "
 	
+	if winCallfromPS "cmd.exe /c ver" | grep "6.1.760"; then
+		echo -e  "Warning: ${VERMELHO}Windows 7 ended support!${NORMAL}\nRead more in:https://www.microsoft.com/en-US/windows/windows-7-end-of-life-support-information"
+	fi
+
+	if winCallfromPS "cmd.exe /c ver" | grep "6.2.9200\|6.3.9600" ; then 
+		echo -e  "Warning: ${VERMELHO}Windows 8/8.1${NORMAL} there is no longer supported by LAMW Manager"
+	fi
+
+	if [ "$ARCH" != "amd64" ] && [ "$ARCH" != "x86_64" ]; then
+		echo "${VERMELHO}Warning:${NORMAL}LAMW Manager now only supports ${NEGRITO}64-bit${NORMAL} windows."
+		echo "${NEGRITO}Installation on Windows 32 bit will be disabled in Aug / 2021.${NORMAL}"
+		sleep 2
+	fi
+
+	echo "${VERMELHO}Warning:${NORMAL}Now ${NEGRITO}ROOT_LAMW=$LAMW_MANAGER_PATH\\LAMW${NORMAL}";sleep 3
+}
+
+parseExtraParams(){
+
+	for arg_index in ${!ARGS[@]}; do 
+		arg=${ARGS[$arg_index]}
+		if [ "$arg" = "--use_proxy" ];then
+			INDEX_FOUND_USE_PROXY=$arg_index
+			break
+		fi
+	done
+
+	if [ $INDEX_FOUND_USE_PROXY -lt 0 ]; then
+		initParameters
+	else 
+		index_proxy_server=$((INDEX_FOUND_USE_PROXY+1))
+		index_server_value=$((index_proxy_server+1))
+		index_port_server=$((index_server_value+1))
+		index_port_value=$((index_port_server+1))
+		if [ "${ARGS[$index_proxy_server]}" = "--server" ]; then
+			if [ "${ARGS[$index_port_server]}" = "--port" ] ;then
+				initParameters "${ARGS[$INDEX_FOUND_USE_PROXY]}" "${ARGS[$index_server_value]}" "${ARGS[$index_port_value]}"
+			else 
+				echo "${VERMELHO}Error:${NORMAL}missing ${NEGRITO}--port${NORMAL}";exit 1
+			fi
+			unset ARGS[$INDEX_FOUND_USE_PROXY]
+			unset ARGS[$index_proxy_server]
+			unset ARGS[$index_server_value]
+			unset ARGS[$index_port_server]
+			unset ARGS[$index_port_value]
+		else 
+			echo "${VERMELHO}Error:${NORMAL}missing ${NEGRITO}--server${NORMAL}";exit 1
+		fi
+	fi
+}
+
+
+parseExtraParams
+setWinArch
+welcomeMessages	
 
 #Parameters are useful for understanding script operation
 case "$1" in
@@ -1427,10 +1424,6 @@ case "$1" in
 			BuildLazarusIDE "1";
 		fi					
 	;;
-	# "getlaz4android")
-	# 	getLazarusSource
-	# 	BuildLazarusIDE
-	# ;;
 	*)
 		printf "%b" "${LAMW_OPTS[*]}"
 	;;	
