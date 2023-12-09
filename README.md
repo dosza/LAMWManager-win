@@ -52,7 +52,7 @@ Getting Started!
 
 1)	First read this [*README.md*](https://github.com/dosza/LAMWManager-win) and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
 2)	Disable your antivirus(temporarily)
-3)	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
+3)	[Click here to download *LAMW Manager Setup* ](https://github.com/dosza/LAMWManager-win/releases/download/v0.3.1.7/lamw_manager_setup.exe) 
 4)	Double-click to run **lamw_manager_setup.exe**
 5)  If the *Windows Protected Your PC* dialog box appears
 	1)	Click on *more information...*
@@ -81,7 +81,7 @@ Getting Started!
 	```
 #### Upgrading all LAMW environment ####
 
-If LAMW requires new Android APIs or new Gradle version, you must run [*lamw_manager_setup.exe*](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) again
+If LAMW requires new Android APIs or new Gradle version, you must run [*lamw_manager_setup.exe*](https://github.com/dosza/LAMWManager-win/releases/download/v0.3.1.7/lamw_manager_setup.exe) again
 
 Read the [*Getting Started*](#getting-started)
 
