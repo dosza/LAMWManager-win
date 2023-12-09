@@ -1,6 +1,12 @@
 # LAMW Manager Releases Notes
 This page contains information about new features and bug fixes.
 
+v0.3.1 Fixes, 2023
+---
+**Fixes**
++	 Get JDK requerement by [*package.json*]
+
+
 v0.3.1.6-beta - Feb 22, 2022
 ---
 **Fixes**
