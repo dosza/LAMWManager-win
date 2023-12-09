@@ -4,8 +4,8 @@ This page contains information about new features and bug fixes.
 v0.3.1 Fixes, 2023
 ---
 **Fixes**
-+	 Get JDK requerement by [*package.json*]
-
++	 Get JDK requerement by *package.json*
++	**Warning:** from now on *lamw_manager_setup.exe* from [*raw download*](https://github.com/dosza/LAMWManager-win/tree/master/lamw_manager/lamw_manager_setup.exe) will not be available!
 
 v0.3.1.6-beta - Feb 22, 2022
 ---
