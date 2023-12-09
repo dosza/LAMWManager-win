@@ -102,7 +102,7 @@ This error is not related to LAMW Manager, but to the windows command prompt.The
 
 Releases Notes
 ---
-For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/edit/v0.3.x/lamw_manager/docs/releases_notes.md#v031-fixes-2023)
+For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/tree/v0.3.x/lamw_manager/docs/releases_notes.md#v031-fixes-2023)
 
 Congratulations!
 ---
