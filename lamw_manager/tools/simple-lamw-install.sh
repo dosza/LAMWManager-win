@@ -73,7 +73,7 @@ WINDOWS_CMD_WRAPPERS=1
 ARGS=($@)
 INDEX_FOUND_USE_PROXY=-1
 
-JDK_VERSION=8
+
 FPC_TRUNK_VERSION=3.2.0-beta
 _FPC_TRUNK_VERSION=3.2.0
 FPC_TRUNK_SVNTAG=fixes_3_2
@@ -119,7 +119,7 @@ FLAG_SCAPE=0
 #Flag tratador de sinal 
 MAGIC_TRAP_INDEX=-1
 OLD_JAVA_HOME="$HOMEDRIVE\\Program Files\\Zulu\\zulu-8"
-JAVA_EXEC_PATH="$ROOT_LAMW\\jdk\\zulu-$JDK_VERSION\\bin"
+JAVA_EXEC_PATH="$ROOT_LAMW\\jdk\\zulu-default\\bin"
 
 OLD_LAMW_MENU_PATH="$HOMEDRIVE\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
 LAMW_MENU_PATH="$HOMEDRIVE${HOMEPATH}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\LAMW4Windows"
@@ -291,7 +291,7 @@ setWinArch(){
 	case "$ARCH" in
 		"x86_64"| "amd64" )
 			OS_PREBUILD="windows-x86_64"
-			ZULU_API_JDK_URL+="?java_version$JDK_VERSION&jdk_version=$JDK_VERSION&zulu_version=$JDK_VERSION&os=windows&arch=x86&hw_bitness=64&ext=zip&bundle_type=jdk&javafx=false&latest=true&support_term=lts"
+			ZULU_API_JDK_URL_PARAM="&os=windows&arch=x86&hw_bitness=64&ext=zip&bundle_type=jdk&javafx=false&latest=true&support_term=lts"
 			MSYS_TEMP="$HOMEDRIVE\\tools\\msys64\\tmp"
 			MINGW_PATH="$HOMEDRIVE\\tools\\msys64\\mingw64\\bin:$HOMEDRIVE\\tools\\msys32\\mingw64\\bin"
 			PROGR+=" mingw-w64-x86_64-jq"
@@ -302,7 +302,7 @@ setWinArch(){
 
 		*)
 			OS_PREBUILD="windows"
-			ZULU_API_JDK_URL+="?java_version$JDK_VERSION&jdk_version=$JDK_VERSION&zulu_version=$JDK_VERSION&os=windows&arch=x86&hw_bitness=32&ext=zip&bundle_type=jdk&javafx=false&latest=true&support_term=lts"
+			ZULU_API_JDK_URL_PARAM="&os=windows&arch=x86&hw_bitness=32&ext=zip&bundle_type=jdk&javafx=false&latest=true&support_term=lts"
 			MSYS_TEMP="$HOMEDRIVE\\tools\\msys32\\tmp"
 			PROGR+=" mingw-w64-i686-jq"
 			OS_TARGET="win32"
@@ -358,7 +358,7 @@ setJDKDeps(){
 	ZULU_JDK_URL="$(echo $ZULU_JDK_JSON | jq '.url' | sed 's/"//g')"
 	ZULU_JDK_ZIP="$(echo $ZULU_JDK_JSON | jq '.name' | sed 's/"//g' )"
 	ZULU_JDK_FILE="$(echo $ZULU_JDK_ZIP | sed 's/.zip//g')"
-	JAVA_VERSION="1.8.0_$(echo $ZULU_JDK_JSON | jq '.java_version[2]'| sed 's/"//g')"
+	JAVA_VERSION="$JDK_VERSION.0.$(echo $ZULU_JDK_JSON | jq '.java_version[2]'| sed 's/"//g')"
 }
 
 checkJDKVersionStatus(){
@@ -377,6 +377,8 @@ setLAMWDeps(){
 	GRADLE_HOME="$ROOT_LAMW\\gradle-${GRADLE_VERSION}"
 	GRADLE_ZIP_LNK="https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
 	GRADLE_ZIP_FILE="gradle-${GRADLE_VERSION}-bin.zip"
+	JDK_VERSION=$(getLAMWDep '.dependencies.jdk')
+	ZULU_API_JDK_URL+="?java_version$JDK_VERSION&jdk_version=$JDK_VERSION&zulu_version=$JDK_VERSION$ZULU_API_JDK_URL_PARAM"
 	setAndroidSDKCMDParameters
 
 }
@@ -524,7 +526,7 @@ getJDK(){
 		printf "%s" "Please wait, extracting \"$ZULU_JDK_ZIP\"... "
 		unzip -q "$ZULU_JDK_ZIP"
 		echo "Done"
-		mv "$ZULU_JDK_FILE" "zulu-$JDK_VERSION"
+		mv "$ZULU_JDK_FILE" "zulu-default"
 		[ -e "$ZULU_JDK_ZIP" ] && rm -rf $ZULU_JDK_ZIP
 	fi
 }
@@ -906,6 +908,7 @@ Repair(){
 	getStatusInstalation
 	if [ $LAMW_INSTALL_STATUS = 1 ]; then
 		if [ ! -e "$JAVA_HOME" ]; then
+			setLAMWDeps
 			getJDK
 		fi
 		if [ ! -e "$LAMW_IDE_HOME" ]; then

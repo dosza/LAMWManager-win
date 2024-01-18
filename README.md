@@ -1,7 +1,7 @@
 LAMW Manager - Windows Port
 ===
 
-### v0.3.1.6-beta ###
+### v0.3.1.7-beta ###
 
 LAMW Manager is a command line tool to automate the **installation**, **configuration** and **upgrade** the framework<br/>[LAMW - Lazarus Android Module Wizard](https://github.com/jmpessoa/lazandroidmodulewizard)
 
@@ -52,7 +52,7 @@ Getting Started!
 
 1)	First read this [*README.md*](https://github.com/dosza/LAMWManager-win) and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
 2)	Disable your antivirus(temporarily)
-3)	[Click here to download *LAMW Manager Setup* ](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) 
+3)	[Click here to download *LAMW Manager Setup* ](https://github.com/dosza/LAMWManager-win/releases/download/v0.3.1.7/lamw_manager_setup.exe) 
 4)	Double-click to run **lamw_manager_setup.exe**
 5)  If the *Windows Protected Your PC* dialog box appears
 	1)	Click on *more information...*
@@ -81,7 +81,7 @@ Getting Started!
 	```
 #### Upgrading all LAMW environment ####
 
-If LAMW requires new Android APIs or new Gradle version, you must run [*lamw_manager_setup.exe*](https://raw.githubusercontent.com/dosza/LAMWManager-win/master/lamw_manager/lamw_manager_setup.exe) again
+If LAMW requires new Android APIs or new Gradle version, you must run [*lamw_manager_setup.exe*](https://github.com/dosza/LAMWManager-win/releases/download/v0.3.1.7/lamw_manager_setup.exe) again
 
 Read the [*Getting Started*](#getting-started)
 
@@ -102,12 +102,12 @@ This error is not related to LAMW Manager, but to the windows command prompt.The
 
 Releases Notes
 ---
-For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/releases_notes.md#v0316-beta---feb-22-2022)
+For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/tree/v0.3.x/lamw_manager/docs/releases_notes.md#v031-fixes-2023)
 
 Congratulations!
 ---
 You are now a Lazarus for Android developer!<br/>[Building Android application with **LAMW** is **RAD**](https://drive.google.com/open?id=1CeDDpuDfRwYrKpN7VHbossH6GfZUfqjm)<br/>
 
-More information read [**LAMW Manager v0.3.1 Manual**](https://github.com/dosza/LAMWManager-win/blob/v0.3.1/lamw_manager/docs/man.md)
+More information read [**LAMW Manager v0.3.1 Manual**](https://github.com/dosza/LAMWManager-win/blob/v0.3.x/lamw_manager/docs/man.md)
 
 By Daniel Oliveira
