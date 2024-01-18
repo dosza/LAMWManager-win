@@ -1,3 +1,7 @@
+<head>
+  <meta name="robots" content="noindex">
+ </head>
+
 LAMW Manager - Windows Port
 ===
 
@@ -51,18 +55,17 @@ Getting Started!
 #### How to use LAMW Manager: ####
 
 1)	First read this [*README.md*](https://github.com/dosza/LAMWManager-win) and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
-2)	Disable your antivirus(temporarily)
-3)	[Click here to download *LAMW Manager Setup* ](https://github.com/dosza/LAMWManager-win/releases/download/v0.3.1.7/lamw_manager_setup.exe) 
-4)	Double-click to run **lamw_manager_setup.exe**
-5)  If the *Windows Protected Your PC* dialog box appears
+2)	[Click here to download *LAMW Manager Setup* ](https://github.com/dosza/LAMWManager-win/releases/download/v0.3.1.7/lamw_manager_setup.exe) 
+3)	Double-click to run **lamw_manager_setup.exe**
+4)  If the *Windows Protected Your PC* dialog box appears
 	1)	Click on *more information...*
 	2)	Check *I understand the Risks and want to run this app*
 	3)	Click on *run anyway* 
-6)	Accept permission to run *lamw_manager_setup.exe* as *Admin*
-7)  Select the destination folder for *lamw_manager* by clicking the *Browse...* 
-8)	Click in *Next*, *Next*...
-9)	Still check *Launch LAMW Manager* and click in *finish*
-10) Wait *lamw_manager* install LAMW environment
+5)	Accept permission to run *lamw_manager_setup.exe* as *Admin*
+6)  Select the destination folder for *lamw_manager* by clicking the *Browse...* 
+7)	Click in *Next*, *Next*...
+8)	Still check *Launch LAMW Manager* and click in *finish*
+19) Wait *lamw_manager* install LAMW environment
 
 
 **Note**: By default lamw_manager is installed in C:\lamw_manager !!
