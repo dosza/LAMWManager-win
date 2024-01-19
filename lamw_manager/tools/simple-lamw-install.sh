@@ -344,6 +344,7 @@ setAndroidSDKCMDParameters(){
 		"ndk-bundle" 
 		"extras;android;m2repository"
 		"extras;google;"{google_play_services,market_apk_expansion,market_licensing}
+		"tools"
 	)
 
 
@@ -530,31 +531,6 @@ getJDK(){
 		[ -e "$ZULU_JDK_ZIP" ] && rm -rf $ZULU_JDK_ZIP
 	fi
 }
-getAnt(){
-	changeDirectory "$ANDROID_HOME" 
-	if [ ! -e "$ANT_HOME" ]; then
-		MAGIC_TRAP_INDEX=-1
-		trap TrapControlC 2
-		wget -c "$ANT_ZIP_LINK"
-
-		if [ $? != 0 ] ; then
-			wget -c "$ANT_ZIP_LINK"
-			if [ $? != 0 ]; then 
-				echo "possible network instability! Try later!"
-				exit 1
-			fi
-		fi
-		MAGIC_TRAP_INDEX=1
-		trap TrapControlC 2
-		printf "%s" "Please wait, extracting \"$ANT_ZIP_FILE\" ... "
-		unzip -q "$ANT_ZIP_FILE"
-		echo "Done"
-	fi
-
-	if [ -e  "$ANT_ZIP_FILE" ]; then
-		rm "$ANT_ZIP_FILE"
-	fi
-}
 
 
 getGradle(){
@@ -576,8 +552,7 @@ getGradle(){
 
 
 #Get Gradle and SDK Tools 
-getAndroidSDKTools(){
-	initROOT_LAMW
+getAndroidCmdLineTools(){
 	changeDirectory $ROOT_LAMW
 	changeDirectory $ANDROID_SDK_ROOT
 	
@@ -596,29 +571,6 @@ getAndroidSDKTools(){
 	fi
 }
 
-getSDKAntSupportedTools(){
-	initROOT_LAMW
-	changeDirectory $ANDROID_SDK_ROOT
-	SDK_TOOLS_VERSION="r25.2.5"
-	SDK_TOOLS_URL="https://dl.google.com/android/repository/tools_r25.2.5-windows.zip"
-	SDK_TOOLS_ZIP="tools_r25.2.5-windows.zip"
-	SDK_TOOLS_DIR="$ANDROID_SDK_ROOT\\tools"
-	if [ ! -e "$SDK_TOOLS_DIR" ];then
-		trap TrapControlC  2
-		MAGIC_TRAP_INDEX=4
-		wget -c $SDK_TOOLS_URL
-		MAGIC_TRAP_INDEX=5
-		printf "%s" "Please wait, extracting \"$SDK_TOOLS_ZIP\" ... "
-		unzip -o -q  $SDK_TOOLS_ZIP
-		echo "Done"
-		rm $SDK_TOOLS_ZIP
-	fi
-}
-
-getAndroidCmdLineTools(){
-	getSDKAntSupportedTools
-	getAndroidSDKTools
-}
 
 runSDKManagerLicenses(){
 	local sdk_manager_cmd="$CMD_SDK_TOOLS_DIR\\latest\\bin\\sdkmanager.bat"
@@ -1273,11 +1225,10 @@ getLazarusSource(){
 
 
 mainInstall(){
-
+	initROOT_LAMW
 	getTerminalDeps
 	setLAMWDeps
 	getJDK
-	getAnt
 	getGradle
 	getAndroidCmdLineTools
 	DisableTrapActions
