@@ -1252,8 +1252,8 @@ welcomeMessages(){
 	echo "----------------------------------------------------------------------"
 	printf "${LAMW_INSTALL_WELCOME[*]}"
 	echo "----------------------------------------------------------------------"
-	echo "LAMW Manager (Official Support : Linux supported Debian 10, Ubuntu 18.04)
-	Windows Port (from MSYS2): Only Windows 10 64 bits"
+	echo "${VERMELHO}Warning:${NORMAL} To best result use the official LAMW Manager in Linux!"
+	echo ""
 
 	echo "Please wait ... "
 	
