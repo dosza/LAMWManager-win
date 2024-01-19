@@ -790,7 +790,7 @@ LAMW4LinuxPostConfig(){
 		"SET PATH=$JAVA_EXEC_PATH;%PATH%"
 		"SET ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
 		"SET JAVA_HOME=\"$JAVA_HOME\""
-		"start "LAMW4Windows" /min  \"$LAMW_IDE_HOME\\lazarus\" %*"
+		"start \"LAMW4Windows\" /min  \"$LAMW_IDE_HOME\\lazarus\" %*"
 	)
 
 
