@@ -42,7 +42,7 @@ OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
 LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
 FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1.7-beta"
+LAMW_INSTALL_VERSION="0.3.1.8-beta"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -1095,7 +1095,7 @@ ConfigureFPCTrunk(){
 		"-CfVFPV3"
 		"-Xd"
 		"-XParm-linux-androideabi-"
-		"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\arm-linux-androideabi\\""$ANDROID_SDK_TARGET"
+		"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\arm-linux-androideabi\\30"
 		"-FLlibdl.so"
 		"-FD${ARM_ANDROID_TOOLS}"
 		"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
@@ -1105,7 +1105,7 @@ ConfigureFPCTrunk(){
 		'#IFDEF CPUAARCH64'
 		'-Xd'
 		'-XPaarch64-linux-android- '
-		"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\aarch64-linux-android\\""$ANDROID_SDK_TARGET"
+		"-Fl${ANDROID_SDK_ROOT}\\ndk-bundle\\toolchains\\llvm\\prebuilt\\$OS_PREBUILD\\sysroot\\usr\\lib\\aarch64-linux-android\\30"
 		'-FLlibdl.so'
 		"-FD${AARCH64_ANDROID_TOOLS}"
 		"-Fu$FPC_TRUNK_PARENT""\\\$fpcversion\\units\\\$fpctarget" #-Fu/usr/lib/fpc/$fpcversion/units/$fpctarget
