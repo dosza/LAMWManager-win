@@ -5,7 +5,7 @@
 LAMW Manager - Windows Port
 ===
 
-### v0.3.1.7-beta ###
+### v0.3.1.9-beta ###
 
 LAMW Manager is a command line tool to automate the **installation**, **configuration** and **upgrade** the framework<br/>[LAMW - Lazarus Android Module Wizard](https://github.com/jmpessoa/lazandroidmodulewizard)
 
@@ -55,7 +55,7 @@ Getting Started!
 #### How to use LAMW Manager: ####
 
 1)	First read this [*README.md*](https://github.com/dosza/LAMWManager-win) and [*Third Part Tools*](https://github.com/dosza/LAMWManager-win/blob/master/lamw_manager/docs/third_party.md) to understand the operation and limitations of this tool.
-2)	[Click here to download *LAMW Manager Setup* ](https://github.com/dosza/LAMWManager-win/releases/download/v0.3.1.7/lamw_manager_setup.exe) 
+2)	[Click here to download *LAMW Manager Setup* ](https://github.com/dosza/lamWManager-win/releases/latest/download/lamw_manager_setup.exe) 
 3)	Double-click to run **lamw_manager_setup.exe**
 4)  If the *Windows Protected Your PC* dialog box appears
 	1)	Click on *more information...*
@@ -84,7 +84,7 @@ Getting Started!
 	```
 #### Upgrading all LAMW environment ####
 
-If LAMW requires new Android APIs or new Gradle version, you must run [*lamw_manager_setup.exe*](https://github.com/dosza/LAMWManager-win/releases/download/v0.3.1.7/lamw_manager_setup.exe) again
+If LAMW requires new Android APIs or new Gradle version, you must run [*lamw_manager_setup.exe*](https://github.com/dosza/lamWManager-win/releases/latest/download/lamw_manager_setup.exe) again
 
 Read the [*Getting Started*](#getting-started)
 
@@ -105,7 +105,7 @@ This error is not related to LAMW Manager, but to the windows command prompt.The
 
 Releases Notes
 ---
-For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/tree/v0.3.x/lamw_manager/docs/releases_notes.md#v031-fixes-2023)
+For information on new features and bug fixes read the [*Release Notes*](https://github.com/dosza/LAMWManager-win/tree/v0.3.x/lamw_manager/docs/releases_notes.md#latest)
 
 Congratulations!
 ---
