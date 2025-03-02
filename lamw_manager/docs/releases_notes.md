@@ -1,6 +1,14 @@
 # LAMW Manager Releases Notes
 This page contains information about new features and bug fixes.
 
+Latest
+---
+
+v0.3.1.9, Feb, 2023
+---
+**News**
++	Upgrade Lazarus from 2.0.12 to 3.8
+
 v0.3.1 Fixes, 2023
 ---
 **Fixes**
