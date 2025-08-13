@@ -4,8 +4,7 @@
 
 LAMW Manager - Windows Port
 ===
-
-### v0.3.1.9-beta ###
+### v0.3.1.10-beta ###
 
 LAMW Manager is a command line tool to automate the **installation**, **configuration** and **upgrade** the framework<br/>[LAMW - Lazarus Android Module Wizard](https://github.com/jmpessoa/lazandroidmodulewizard)
 
