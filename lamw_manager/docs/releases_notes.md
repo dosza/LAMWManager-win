@@ -4,6 +4,11 @@ This page contains information about new features and bug fixes.
 Latest
 ---
 
+### v0.3.1.10-beta ###
+
+**News**
++ Prepare experimental support to 16 KB pages
+
 v0.3.1.9, Feb, 2023
 ---
 **News**
