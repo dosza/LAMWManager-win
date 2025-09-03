@@ -42,7 +42,7 @@ OLD_LAMW4WINDOWS_HOME="$HOMEDRIVE\\LAMW4Windows"
 LAMW4WINDOWS_HOME="$ROOT_LAMW\\LAMW4Windows"
 FPC_STABLE_EXEC=$LAMW_IDE_HOME\\fpc\\3.0.4\\bin\\i386-win32
 
-LAMW_INSTALL_VERSION="0.3.1.10-beta"
+LAMW_INSTALL_VERSION="0.3.1.11-beta"
 LAMW_INSTALL_WELCOME=(
 	"\t\tWelcome LAMW  Manager from MSYS2  version: [$LAMW_INSTALL_VERSION]\n"
 	"\t\tPowerd by DanielTimelord\n"
@@ -87,7 +87,7 @@ ANT_VERSION="1.10.5"
 
 
 CMD_SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-win-${CMD_TOOLS_VERSION}_latest.zip"
-LAMW_SRC_LNK="http://github.com/jmpessoa/lazandroidmodulewizard"
+LAMW_SRC_LNK="https://github.com/jmpessoa/lazandroidmodulewizard"
 LAMW_PACKAGE_URL="https://raw.githubusercontent.com/jmpessoa/lazandroidmodulewizard/master/package.json"
 LAZARUS_STABLE_SRC_LNK="https://gitlab.com/freepascal.org/lazarus/lazarus.git"
 BINUTILS_URL="https://gitlab.com/freepascal.org/fpc/build.git"
