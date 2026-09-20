@@ -3,6 +3,12 @@ This page contains information about new features and bug fixes.
 
 Latest
 ---
+### v0.3.1.12-beta ###
+**Fixes**
++ Remove unnecessary android package *tools*
+
+**News**
++ Update to Lazarus 4.8
 
 ### v0.3.1.10-beta ###
 
